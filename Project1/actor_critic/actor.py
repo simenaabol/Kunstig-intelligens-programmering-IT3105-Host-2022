@@ -24,7 +24,14 @@ eligibility_decay
 
 """
 
-""" class Actor():
-    def __init__(self, learning_rate, gamma, epsilon, g_epsilon, eligibility_decay): """
+class Actor():
+    def __init__(self, learning_rate, discount_factor, epsilon, eligibility_decay): # evt goal_epsilon og num_episodes
+        self.learning_rate = learning_rate
+        self.discount_factor = discount_factor
+        self.epsilon = epsilon
+        self.eligibility_decay = eligibility_decay
 
+        
+    def reset_eligibilites():
+        raise NotImplementedError()
 

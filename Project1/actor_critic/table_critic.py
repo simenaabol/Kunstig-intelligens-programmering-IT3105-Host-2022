@@ -6,3 +6,10 @@ or PyTorch. See the section entitled Function Approximators in the Critic in act
 this implementation.
 
 """
+
+class Table_critic():
+    def __init__(self) -> None:
+        pass
+
+    def reset_eligibilites():
+        raise NotImplementedError()

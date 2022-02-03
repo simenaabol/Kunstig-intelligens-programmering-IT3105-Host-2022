@@ -6,3 +6,7 @@ or PyTorch. See the section entitled Function Approximators in the Critic in act
 this implementation.
 
 """
+
+class NN_critic():
+    def __init__(self) -> None:
+        pass
