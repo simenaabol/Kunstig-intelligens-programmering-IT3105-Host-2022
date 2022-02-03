@@ -8,11 +8,11 @@ class Sim_world():
         """ Set initial game configs here """
 
         if config["problem"] == "cart":
-            self = Cart()
+            self.problem = Cart()
         elif config["problem"] == "gambler":
-            self = Gambler()
+            self.problem = Gambler()
         elif config["problem"] == "hanoi":
-            self = Hanoi()
+            self.problem = Hanoi()
         else:
             raise Exception('Sim_world must be cart, gambler, or hanoi.')
 
@@ -20,4 +20,5 @@ class Sim_world():
 
     def reset_game_state(self):
 
-        return self  # simworld, state, done?, legal moves
+        return self.problem, self.problem.get_state(), self.problem.game_over(), self.problem.get_legal_moves()
+

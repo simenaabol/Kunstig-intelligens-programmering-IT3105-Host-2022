@@ -35,3 +35,5 @@ class Actor():
     def reset_eligibilites():
         raise NotImplementedError()
 
+    def get_action():
+        raise NotImplementedError()
