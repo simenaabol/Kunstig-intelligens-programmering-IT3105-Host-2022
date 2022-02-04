@@ -12,4 +12,16 @@ class Table_critic():
         pass
 
     def reset_eligibilites():
-        raise NotImplementedError()
+        raise NotImplementedError
+
+    def state_handler(state):
+        raise NotImplementedError
+
+    def set_initial_eligibility(state):
+        raise NotImplementedError
+
+    def value():
+        raise NotImplementedError
+
+    def calc_td_error():
+        raise NotImplementedError

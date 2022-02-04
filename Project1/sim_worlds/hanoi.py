@@ -3,10 +3,13 @@ class Hanoi():
         pass
 
     def get_state():
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def get_legal_moves():
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def game_over():
-        raise NotImplementedError()
+        raise NotImplementedError
+
+    def do_move():
+        raise NotImplementedError

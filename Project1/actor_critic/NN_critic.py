@@ -10,3 +10,9 @@ this implementation.
 class NN_critic():
     def __init__(self) -> None:
         pass
+
+    def value():
+        raise NotImplementedError
+
+    def calc_td_error():
+        raise NotImplementedError

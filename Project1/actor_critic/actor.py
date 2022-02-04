@@ -33,7 +33,13 @@ class Actor():
 
         
     def reset_eligibilites():
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def get_action():
-        raise NotImplementedError()
+        raise NotImplementedError
+
+    def state_handler(state, legal_moves):
+        raise NotImplementedError
+
+    def set_initial_eligibility(state, action):
+        raise NotImplementedError

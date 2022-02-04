@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from numpy import isin
 from actor_critic.actor import Actor
 from actor_critic.sim_world import Sim_world
 from actor_critic.NN_critic import NN_critic
@@ -6,6 +7,7 @@ from actor_critic.table_critic import Table_critic
 
 class RL_learner():
     def __init__(self, config):
+    
         self.sim_world = Sim_world()
 
         # Initialize pi(s, a) <- 0 /forall s, a
@@ -37,22 +39,46 @@ class RL_learner():
 
             # Reset eligibilities in actor and critic
             self.actor.reset_eligibilites()
-            if self.critic == Table_critic():
+            if isinstance(self.critic, Table_critic):
                 self.critic.reset_eligibilites()
 
-            # Set initial state for sim world
-            problem, state, done, legal_moves = self.sim_world.reset_game_state() # retrieve relevant values for the world
+            # Retrieve initial state for sim world
+            state, done, legal_moves = self.sim_world.reset_game_state()
 
             if not legal_moves:
                 break
 
             action = self.actor.get_action(state, legal_moves)
 
-            for step in range(self.max_steps):
-                # Do action a from state s, moving the system to state s' and recieving reinforcement r
+            while not done:
 
-                if done:
-                    break
+                # Set eligibilities to 1
+                self.actor.set_initial_eligibility(state, action)
+                if isinstance(self.critic, Table_critic):
+                    self.critic.set_initial_eligibility(state)
+
+                next_state, reward, done, legal_moves = self.sim_world.step(action)
+
+                next_action = self.actor.get_action(next_state, legal_moves)
+
+                # Calculating temporal difference error as well as the target- and current state value
+                target_val, curr_state_val, td_error = self.critic.calc_td_error()
+
+                
+
+
+
+
+
+
+                # Stores the states for the episode
+                self.actor.state_handler(state, legal_moves)
+                if isinstance(self.critic, Table_critic):
+                    self.critic.state_handler(state, legal_moves)
+
+
+
+
 
             
 

@@ -20,5 +20,9 @@ class Sim_world():
 
     def reset_game_state(self):
 
-        return self.problem, self.problem.get_state(), self.problem.game_over(), self.problem.get_legal_moves()
+        return self.problem.get_state(), self.problem.game_over(), self.problem.get_legal_moves()
+
+    def step(self, action):
+
+        return self.problem.do_move(action)
 
