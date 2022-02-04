@@ -6,7 +6,7 @@ from actor_critic.table_critic import Table_critic
 
 class RL_learner():
     def __init__(self, config):
-        self.sim_world = Sim_world()
+        self.sim_world = Sim_world(config)
 
         # Initialize pi(s, a) <- 0 /forall s, a
         """ Expand config to add the right values """
