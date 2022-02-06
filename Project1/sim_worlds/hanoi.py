@@ -126,7 +126,7 @@ class Hanoi():
         lPegs = self.get_lPegs()
         dWith = self.get_nDiscs()
         nPegs = self.get_nPegs()
-        
+        dWithG = dWith+3
 
         
         #define Matplotlib figure and axis
@@ -137,14 +137,14 @@ class Hanoi():
             
             for j,disc in enumerate(peg):
                 if len(peg) != 0:
-                    ax.add_patch(Rectangle((j*0.5+i*dWith, j), disc, 1,  
+                    ax.add_patch(Rectangle((j*0.5+i*dWithG, j), disc, 1,  
                     edgecolor ="blue", linewidth=1, facecolor  ='yellow'))
               
                 
 
 
         #create simple line plot.
-        ax.plot([nPegs*dWith, nPegs*dWith], [dWith, dWith])
+        ax.plot([nPegs*dWithG, nPegs*dWithG], [dWith+1, dWith+1])
 
         return plt.show()
 
@@ -153,7 +153,7 @@ class Hanoi():
 
 
 
-Game = Hanoi(4,3)#Pegs and discs
+Game = Hanoi(5,6)#Pegs and discs
 ''' print('Sate of the game', Game.get_lPegs())
 moves = Game.get_legal_moves()
 print('Legal moves', moves)
@@ -166,9 +166,9 @@ print(Game.game_done()) '''
 Game.get_graphic()
 Game.take_action([0,1])
 Game.get_graphic()
-Game.take_action([1,2])
+Game.take_action([0,2])
 Game.get_graphic()
-Game.take_action([0,1])
+Game.take_action([0,4])
 Game.get_graphic()
 
 
