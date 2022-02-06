@@ -1,3 +1,6 @@
+from turtle import color
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 import numpy as np
 
 
@@ -24,24 +27,25 @@ class Hanoi():
     def get_legal_moves(self):
 
         pegWithDisc = self.peg_with_disc()
-        print('Peg som har discs', pegWithDisc)
+        print('pegWithDisc:',  pegWithDisc)
 
-        lMoves = self.get_legal_move_from_peg(pegWithDisc)
-        print(lMoves)
+        lMoves= []
+        for peg in pegWithDisc:
+            lMoves.append(self.get_legal_move_from_peg(peg))
 
+        
+        return lMoves 
 
-        return lMoves
-
-    def get_legal_move_from_peg(self, pegWithDisc): #pegNumber is the peg which disc is from
-        move= []
+    def get_legal_move_from_peg(self, pegWithDisc): #pegWithDisc is the peg which disc is from
+        move = []
         lPegs = self.get_lPegs()
-        intPeg = int(pegWithDisc[0])
 
-        for i in range(len(pegWithDisc)): # i blir hvilken peg vi henter fra
-            print('hallo', lPegs[intPeg])
-            hDisc = lPegs[intPeg][-1]
-            print('Henter overste disk fra peg', hDisc)
-            for j, peg in enumerate(lPegs): # J er hvilken peg vi er i
+
+        #for i in range(len(pegWithDisc)+1): # i blir hvilken peg vi henter fra
+        hDisc = lPegs[pegWithDisc][-1]
+        print('hDisc', hDisc)
+        for j, peg in enumerate(lPegs): # J er hvilken peg vi er i
+                
                 if 0 == len(peg):
                     move.append([pegWithDisc, j])
                 elif peg[-1] < hDisc:
@@ -84,10 +88,26 @@ class Hanoi():
         return hDisc
             
                               
+    def take_action(self, move):
+        lPegs = self.get_lPegs()
+        fromPeg = move[0]
+        toPeg = move[1]
+        print(fromPeg, toPeg)
+        lPegs[toPeg].append(lPegs[fromPeg][-1]) # Adds the disc to the new peg
+        lPegs[fromPeg].pop()
 
 
-    def game_over(self):
-        raise NotImplementedError()
+    def game_done(self):
+        lPegs = self.get_lPegs()
+        
+        for i in range(len(lPegs)):
+            if 0 != len(lPegs[i]):
+                return False
+            else:
+                continue    
+
+        return True
+            
 
 
     def get_nPegs(self):
@@ -101,14 +121,57 @@ class Hanoi():
 
     def get_aDiscs(self):
         return self.aDiscs
+    
+    def get_graphic(self):
+        lPegs = self.get_lPegs()
+        dWith = self.get_nDiscs()
+        nPegs = self.get_nPegs()
+        
+
+        
+        #define Matplotlib figure and axis
+        fig, ax = plt.subplots()
+
+        #add rectangle to plot
+        for i, peg in enumerate(lPegs):
+            
+            for j,disc in enumerate(peg):
+                if len(peg) != 0:
+                    ax.add_patch(Rectangle((j*0.5+i*dWith, j), disc, 1,  
+                    edgecolor ="blue", linewidth=1, facecolor  ='yellow'))
+              
+                
+
+
+        #create simple line plot.
+        ax.plot([nPegs*dWith, nPegs*dWith], [dWith, dWith])
+
+        return plt.show()
 
 
 
 
 
-Game = Hanoi(5,4)#Pegs and discs
-print(Game.get_lPegs())
-print(Game.get_legal_moves())
+
+Game = Hanoi(4,3)#Pegs and discs
+''' print('Sate of the game', Game.get_lPegs())
+moves = Game.get_legal_moves()
+print('Legal moves', moves)
+Game.take_action([0,4])
+print('Sate of the game', Game.get_lPegs())
+moves = Game.get_legal_moves()
+print('Legal moves', moves)
+print(Game.game_done()) '''
+
+Game.get_graphic()
+Game.take_action([0,1])
+Game.get_graphic()
+Game.take_action([1,2])
+Game.get_graphic()
+Game.take_action([0,1])
+Game.get_graphic()
+
+
 
 
 
