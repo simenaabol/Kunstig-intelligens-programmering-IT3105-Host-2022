@@ -32,14 +32,23 @@ class Actor():
         self.eligibility_decay = eligibility_decay
 
         
-    def reset_eligibilites():
+    def reset_eligibilites(self):
         raise NotImplementedError
 
-    def get_action():
+    def get_action(self):
         raise NotImplementedError
 
-    def state_handler(state, legal_moves):
+    def state_handler(self, state, legal_moves):
         raise NotImplementedError
 
-    def set_initial_eligibility(state, action):
+    def set_initial_eligibility(self, state, action):
+        raise NotImplementedError
+
+    def set_sap_eligibility(self, state, action):
+        raise NotImplementedError
+
+    def update_eligibilities_and_policy(self, episode_actions, td_error):
+        raise NotImplementedError
+
+    def update_epsilon(self):
         raise NotImplementedError

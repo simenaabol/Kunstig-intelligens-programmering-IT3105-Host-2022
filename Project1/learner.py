@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-from numpy import isin
 from actor_critic.actor import Actor
 from actor_critic.sim_world import Sim_world
 from actor_critic.NN_critic import NN_critic
@@ -30,6 +29,9 @@ class RL_learner():
 
 
     def training(self):
+
+        """ Used for reward graph if we want """
+        rewards = []
         
         for episode in range(self.num_episodes):
 
@@ -37,51 +39,63 @@ class RL_learner():
             if episode % 10 == 0:
                 print("Episode nr. ", episode)
 
-            # Reset eligibilities in actor and critic
+            # Reset eligibilities in actor and table-based critic
             self.actor.reset_eligibilites()
             if isinstance(self.critic, Table_critic):
                 self.critic.reset_eligibilites()
 
+            """ Dont know if we need to reset the game itself also? Or only use these variables """
             # Retrieve initial state for sim world
-            state, done, legal_moves = self.sim_world.reset_game_state()
+            state, done, legal_moves = self.sim_world.get_initial_game_state()
 
-            if not legal_moves:
-                break
-
+            # Gets the best action from the current policy
             action = self.actor.get_action(state, legal_moves)
 
+            if not legal_moves:
+                print("No legal moves")
+                break
+
+            episode_actions = []
+            episode_reward = 0
+
+            # Executing the steps for the episode
             while not done:
 
-                # Set eligibilities to 1
-                self.actor.set_initial_eligibility(state, action)
-                if isinstance(self.critic, Table_critic):
-                    self.critic.set_initial_eligibility(state)
-
-                next_state, reward, done, legal_moves = self.sim_world.step(action)
-
-                next_action = self.actor.get_action(next_state, legal_moves)
-
-                # Calculating temporal difference error as well as the target- and current state value
-                target_val, curr_state_val, td_error = self.critic.calc_td_error()
-
-                
-
-
-
-
-
-
-                # Stores the states for the episode
+                """ IDK """
                 self.actor.state_handler(state, legal_moves)
                 if isinstance(self.critic, Table_critic):
                     self.critic.state_handler(state, legal_moves)
 
+                # Set eligibilities to 1
+                # Actor needs SAP-based eligibilites
+                self.actor.set_initial_eligibility(state, action)
+                if isinstance(self.critic, Table_critic):
+                    # Critic needs state-based eligibilities
+                    self.critic.set_initial_eligibility(state)
 
+                # Retrieves info for the next step in the episode
+                next_state, reward, done, legal_moves = self.sim_world.step(action)
+                episode_reward += reward
 
+                next_action = self.actor.get_action(next_state, legal_moves)
 
+                # Calculating temporal difference error as well as the target- and current state value
+                target_val, curr_state_val, td_error = self.critic.calc_td_error(state, reward, next_state)
 
-            
+                episode_actions.append((state, td_error, action))
 
+                # Update policy for actor
+                self.actor.update_eligibilities_and_policy(episode_actions, td_error, state)
 
-            
+                # Update table or NN
+                if isinstance(self.critic, Table_critic):
+                    self.critic.update_eligibilities_and_values(episode_actions, td_error)
+                else:
+                    self.critic.update_weights(episode_actions, target_val, curr_state_val)
+
+                state = next_state
+                action = next_action
+
+            self.actor.update_epsilon()
+
 

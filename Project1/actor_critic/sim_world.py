@@ -18,8 +18,9 @@ class Sim_world():
 
         self.config = config
 
-    def reset_game_state(self):
+    def get_initial_game_state(self):
 
+        """ Create game object from config and get states """
         return self.problem.get_state(), self.problem.game_over(), self.problem.get_legal_moves()
 
     def step(self, action):

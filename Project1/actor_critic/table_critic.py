@@ -11,17 +11,21 @@ class Table_critic():
     def __init__(self) -> None:
         pass
 
-    def reset_eligibilites():
+    def reset_eligibilites(self):
         raise NotImplementedError
 
-    def state_handler(state):
+
+    def state_handler(self, state):
         raise NotImplementedError
 
-    def set_initial_eligibility(state):
+    def set_initial_eligibility(self, state):
         raise NotImplementedError
 
-    def value():
+    def calc_td_error(self):
         raise NotImplementedError
 
-    def calc_td_error():
+    def set_eligibility(self, state):
+        raise NotImplementedError
+
+    def update_eligibilities_and_values(self, episode_actions, td_error):
         raise NotImplementedError
