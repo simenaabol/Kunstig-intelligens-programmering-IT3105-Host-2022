@@ -22,7 +22,7 @@ class Hanoi():
         self.lPegs = lPegs
 
     def get_state(self):
-        return "HanoiState"
+        return self.lPegs
 
     def get_legal_moves(self):
 
@@ -108,10 +108,10 @@ class Hanoi():
                 print(len(lPegs[i]))
                 print(discs)
                 if len(lPegs[i]) ==  discs-1 :
-                     return True
+                     return [True, 1000]
 
 
-        return False
+        return [False, 0]
             
 
 
@@ -186,6 +186,7 @@ Game.get_graphic()
 
 print(Game.get_legal_moves())
 print(Game.game_done())
+print(Game.get_state())
 
 
 
