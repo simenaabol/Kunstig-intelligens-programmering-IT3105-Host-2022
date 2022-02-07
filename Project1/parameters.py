@@ -1,5 +1,7 @@
 config = {
     'problem': 'hanoi',
+    #'problem': 'gambler',
+    #'problem': 'cart',
 }
 
 
