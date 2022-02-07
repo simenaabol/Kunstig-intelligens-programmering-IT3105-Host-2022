@@ -134,7 +134,7 @@ class Hanoi():
 
         #add rectangle to plot
         for i, peg in enumerate(lPegs):
-            ax.plot([(dWith*0.5)-1+i*(dWithG), (dWith*0.5)+i*(dWithG)-1], [0, dWith-0.5])
+            ax.plot([(dWith*0.5)-0.5+i*(dWithG), (dWith*0.5)-0.5+i*(dWithG)], [0, dWith-0.5])
             
             for j,disc in enumerate(peg):
                 if len(peg) != 0:
@@ -168,13 +168,15 @@ print(Game.game_done()) '''
 print(Game.get_lPegs())
 
 print(Game.get_legal_moves())
-
-Game.take_action([0,2])
 Game.get_graphic()
+
+Game.take_action([0,1])
+Game.get_graphic()
+
 
 Game.take_action([0,2])
 Game.take_action([1,2])
-
+Game.get_graphic()
 
 print(Game.get_legal_moves())
 print(Game.game_done())
