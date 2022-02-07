@@ -99,14 +99,19 @@ class Hanoi():
 
     def game_done(self):
         lPegs = self.get_lPegs()
-        
-        for i in range(len(lPegs)-1):
-            if 0 != len(lPegs[i]):
-                return False
-            else:
-                continue    
+        discs = self.get_nDiscs()
 
-        return True
+        
+        for i in range(len(lPegs)):
+            if 0 == len(lPegs[0]):   
+                print('hællæ') 
+                print(len(lPegs[i]))
+                print(discs)
+                if len(lPegs[i]) ==  discs-1 :
+                     return True
+
+
+        return False
             
 
 
@@ -154,7 +159,7 @@ class Hanoi():
 
 
 
-Game = Hanoi(3,2)#Pegs and discs
+Game = Hanoi(5,6)#Pegs and discs
 ''' print('Sate of the game', Game.get_lPegs())
 moves = Game.get_legal_moves()
 print('Legal moves', moves)
@@ -170,16 +175,18 @@ print(Game.get_lPegs())
 print(Game.get_legal_moves())
 Game.get_graphic()
 
-Game.take_action([0,2])
+Game.take_action([0,1])
 Game.get_graphic()
 
 
-Game.take_action([0,1])
-Game.take_action([2,1])
+Game.take_action([0,2])
+Game.take_action([0,3])
+Game.take_action([0,4])
 Game.get_graphic()
 
 print(Game.get_legal_moves())
 print(Game.game_done())
+
 
 
 ''' Game.get_graphic()
