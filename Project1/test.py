@@ -1,5 +1,2 @@
-from parameters import config, cartConfig, gamblerConfig, hanoiConfig
-
-
-test= config['problem'][][]
-print(test)
+thislist = [0]
+print(len(thislist))
