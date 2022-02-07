@@ -170,12 +170,12 @@ print(Game.get_lPegs())
 print(Game.get_legal_moves())
 Game.get_graphic()
 
-Game.take_action([0,1])
+Game.take_action([0,2])
 Game.get_graphic()
 
 
-Game.take_action([0,2])
-Game.take_action([1,2])
+Game.take_action([0,1])
+Game.take_action([2,1])
 Game.get_graphic()
 
 print(Game.get_legal_moves())
