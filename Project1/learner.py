@@ -83,7 +83,7 @@ class RL_learner():
                 target_val, curr_state_val, td_error = self.critic.calc_td_error(state, reward, next_state)
 
                 episode_actions.append((state, td_error, action))
-
+    
                 # Update policy for actor
                 self.actor.update_eligibilities_and_policy(episode_actions, td_error, state)
 
