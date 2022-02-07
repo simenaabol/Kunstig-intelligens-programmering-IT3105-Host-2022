@@ -48,7 +48,7 @@ class Hanoi():
                 
                 if 0 == len(peg):
                     move.append([pegWithDisc, j])
-                elif peg[-1] < hDisc:
+                elif peg[-1] > hDisc:
                     move.append([pegWithDisc, j]) # legger til hvilken peg man kan flytt fra, og til
                 else:
                     continue
@@ -100,7 +100,7 @@ class Hanoi():
     def game_done(self):
         lPegs = self.get_lPegs()
         
-        for i in range(len(lPegs)):
+        for i in range(len(lPegs)-1):
             if 0 != len(lPegs[i]):
                 return False
             else:
@@ -134,6 +134,7 @@ class Hanoi():
 
         #add rectangle to plot
         for i, peg in enumerate(lPegs):
+            ax.plot([(dWith*0.5)-1+i*(dWithG), (dWith*0.5)+i*(dWithG)-1], [0, dWith-0.5])
             
             for j,disc in enumerate(peg):
                 if len(peg) != 0:
@@ -144,7 +145,7 @@ class Hanoi():
 
 
         #create simple line plot.
-        ax.plot([nPegs*dWithG, nPegs*dWithG], [dWith+1, dWith+1])
+        ax.plot([0, (dWith+2)*nPegs], [dWith, dWith], color = "white")
 
         return plt.show()
 
@@ -153,7 +154,7 @@ class Hanoi():
 
 
 
-Game = Hanoi(5,6)#Pegs and discs
+Game = Hanoi(3,2)#Pegs and discs
 ''' print('Sate of the game', Game.get_lPegs())
 moves = Game.get_legal_moves()
 print('Legal moves', moves)
@@ -163,14 +164,30 @@ moves = Game.get_legal_moves()
 print('Legal moves', moves)
 print(Game.game_done()) '''
 
+
+print(Game.get_lPegs())
+
+print(Game.get_legal_moves())
+
+Game.take_action([0,2])
 Game.get_graphic()
+
+Game.take_action([0,2])
+Game.take_action([1,2])
+
+
+print(Game.get_legal_moves())
+print(Game.game_done())
+
+
+''' Game.get_graphic()
 Game.take_action([0,1])
 Game.get_graphic()
 Game.take_action([0,2])
 Game.get_graphic()
 Game.take_action([0,4])
 Game.get_graphic()
-
+ '''
 
 
 
