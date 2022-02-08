@@ -1,28 +1,4 @@
-"""
-On-policy RL -> policyen som brukes for søk gjennom states gjennom hver episode (behavior policy) er også policyen som systemet 
-                bruker for å lære (target policy)
-
-To insure a balance between exploration and exploitation, the actor should use its policy in an -greedy
-manner (see actor-critic.pdf), where  is either a constant, user-supplied parameter, or a dynamic variable
-that changes (i.e. decreases) from earlier to later episodes. By setting  = 0 at run’s end, the behavior policy
-essentially becomes the target policy. By displaying one game played with this policy, the user sees the best
-moves that the actor has found for the states of an episode.
-
-The actor’s policy should be represented as a table (or Python dictionary) that maps state-action pairs (s,a)
-to values that indicate the desirability of performing action a when in state s. For any state s, it is wise to
-normalize the values across all legal actions from s, thus yielding a probability distribution over the possible
-actions to take from s. The  greedy policy would then choose the action with the highest probability, or a
-random value
-
-parametere:
-
-learning_rate
-gamma
-epsilon
-goal_epsilon
-eligibility_decay
-
-"""
+import random
 
 class Actor():
     def __init__(self, learning_rate, discount_factor, epsilon, eligibility_decay): # evt goal_epsilon og num_episodes
@@ -30,10 +6,71 @@ class Actor():
         self.discount_factor = discount_factor
         self.epsilon = epsilon
         self.eligibility_decay = eligibility_decay
+        self.eligibilities = {}
+        self.policy = {}
 
         
-    def reset_eligibilites():
-        raise NotImplementedError()
+    def state_handler(self, state, legal_moves):
+        raise NotImplementedError
 
-    def get_action():
-        raise NotImplementedError()
+    def reset_eligibilites(self):
+        """ 
+        Resets the eligibilities for the actor policy to 0
+        """
+        self.eligibilities = {}
+
+    def get_action(self, state, legal_moves=[]):
+
+        if state not in self.policy.keys():
+            return random.choice(legal_moves)
+
+        elif random.uniform(0, 1) < self.epsilon:
+
+            return random.choice(list(self.policy[state].keys()))
+
+        greedy_action = None
+        highest_val = float('-inf')
+
+        for action, value in self.policy[state].items():
+            
+            if value > highest_val and value != 0:
+                highest_val = value
+                greedy_action = action
+
+        return greedy_action
+
+
+    def set_initial_eligibility(self, state, action):
+        
+        """ Look for numpy arrays to strings """
+        self.eligibilities[state][action] == 1
+
+    def update_policy(self, state, action, td_error):
+
+        if state not in self.policy.keys():
+
+            self.policy[state] = {
+                action: 0
+            }
+
+        """ Try to change this one """
+        self.policy[state][action] = self.policy[state].get(action) \
+                                    + self.learning_rate * td_error \
+                                    * self.eligibilities[state].get(action)
+
+    def update_eligibilities(self, state, action, current_state):
+
+        if state == current_state:
+            self.eligibilities[state][action] = 1
+        else:
+            self.eligibilities[state][action] *= self.discount_factor * self.eligibility_decay
+
+
+    def update_eligibilities_and_policy(self, episode_actions, td_error, current_state):
+
+        for state, _, action in episode_actions:
+            self.update_policy(state, action, td_error)
+            self.update_eligibilities(state, action, current_state)
+
+    def update_epsilon(self):
+        raise NotImplementedError
