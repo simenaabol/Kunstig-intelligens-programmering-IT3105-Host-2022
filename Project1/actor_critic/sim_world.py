@@ -26,9 +26,14 @@ class Sim_world():
         else:
             raise Exception('Sim_world must be cart, gambler, or hanoi.')
 
-    def reset_game_state(self):
+        self.config = config
 
+    def get_initial_game_state(self):
+
+        """ Create game object from config and get states """
         return self.problem.get_state(), self.problem.game_over(), self.problem.get_legal_moves()
 
-Sim_world()
+    def step(self, action):
+
+        return self.problem.do_move(action)
 
