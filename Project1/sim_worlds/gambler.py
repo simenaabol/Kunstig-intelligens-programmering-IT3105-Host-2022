@@ -56,14 +56,14 @@ class Gambler():
         return self.coins
 
 
-B = Gambler(0.5)
-#print(B.get_wP())
-print('Du starter med kr:',B.get_state())
-print('Din vinnersannsynlighet er: ', B.get_wP())
+# B = Gambler(0.5)
+# #print(B.get_wP())
+# print('Du starter med kr:',B.get_state())
+# print('Din vinnersannsynlighet er: ', B.get_wP())
 
-#print(B.game_done())
-moves = B.get_legal_moves()
-B.take_action(random.choice(moves))
-print(B.get_state())
-print(B.get_state())
-print(B.game_done())
+# #print(B.game_done())
+# moves = B.get_legal_moves()
+# B.take_action(random.choice(moves))
+# print(B.get_state())
+# print(B.get_state())
+# print(B.game_done())

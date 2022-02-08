@@ -20,8 +20,7 @@ class Table_critic():
 
     def set_initial_eligibility(self, state):
         
-        """ Look for numpy arrays to strings """
-        self.eligibilites[state] == 1
+        self.eligibilites[state] = {1}
 
     def add_state_to_value_table(self, state):
         """ Initialize the state with a small, random value. """
@@ -32,7 +31,7 @@ class Table_critic():
         if state not in self.value_table.keys():
             self.add_state_to_value_table(state)
 
-        if next_state not in self.value_table(next_state):
+        if next_state not in self.value_table.keys():
             self.add_state_to_value_table(next_state)
 
         target_val = reward + (self.discount_factor * self.value_table[next_state])

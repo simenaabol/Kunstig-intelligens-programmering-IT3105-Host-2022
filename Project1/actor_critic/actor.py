@@ -1,10 +1,11 @@
 import random
 
 class Actor():
-    def __init__(self, learning_rate, discount_factor, epsilon, eligibility_decay): # evt goal_epsilon og num_episodes
+    def __init__(self, learning_rate, discount_factor, epsilon, epsilon_decay, eligibility_decay): # evt goal_epsilon og num_episodes
         self.learning_rate = learning_rate
         self.discount_factor = discount_factor
         self.epsilon = epsilon
+        self.epsilon_decay = epsilon_decay
         self.eligibility_decay = eligibility_decay
         self.eligibilities = {}
         self.policy = {}
@@ -19,33 +20,42 @@ class Actor():
         """
         self.eligibilities = {}
 
-    def get_action(self, state, legal_moves=[]):
+    def get_action(self, state, legal_moves):
 
         if state not in self.policy.keys():
-            return random.choice(legal_moves)
+            choice = random.choice(legal_moves)
+            choice = tuple(choice)
+            self.policy[state] = {}
+            return choice
 
         elif random.uniform(0, 1) < self.epsilon:
-
-            return random.choice(list(self.policy[state].keys()))
+            return tuple(random.choice(legal_moves))
 
         greedy_action = None
         highest_val = float('-inf')
 
-        for action, value in self.policy[state].items():
+        for action in legal_moves:
+
+            action = tuple(action)
+            print("STATE", state)
+            print("ACTION", action)
+            print(self.policy)
             
-            if value > highest_val and value != 0:
-                highest_val = value
+            if self.policy[state][action] > highest_val:
+                highest_val = self.policy[state][action]
                 greedy_action = action
 
         return greedy_action
 
 
     def set_initial_eligibility(self, state, action):
-        
-        """ Look for numpy arrays to strings """
-        self.eligibilities[state][action] == 1
+        action = tuple(action)
+        self.eligibilities[state] = {action: 1}
+
 
     def update_policy(self, state, action, td_error):
+
+        action = tuple(action)
 
         if state not in self.policy.keys():
 
@@ -53,12 +63,21 @@ class Actor():
                 action: 0
             }
 
+        if self.policy[state].get(action) is None:
+
+            self.policy[state] = {
+                action: 0
+            }
+
+
         """ Try to change this one """
-        self.policy[state][action] = self.policy[state].get(action) \
-                                    + self.learning_rate * td_error \
-                                    * self.eligibilities[state].get(action)
+        # self.policy[state][action] += self.learning_rate * td_error * self.eligibilities[state][action]
+
+        """ Denne linja er 100% koka """
+        self.policy[state][action] = self.policy[state].get(action, 0) + self.learning_rate * td_error * self.eligibilities.get(state, {}).get(action, 1)
 
     def update_eligibilities(self, state, action, current_state):
+        action = tuple(action)
 
         if state == current_state:
             self.eligibilities[state][action] = 1
@@ -73,4 +92,4 @@ class Actor():
             self.update_eligibilities(state, action, current_state)
 
     def update_epsilon(self):
-        raise NotImplementedError
+        self.epsilon *= self.epsilon_decay

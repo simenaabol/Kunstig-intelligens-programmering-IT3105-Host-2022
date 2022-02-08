@@ -24,17 +24,20 @@ class Hanoi():
     def get_state(self):
         return self.lPegs
 
+    def get_state_key(self):
+        # print(tuple(map(tuple, self.lPegs)))
+        return tuple(map(tuple, self.lPegs))
+
     def get_legal_moves(self):
 
         pegWithDisc = self.peg_with_disc()
-        print('pegWithDisc:',  pegWithDisc)
+        # print('pegWithDisc:',  pegWithDisc)
 
-        lMoves= []
+        lMoves = []
         for peg in pegWithDisc:
-            lMoves.append(self.get_legal_move_from_peg(peg))
-
-        
-        return lMoves 
+            lMoves+=(self.get_legal_move_from_peg(peg))
+        # print('LMOVES',lMoves)
+        return lMoves
 
     def get_legal_move_from_peg(self, pegWithDisc): #pegWithDisc is the peg which disc is from
         move = []
@@ -43,7 +46,7 @@ class Hanoi():
 
         #for i in range(len(pegWithDisc)+1): # i blir hvilken peg vi henter fra
         hDisc = lPegs[pegWithDisc][-1]
-        print('hDisc', hDisc)
+        # print('hDisc', hDisc)
         for j, peg in enumerate(lPegs): # J er hvilken peg vi er i
                 
                 if 0 == len(peg):
@@ -56,6 +59,22 @@ class Hanoi():
                 
         
         return move
+
+    def reset_game(self):
+
+        pegs = self.nPegs
+        discs = self.nDiscs
+        lPegs = self.lPegs
+
+        lPegs = []   # List that rep. all the pegs with the discs. Higer int = bigger discs 
+        for i in range(pegs): # create a list with nested lists
+            lPegs.append([])
+            for n in range(discs):
+                if i == 0:
+                    lPegs[i].append(discs-n) # Place the discs in the first peg
+                #else:
+                #   lPegs[i].append(0) # fills nested lists with data
+        self.lPegs = lPegs
 
     def peg_with_disc(self):
         lPegs = self.get_lPegs()
@@ -80,7 +99,7 @@ class Hanoi():
             for disc in peg:
                 if 0 != len(peg):
 
-                    print(peg)
+                    # print(peg)
                     hDisc = peg[-1]
 
                 else:
@@ -92,9 +111,11 @@ class Hanoi():
         lPegs = self.get_lPegs()
         fromPeg = move[0]
         toPeg = move[1]
-        print(fromPeg, toPeg)
+        # print(fromPeg, toPeg)
         lPegs[toPeg].append(lPegs[fromPeg][-1]) # Adds the disc to the new peg
         lPegs[fromPeg].pop()
+
+    
 
 
     def game_done(self):
@@ -104,14 +125,14 @@ class Hanoi():
         
         for i in range(len(lPegs)):
             if 0 == len(lPegs[0]):   
-                print('hællæ') 
-                print(len(lPegs[i]))
-                print(discs)
+                # print('hællæ') 
+                # print(len(lPegs[i]))
+                # print(discs)
                 if len(lPegs[i]) ==  discs-1 :
-                     return [True, 1000]
+                     return [100, True]
 
 
-        return [False, 0]
+        return [0, False]
             
 
 
@@ -159,7 +180,7 @@ class Hanoi():
 
 
 
-Game = Hanoi(5,6)#Pegs and discs
+Game = Hanoi(3,3)#Pegs and discs
 ''' print('Sate of the game', Game.get_lPegs())
 moves = Game.get_legal_moves()
 print('Legal moves', moves)
@@ -170,23 +191,24 @@ print('Legal moves', moves)
 print(Game.game_done()) '''
 
 
-print(Game.get_lPegs())
+# print(Game.get_lPegs())
 
-print(Game.get_legal_moves())
-Game.get_graphic()
+# print(Game.get_legal_moves())
+# Game.get_graphic()
 
-Game.take_action([0,1])
-Game.get_graphic()
+# Game.take_action([0,1])
+# Game.get_graphic()
 
 
 Game.take_action([0,2])
-Game.take_action([0,3])
-Game.take_action([0,4])
-Game.get_graphic()
+Game.take_action([0,1])
+#print(Game.get_legal_moves())
 
-print(Game.get_legal_moves())
-print(Game.game_done())
-print(Game.get_state())
+# Game.get_graphic()
+
+# print(Game.get_legal_moves())
+# print(Game.game_done())
+# print(Game.get_state())
 
 
 

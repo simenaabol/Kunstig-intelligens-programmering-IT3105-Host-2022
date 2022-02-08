@@ -2,18 +2,14 @@ import sys # added!
 sys.path.append("..") # added!
 
 
-from Project1.sim_worlds.gambler import Gambler
-from Project1.sim_worlds.cart import Cart
-from Project1.sim_worlds.hanoi import Hanoi
-
-
-
-
-from Project1.parameters import config, cartConfig, gamblerConfig, hanoiConfig
+from sim_worlds.gambler import Gambler
+from sim_worlds.cart import Cart
+from sim_worlds.hanoi import Hanoi
+from parameters import cartConfig, gamblerConfig, hanoiConfig
 
 
 class Sim_world():
-    def __init__(self):
+    def __init__(self, config):
 
         """ Set initial game configs here """
 
@@ -30,10 +26,21 @@ class Sim_world():
 
     def get_initial_game_state(self):
 
-        """ Create game object from config and get states """
-        return self.problem.get_state(), self.problem.game_over(), self.problem.get_legal_moves()
+        self.problem.reset_game()
+        return self.problem.get_state_key(), self.problem.game_done()[1], self.problem.get_legal_moves()
 
     def step(self, action):
 
-        return self.problem.do_move(action)
+        self.problem.take_action(action)
+        
+        return self.problem.get_state_key(), self.problem.game_done()[0], self.problem.game_done()[1], self.problem.get_legal_moves()
+
+    def get_parameters(self):
+        if self.config["problem"] == "cart":
+            return cartConfig
+        elif self.config["problem"] == "gambler":
+            return gamblerConfig
+        elif self.config["problem"] == "hanoi":
+            return hanoiConfig
+
 
