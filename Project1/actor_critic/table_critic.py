@@ -16,7 +16,8 @@ class Table_critic():
         self.eligibilites = {}
 
     def state_handler(self, state):
-        raise NotImplementedError
+        if state not in self.value_table.keys():
+            self.value_table[state] = random.uniform(0, 1)
 
     def set_initial_eligibility(self, state):
         

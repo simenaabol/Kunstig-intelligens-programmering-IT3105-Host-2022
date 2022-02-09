@@ -115,26 +115,20 @@ class Hanoi():
         lPegs[toPeg].append(lPegs[fromPeg][-1]) # Adds the disc to the new peg
         lPegs[fromPeg].pop()
 
-    
-
 
     def game_done(self):
         lPegs = self.get_lPegs()
         discs = self.get_nDiscs()
 
+        print(self.lPegs)
         
         for i in range(len(lPegs)):
             if 0 == len(lPegs[0]):   
-                # print('hællæ') 
-                # print(len(lPegs[i]))
-                # print(discs)
                 if len(lPegs[i]) ==  discs-1 :
                      return [100, True]
 
-
         return [0, False]
             
-
 
     def get_nPegs(self):
         return self.nPegs

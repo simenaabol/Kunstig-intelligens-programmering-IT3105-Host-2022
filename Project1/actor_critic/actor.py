@@ -12,7 +12,10 @@ class Actor():
 
         
     def state_handler(self, state, legal_moves):
-        raise NotImplementedError
+        if state not in self.policy.keys():
+            self.policy[state] = {}
+            for move in legal_moves:
+                self.policy[state][move] = 0
 
     def reset_eligibilites(self):
         """ 
@@ -34,15 +37,17 @@ class Actor():
         greedy_action = None
         highest_val = float('-inf')
 
-        for action in legal_moves:
+        for action, value in self.policy[state].items():
 
-            action = tuple(action)
-            print("STATE", state)
-            print("ACTION", action)
-            print(self.policy)
+            # action = tuple(action)
+            # print("STATE", state)
+            # print("ACTION", action)
+            # print(self.policy)
+
+            # print("POLICY VAL", self.policy[state][action])
             
-            if self.policy[state][action] > highest_val:
-                highest_val = self.policy[state][action]
+            if value > highest_val:
+                highest_val = value
                 greedy_action = action
 
         return greedy_action

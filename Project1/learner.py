@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from numpy import number
 # from Project1 import parameters
 from actor_critic.actor import Actor
 from actor_critic.sim_world import Sim_world
@@ -61,7 +62,7 @@ class RL_learner():
                 break
 
             # Gets the best action from the current policy
-            print("EPISODE!!!")
+            # print("EPISODE!!!")
             action = self.actor.get_action(state, legal_moves)
 
             # if not legal_moves:
@@ -70,14 +71,15 @@ class RL_learner():
 
             episode_actions = []
             episode_reward = 0
+            number_steps = 0
             
             # Executing the steps for the episode
             for step in range(self.parameters["max_steps"]):
 
                 """ IDK """
-                # self.actor.state_handler(state, legal_moves)
-                # if isinstance(self.critic, Table_critic):
-                #     self.critic.state_handler(state, legal_moves)
+                self.actor.state_handler(state, legal_moves)
+                if isinstance(self.critic, Table_critic):
+                    self.critic.state_handler(state)
 
                 # Retrieves info for the next step in the episode
                 next_state, reward, done, legal_moves = self.sim_world.step(action)
@@ -92,6 +94,7 @@ class RL_learner():
 
 
                 if done or legal_moves == []:
+                    print(done)
                     print("Game is done")
                     break
 
@@ -102,7 +105,7 @@ class RL_learner():
                 # Update policy for actor
                 self.actor.update_eligibilities_and_policy(episode_actions, td_error, state)
 
-                print("STEP!!!")
+                # print("STEP!!!")
                 next_action = self.actor.get_action(next_state, legal_moves)
 
                 episode_actions.append((state, td_error, action))
@@ -115,7 +118,9 @@ class RL_learner():
 
                 state = next_state
                 action = next_action
+                number_steps += 1
 
             self.actor.update_epsilon()
+            print("End state", state, "Episode reward:", episode_reward, "Number steps:", number_steps)
 
 
