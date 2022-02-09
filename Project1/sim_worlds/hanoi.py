@@ -35,7 +35,10 @@ class Hanoi():
 
         lMoves = []
         for peg in pegWithDisc:
-            lMoves+=(self.get_legal_move_from_peg(peg))
+            temp_moves = self.get_legal_move_from_peg(peg)
+            if len(temp_moves) != 0:
+                lMoves += temp_moves
+            # lMoves+=(self.get_legal_move_from_peg(peg))
         # print('LMOVES',lMoves)
         return lMoves
 
@@ -108,6 +111,8 @@ class Hanoi():
             
                               
     def take_action(self, move):
+        # print(move)
+        # print(self.lPegs)
         lPegs = self.get_lPegs()
         fromPeg = move[0]
         toPeg = move[1]
@@ -120,11 +125,11 @@ class Hanoi():
         lPegs = self.get_lPegs()
         discs = self.get_nDiscs()
 
-        print(self.lPegs)
+        # print(self.lPegs)
         
         for i in range(len(lPegs)):
-            if 0 == len(lPegs[0]):   
-                if len(lPegs[i]) ==  discs-1 :
+            if discs == len(lPegs[i]):   
+                if len(lPegs[0]) != discs:
                      return [100, True]
 
         return [0, False]

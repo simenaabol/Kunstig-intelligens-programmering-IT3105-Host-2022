@@ -92,13 +92,6 @@ class RL_learner():
                     # Critic needs state-based eligibilities
                     self.critic.set_initial_eligibility(state)
 
-
-                if done or legal_moves == []:
-                    print(done)
-                    print("Game is done")
-                    break
-
-
                 # Calculating temporal difference error as well as the target- and current state value
                 target_val, curr_state_val, td_error = self.critic.calc_td_error(state, reward, next_state)
 
@@ -120,7 +113,13 @@ class RL_learner():
                 action = next_action
                 number_steps += 1
 
+                if done or legal_moves == []:
+                    print(done)
+                    print("Game is done")
+                    break
+
             self.actor.update_epsilon()
             print("End state", state, "Episode reward:", episode_reward, "Number steps:", number_steps)
 
+    # def show_learning_graph(self):
 

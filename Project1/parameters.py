@@ -12,7 +12,7 @@ hanoiConfig = {
         'discs': 3,
     },
 
-    'num_episodes': 100,
+    'num_episodes': 500,
     'max_steps': 300,
     'critic': 'table',
 
@@ -20,7 +20,7 @@ hanoiConfig = {
         'learning_rate': 0.1,
         'discount_factor': 0.9,
         'epsilon': 1,
-        'epsilon_decay': 0.99,
+        'epsilon_decay': 0.95,
         'goal_epsilon': 0.001,
         'eligibility_decay': 0.95
     },

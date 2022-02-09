@@ -37,18 +37,15 @@ class Actor():
         greedy_action = None
         highest_val = float('-inf')
 
+        """ THIS ELSE IS SHIT I THINK """
         for action, value in self.policy[state].items():
-
-            # action = tuple(action)
-            # print("STATE", state)
-            # print("ACTION", action)
-            # print(self.policy)
-
-            # print("POLICY VAL", self.policy[state][action])
             
             if value > highest_val:
                 highest_val = value
                 greedy_action = action
+
+            else:
+                greedy_action = random.choice(legal_moves)
 
         return greedy_action
 
