@@ -55,6 +55,16 @@ class Gambler():
     def get_state(self):
         return self.coins
 
+    def get_reward(self):
+        coin = self.get_state()
+
+        if coin != 100:
+            return coin
+        else:
+            return 1000
+
+
+
 
 # B = Gambler(0.5)
 # #print(B.get_wP())

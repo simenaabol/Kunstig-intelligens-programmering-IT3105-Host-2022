@@ -128,7 +128,7 @@ class Hanoi():
         # print(self.lPegs)
         
         for i in range(len(lPegs)):
-            if discs == len(lPegs[i])+1:   
+            if discs == len(lPegs[i]):   
                 # if discs == lPegs[i][1]:   
                 if len(lPegs[0]) != discs:
                     return [100, True]
