@@ -18,7 +18,7 @@ class Sim_world():
         elif config["problem"] == "gambler":
             self.problem = Gambler()
         elif config["problem"] == "hanoi":
-            self.problem = Hanoi()
+            self.problem = Hanoi(hanoiConfig["game_config"]['pegs'], hanoiConfig["game_config"]['discs'])
         else:
             raise Exception('Sim_world must be cart, gambler, or hanoi.')
 
@@ -42,5 +42,3 @@ class Sim_world():
             return gamblerConfig
         elif self.config["problem"] == "hanoi":
             return hanoiConfig
-
-
