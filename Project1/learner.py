@@ -34,6 +34,10 @@ class RL_learner():
         self.num_episodes = self.parameters["num_episodes"]
         self.max_steps = self.parameters["max_steps"]
         self.config = config
+        self.num_steps = 0
+        self.episode = 0
+        self.graph = []
+        self.least_steps = []
 
 
     def training(self):
@@ -44,10 +48,10 @@ class RL_learner():
         for episode in range(self.num_episodes):
 
             # Print every tenth episode to keep track
-            # if episode % 10 == 0:
-            #     print("Episode nr. ", episode)
+            if episode % 10 == 0:
+                print("Episode nr. ", episode)
 
-            print("Episode nr:", episode)
+            # print("Episode nr:", episode)
 
             # Reset eligibilities in actor and table-based critic
             self.actor.reset_eligibilites()
@@ -72,7 +76,8 @@ class RL_learner():
             episode_actions = []
             episode_reward = 0
             number_steps = 0
-            
+
+            self.num_steps = 0
             # Executing the steps for the episode
             for step in range(self.parameters["max_steps"]):
 
@@ -111,15 +116,30 @@ class RL_learner():
 
                 state = next_state
                 action = next_action
-                number_steps += 1
 
                 if done or legal_moves == []:
-                    print(done)
-                    print("Game is done")
+                    # print(done)
+                    # print("Game is done")
                     break
 
-            self.actor.update_epsilon()
-            print("End state", state, "Episode reward:", episode_reward, "Number steps:", number_steps)
+                number_steps += 1
 
-    # def show_learning_graph(self):
+            self.episode += 1
+            self.actor.update_epsilon()
+            self.graph.append((self.episode + 1, number_steps))
+            self.least_steps.append(number_steps)
+            # print("End state", state, "Episode reward:", episode_reward, "Number steps:", number_steps)
+
+    def show_learning_graph(self):
+        # print(self.graph)
+        x = list(map(lambda x: x[0], self.graph))
+        y = list(map(lambda x: x[1], self.graph))
+        # print(min(self.graph[1]))
+        print(min(self.least_steps))
+
+        plt.plot(x, y)
+        plt.xlabel("Episode")
+        plt.ylabel("Number of steps")
+        plt.show()
+        
 

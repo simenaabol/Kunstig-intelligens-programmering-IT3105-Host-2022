@@ -12,7 +12,7 @@ hanoiConfig = {
         'discs': 3,
     },
 
-    'num_episodes': 500,
+    'num_episodes': 200,
     'max_steps': 300,
     'critic': 'table',
 
