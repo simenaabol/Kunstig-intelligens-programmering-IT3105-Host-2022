@@ -128,14 +128,12 @@ class RL_learner():
             self.actor.update_epsilon()
             self.graph.append((self.episode + 1, number_steps))
             self.least_steps.append(number_steps)
-            # print("End state", state, "Episode reward:", episode_reward, "Number steps:", number_steps)
+            print("End state", state, "Episode reward:", episode_reward, "Number steps:", number_steps)
 
     def show_learning_graph(self):
-        # print(self.graph)
         x = list(map(lambda x: x[0], self.graph))
         y = list(map(lambda x: x[1], self.graph))
-        # print(min(self.graph[1]))
-        print(min(self.least_steps))
+        print("Least amount of steps",min(self.least_steps))
 
         plt.plot(x, y)
         plt.xlabel("Episode")

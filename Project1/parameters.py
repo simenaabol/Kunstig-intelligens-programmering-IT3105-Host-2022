@@ -9,10 +9,10 @@ hanoiConfig = {
 
     'game_config': {
         'pegs': 3,
-        'discs': 3,
+        'discs': 4,
     },
 
-    'num_episodes': 200,
+    'num_episodes': 100,
     'max_steps': 300,
     'critic': 'table',
 
