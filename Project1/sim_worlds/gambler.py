@@ -43,7 +43,7 @@ class Gambler():
         if self.get_state() == 100:
             return [1000, True]
         elif self.get_state() == 0:
-            return [0, True]
+            return [self.coins, True]
         else:
             return [-1, False]
 
@@ -69,7 +69,7 @@ class Gambler():
 
 
 B = Gambler(1.0)
-print(B.get_wP())
+# print(B.get_wP())
 # print('Du starter med kr:',B.get_state())
 # print('Din vinnersannsynlighet er: ', B.get_wP())
 

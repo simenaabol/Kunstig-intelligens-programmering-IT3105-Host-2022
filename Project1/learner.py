@@ -1,8 +1,9 @@
-import matplotlib.pyplot as plt
 from actor_critic.actor import Actor
 from actor_critic.sim_world import Sim_world
 from actor_critic.NN_critic import NN_critic
 from actor_critic.table_critic import Table_critic
+
+import matplotlib.pyplot as plt
 
 class RL_learner():
     def __init__(self, config):
@@ -34,12 +35,10 @@ class RL_learner():
         self.episode = 0
         self.vals_for_learning_graph = []
         self.least_steps = []
+        self.vals_for_gambler = []
 
 
     def training(self):
-
-        """ Used for reward graph if we want """
-        rewards = []
         
         for episode in range(self.num_episodes):
  
@@ -96,19 +95,22 @@ class RL_learner():
                 # Calculating temporal difference error as well as the target- and current state value
                 target_val, curr_state_val, td_error = self.critic.calc_td_error(state, reward, next_state)
 
-                # Update policy for actor
-                self.actor.update_eligibilities_and_policy(episode_actions, td_error, state)
-
+                # Append the SAP with the td error
                 episode_actions.append((state, td_error, action))
 
-                # Update table or NN
+                # Update the eligibilities and policy for the actor
+                self.actor.update_eligibilities_and_policy(episode_actions, td_error, state)
+
+                # Update values for the table critic or the NN-critic
                 if isinstance(self.critic, Table_critic):
                     self.critic.update_eligibilities_and_values(episode_actions, td_error)
                 else:
                     self.critic.update_weights(episode_actions, target_val, curr_state_val)
 
+                # Retrieve the next action
                 next_action = self.actor.get_action(next_state, legal_moves)
 
+                # Set state and action for next step cycle
                 state = next_state
                 action = next_action
 
@@ -118,14 +120,42 @@ class RL_learner():
             self.least_steps.append(number_steps)
             # print("End state", state, "Episode reward:", episode_reward, "Number steps:", number_steps)
 
-    def show_learning_graph(self):
-        x = list(map(lambda x: x[0], self.vals_for_learning_graph))
-        y = list(map(lambda x: x[1], self.vals_for_learning_graph))
-        print("Least amount of steps",min(self.least_steps))
 
+        """ PUT THESE IN THEIR OWN FILES """
+
+        """ VISUAL CONFIG FOR GAMBLER """
+
+        pol = self.actor.get_actor_policy()
+
+        for act, value in pol.items():
+            highest_val = float('-inf')
+            picked_key = None
+            for key, value2 in value.items():
+                if value2 != 0:
+                    if value2 > highest_val:
+
+                        highest_val = value2
+                        picked_key = key
+
+            self.vals_for_gambler.append((act[0], picked_key[0]))
+
+        self.vals_for_gambler.sort(key=lambda x: x[0])
+        # print(self.vals_for_gambler)
+
+    def show_learning_graph(self):
+
+        """ Gambler """
+        x = list(map(lambda x: x[0], self.vals_for_gambler))
+        y = list(map(lambda x: x[1], self.vals_for_gambler))
+
+        """ Hanoi """
+        # x = list(map(lambda x: x[0], self.vals_for_learning_graph))
+        # y = list(map(lambda x: x[1], self.vals_for_learning_graph))
+        # print("Least amount of steps", min(self.least_steps))
+
+        """ Change labels to right game """
         plt.plot(x, y)
-        plt.xlabel("Episode")
-        plt.ylabel("Number of steps")
+        plt.xlabel("State")
+        plt.ylabel("Bet")
         plt.show()
-        
 

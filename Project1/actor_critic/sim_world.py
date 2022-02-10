@@ -16,7 +16,7 @@ class Sim_world():
         if config["problem"] == "cart":
             self.problem = Cart()
         elif config["problem"] == "gambler":
-            self.problem = Gambler(gamblerConfig['game_config']['wP'])
+            self.problem = Gambler(gamblerConfig['game_config']['win_prob'])
         elif config["problem"] == "hanoi":
             self.problem = Hanoi(hanoiConfig["game_config"]['pegs'], hanoiConfig["game_config"]['discs'])
         else:
@@ -27,6 +27,7 @@ class Sim_world():
     def get_initial_game_state(self):
 
         self.problem.reset_game()
+
         return self.problem.get_state_key(), self.problem.game_done()[1], self.problem.get_legal_moves()
 
     def step(self, action):

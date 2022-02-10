@@ -72,20 +72,20 @@ class Cart():
         Mc = self.Mc
 
         th2 =  self.update_th2(g, th0, pF, Mp, L, th1, Mc, L)
-        print ('th2: ', th2)
+        # print ('th2: ', th2)
 
         #2.2  -> update/set x2
         x2 = self.x2
         th1 = self.th1
 
         x2 = self.update_x2(pF, Mp, L, th1, th0, Mc, th2)
-        print('x2: ', x2)
+        # print('x2: ', x2)
 
 
         #2.3  -> update/set th1
         t = self.t
         th1 = th1+(t*th2)
-        print('th1: ',th1)
+        # print('th1: ',th1)
 
         #2.4  -> update/set  x1
         x1 = self.x1
@@ -99,7 +99,7 @@ class Cart():
 
         x0 = self.x0
         x0 = x0 + (t*x1)
-        print('x0: ', x0)
+        # print('x0: ', x0)
          
              
 

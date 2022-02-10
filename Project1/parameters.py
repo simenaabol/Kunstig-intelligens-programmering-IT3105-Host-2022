@@ -1,6 +1,6 @@
 config = {
-    'problem': 'hanoi',
-    # 'problem': 'gambler',
+    # 'problem': 'hanoi',
+    'problem': 'gambler',
     #'problem': 'cart',
 }
 
@@ -9,7 +9,7 @@ hanoiConfig = {
 
     'game_config': {
         'pegs': 3, 
-        'discs': 4,
+        'discs': 3
     },
 
     'num_episodes': 100,
@@ -17,17 +17,17 @@ hanoiConfig = {
     'critic': 'table',
 
     'actor_config': {
-        'learning_rate': 0.1,
+        'learning_rate': 0.01,
         'discount_factor': 0.9,
         'epsilon': 1,
-        'epsilon_decay': 0.95,
+        'epsilon_decay': 0.99,
         'goal_epsilon': 0.001,
         'eligibility_decay': 0.99
     },
 
     'critic_config': {
         'learning_rate': 0.1,
-        'discount_factor': 0.90,
+        'discount_factor': 0.9,
         'eligibility_decay': 0.99
     },
 
@@ -43,25 +43,25 @@ hanoiConfig = {
 gamblerConfig = {
     
         'game_config': {
-        'wP': 0.4, 
+        'win_prob': 0.4, 
     },
 
-    'num_episodes': 100,
+    'num_episodes': 15000,
     'max_steps': 300,
     'critic': 'table',
 
     'actor_config': {
-        'learning_rate': 0.1,
+        'learning_rate': 0.01,
         'discount_factor': 0.9,
         'epsilon': 1,
-        'epsilon_decay': 0.95,
+        'epsilon_decay': 0.99,
         'goal_epsilon': 0.001,
-        'eligibility_decay': 0.95
+        'eligibility_decay': 0.99
     },
 
     'critic_config': {
         'learning_rate': 0.1,
-        'discount_factor': 0.90,
+        'discount_factor': 0.9,
         'eligibility_decay': 0.99
     },
 

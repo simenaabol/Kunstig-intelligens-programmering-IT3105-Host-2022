@@ -122,9 +122,9 @@ class Hanoi():
             
             if pegs_list[0] == []:   
                 if len(peg) == discs:
-                    return [100, True]
+                    return [1000, True]
 
-        return [0, False]
+        return [-0.1, False]
 
 
     def get_number_of_pegs(self):
