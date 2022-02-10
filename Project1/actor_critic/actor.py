@@ -26,6 +26,7 @@ class Actor():
     def get_action(self, state, legal_moves):
 
         if state not in self.policy.keys():
+            # print('Legal: ', legal_moves)
             choice = random.choice(legal_moves)
             choice = tuple(choice)
             self.policy[state] = {}
@@ -39,14 +40,18 @@ class Actor():
 
         """ THIS ELSE IS SHIT I THINK """
         for action, value in self.policy[state].items():
+            print('Action: ', action)
             
-            if value > highest_val:
+            if value > highest_val and value != 0:
                 highest_val = value
                 greedy_action = action
+                print('oppe')
 
-            else:
-                greedy_action = random.choice(legal_moves)
-
+            # else:
+                # print('nede')
+                # greedy_action = random.choice(legal_moves)
+        print('hæhhæ', self.policy[state].items())
+        greedy_action = max(self.policy[state].items(), key=lambda x: x[0])[0] if greedy_action is None else greedy_action
         return greedy_action
 
 

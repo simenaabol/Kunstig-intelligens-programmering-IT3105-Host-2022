@@ -46,7 +46,7 @@ class RL_learner():
         rewards = []
         
         for episode in range(self.num_episodes):
-
+ 
             # Print every tenth episode to keep track
             if episode % 10 == 0:
                 print("Episode nr. ", episode)
@@ -80,8 +80,8 @@ class RL_learner():
             self.num_steps = 0
             # Executing the steps for the episode
             for step in range(self.parameters["max_steps"]):
+                number_steps += 1
 
-                """ IDK """
                 self.actor.state_handler(state, legal_moves)
                 if isinstance(self.critic, Table_critic):
                     self.critic.state_handler(state)
@@ -103,6 +103,11 @@ class RL_learner():
                 # Update policy for actor
                 self.actor.update_eligibilities_and_policy(episode_actions, td_error, state)
 
+                if done or legal_moves == []:
+                    print(done)
+                    #print("Game is done")
+                    break
+
                 # print("STEP!!!")
                 next_action = self.actor.get_action(next_state, legal_moves)
 
@@ -116,13 +121,11 @@ class RL_learner():
 
                 state = next_state
                 action = next_action
+                
 
-                if done or legal_moves == []:
-                    # print(done)
-                    # print("Game is done")
-                    break
 
-                number_steps += 1
+
+               
 
             self.episode += 1
             self.actor.update_epsilon()
