@@ -77,11 +77,12 @@ class RL_learner():
             episode_reward = 0
             number_steps = 0
 
-            self.num_steps = 0
+            # self.num_steps = 0
             # Executing the steps for the episode
             for step in range(self.parameters["max_steps"]):
                 number_steps += 1
 
+                # print("FØR SH")
                 self.actor.state_handler(state, legal_moves)
                 if isinstance(self.critic, Table_critic):
                     self.critic.state_handler(state)
@@ -89,6 +90,11 @@ class RL_learner():
                 # Retrieves info for the next step in the episode
                 next_state, reward, done, legal_moves = self.sim_world.step(action)
                 episode_reward += reward
+
+                if done or legal_moves == []:
+                    print(done)
+                    #print("Game is done")
+                    break
 
                 # Set eligibilities to 1
                 # Actor needs SAP-based eligibilites
@@ -103,11 +109,6 @@ class RL_learner():
                 # Update policy for actor
                 self.actor.update_eligibilities_and_policy(episode_actions, td_error, state)
 
-                if done or legal_moves == []:
-                    print(done)
-                    #print("Game is done")
-                    break
-
                 # print("STEP!!!")
                 next_action = self.actor.get_action(next_state, legal_moves)
 
@@ -121,11 +122,6 @@ class RL_learner():
 
                 state = next_state
                 action = next_action
-                
-
-
-
-               
 
             self.episode += 1
             self.actor.update_epsilon()
