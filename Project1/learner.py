@@ -71,10 +71,10 @@ class RL_learner():
             for step in range(self.max_steps):
                 number_steps += 1
 
-                # Adds all states and actions to the actor
+                # Initializing the actor policy with states, and legal moves.
                 self.actor.state_handler(state, legal_moves)
 
-                # Adds all states in the table critic
+                # Initializing the value table with small random values
                 if isinstance(self.critic, Table_critic):
                     self.critic.state_handler(state)
 
@@ -82,9 +82,8 @@ class RL_learner():
                 next_state, reward, done, legal_moves = self.sim_world.step(action)
                 episode_reward += reward
 
+                # Checks if the game is done
                 if done or legal_moves == []:
-                    # print(done)
-                    #print("Game is done")
                     break
 
                 # Set eligibilities to 1
@@ -100,9 +99,6 @@ class RL_learner():
                 # Update policy for actor
                 self.actor.update_eligibilities_and_policy(episode_actions, td_error, state)
 
-                # print("STEP!!!")
-                next_action = self.actor.get_action(next_state, legal_moves)
-
                 episode_actions.append((state, td_error, action))
 
                 # Update table or NN
@@ -110,6 +106,8 @@ class RL_learner():
                     self.critic.update_eligibilities_and_values(episode_actions, td_error)
                 else:
                     self.critic.update_weights(episode_actions, target_val, curr_state_val)
+
+                next_action = self.actor.get_action(next_state, legal_moves)
 
                 state = next_state
                 action = next_action
