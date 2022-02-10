@@ -18,10 +18,11 @@ class Cart():
         self.nX = -2.4 # the left bound on the horizontal cart position
         self.pX = 2.4 # the right bound on the horizontal cart position
         self.T = 300.0 # the length of an episode, in timesteps 
+        self.step = 0.0
         self.nF = -10 # F is the magnitude of that force. (F = 10)
         self.pF = 10
         self.th0 = random.uniform(-(self.thM), self.thM) # angle og the pole (in radians) with respect to the vertical // Theta
-        #Fs = [self.nF, self.pF]
+        self.Fs = [self.nF, self.pF]
         
 
         
@@ -107,14 +108,29 @@ class Cart():
 
 
     def get_state(self):
-        raise NotImplementedError()
+        return self.th0
+
+    def get_state_key(self):
+        return tuple(self.th0)  
 
     def get_legal_moves(self):
-        #B = self.B = random.choice(Fs)
-        raise NotImplementedError()
+        raise self.Fs
 
     def game_done(self):
-        raise NotImplementedError()
+        th0 = self.th0
+        thM = self.thM
+        step = self.step
+        T = self.T
+        
+        if (thM> th0 and th0 > -thM and step == T):
+            return [1000, True]
+        elif (thM> th0 and th0 > -thM):
+            return [10, False]
+        else:
+            return [-1, False]
+
+
+
 
 
 
