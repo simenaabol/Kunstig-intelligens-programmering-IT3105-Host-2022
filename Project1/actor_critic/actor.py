@@ -16,11 +16,7 @@ class Actor():
             self.policy[state] = {}
             for move in legal_moves:
                 move = tuple(move)
-                # print(move)
-                # print("SJDAKLSJDLASJHDJHLS",move)
                 self.policy[state][move] = 0
-
-        # print('hæhhæ',state,"LEGAL", legal_moves, "POL", self.policy)
 
     def reset_eligibilites(self):
         """ 
@@ -51,11 +47,8 @@ class Actor():
             if value > highest_val and value != 0:
                 highest_val = value
                 greedy_action = action
-                # print('oppe')
 
-            # else:
-                # print('nede')
-                # greedy_action = random.choice(legal_moves)
+        """ 100% koka """
         greedy_action = max(self.policy[state].items(), key=lambda x: x[0])[0] if greedy_action is None else greedy_action
         return greedy_action
 
