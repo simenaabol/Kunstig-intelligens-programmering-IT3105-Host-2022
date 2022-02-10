@@ -107,12 +107,9 @@ class Hanoi():
             
                               
     def take_action(self, move):
-        # print(move)
-        # print(self.pegs_list)
         pegs_list = self.get_pegs_list()
         from_peg = move[0]
         to_peg = move[1]
-        # print(from_peg, to_peg)
         pegs_list[to_peg].append(pegs_list[from_peg][-1]) # Adds the disc to the new peg
         pegs_list[from_peg].pop()
 
@@ -121,21 +118,24 @@ class Hanoi():
         pegs_list = self.get_pegs_list()
         discs = self.get_number_of_discs()
 
-        # print(self.pegs_list)
+        for peg in pegs_list:
+            
+            if pegs_list[0] == []:   
+                if len(peg) == discs:
+                    return [100, True]
 
         return [0, False]
+
 
     def get_number_of_pegs(self):
         return self.number_of_pegs
 
     def get_number_of_discs(self):
-        return self.number_of_pegs
+        return self.number_of_discs
 
     def get_pegs_list(self):
         return self.pegs_list
 
-    # def get_aDiscs(self):
-    #     return self.aDiscs
     
     def get_graphic(self):
         pegs_list = self.get_pegs_list()

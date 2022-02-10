@@ -22,7 +22,7 @@ hanoiConfig = {
         'epsilon': 1,
         'epsilon_decay': 0.95,
         'goal_epsilon': 0.001,
-        'eligibility_decay': 0.95
+        'eligibility_decay': 0.99
     },
 
     'critic_config': {

@@ -1,6 +1,4 @@
 import matplotlib.pyplot as plt
-from numpy import number
-# from Project1 import parameters
 from actor_critic.actor import Actor
 from actor_critic.sim_world import Sim_world
 from actor_critic.NN_critic import NN_critic
@@ -33,10 +31,8 @@ class RL_learner():
 
         self.num_episodes = self.parameters["num_episodes"]
         self.max_steps = self.parameters["max_steps"]
-        self.config = config
-        self.num_steps = 0
         self.episode = 0
-        self.graph = []
+        self.vals_for_learning_graph = []
         self.least_steps = []
 
 
@@ -51,8 +47,6 @@ class RL_learner():
             if episode % 10 == 0:
                 print("Episode nr. ", episode)
 
-            # print("Episode nr:", episode)
-
             # Reset eligibilities in actor and table-based critic
             self.actor.reset_eligibilites()
             if isinstance(self.critic, Table_critic):
@@ -61,29 +55,26 @@ class RL_learner():
             # Retrieve initial state for sim world
             state, done, legal_moves = self.sim_world.get_initial_game_state()
 
-            if len(legal_moves) == 0:
-                print(state)
+            # Check for legal moves
+            if legal_moves == []:
+                print("No legal moves", state)
                 break
 
-            # Gets the best action from the current policy
-            # print("EPISODE!!!")
+            # Retrieves action based on policy/epsilon
             action = self.actor.get_action(state, legal_moves)
-
-            # if not legal_moves:
-            #     print("No legal moves")
-            #     break
 
             episode_actions = []
             episode_reward = 0
             number_steps = 0
 
-            # self.num_steps = 0
             # Executing the steps for the episode
-            for step in range(self.parameters["max_steps"]):
+            for step in range(self.max_steps):
                 number_steps += 1
 
-                # print("FØR SH")
+                # Adds all states and actions to the actor
                 self.actor.state_handler(state, legal_moves)
+
+                # Adds all states in the table critic
                 if isinstance(self.critic, Table_critic):
                     self.critic.state_handler(state)
 
@@ -92,7 +83,7 @@ class RL_learner():
                 episode_reward += reward
 
                 if done or legal_moves == []:
-                    print(done)
+                    # print(done)
                     #print("Game is done")
                     break
 
@@ -125,13 +116,13 @@ class RL_learner():
 
             self.episode += 1
             self.actor.update_epsilon()
-            self.graph.append((self.episode + 1, number_steps))
+            self.vals_for_learning_graph.append((self.episode + 1, number_steps))
             self.least_steps.append(number_steps)
-            print("End state", state, "Episode reward:", episode_reward, "Number steps:", number_steps)
+            # print("End state", state, "Episode reward:", episode_reward, "Number steps:", number_steps)
 
     def show_learning_graph(self):
-        x = list(map(lambda x: x[0], self.graph))
-        y = list(map(lambda x: x[1], self.graph))
+        x = list(map(lambda x: x[0], self.vals_for_learning_graph))
+        y = list(map(lambda x: x[1], self.vals_for_learning_graph))
         print("Least amount of steps",min(self.least_steps))
 
         plt.plot(x, y)
