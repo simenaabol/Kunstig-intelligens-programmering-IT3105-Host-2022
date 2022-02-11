@@ -11,14 +11,27 @@ from parameters import cartConfig, gamblerConfig, hanoiConfig
 class Sim_world():
     def __init__(self, config):
 
-        """ Set initial game configs here """
-
         if config["problem"] == "cart":
-            self.problem = Cart()
+            self.problem = Cart(cartConfig['game_config']['L'], 
+                                cartConfig['game_config']['Mp'], 
+                                cartConfig['game_config']['g'], 
+                                cartConfig['game_config']['t'], 
+                                cartConfig['game_config']['Mc'], 
+                                cartConfig['game_config']['x0'], 
+                                cartConfig['game_config']['thM'], 
+                                cartConfig['game_config']['nX'], 
+                                cartConfig['game_config']['pX'], 
+                                cartConfig['game_config']['T'], 
+                                cartConfig['game_config']['step'], 
+                                cartConfig['game_config']['nF'], 
+                                cartConfig['game_config']['pF'])
+
         elif config["problem"] == "gambler":
             self.problem = Gambler(gamblerConfig['game_config']['win_prob'])
+
         elif config["problem"] == "hanoi":
             self.problem = Hanoi(hanoiConfig["game_config"]['pegs'], hanoiConfig["game_config"]['discs'])
+            
         else:
             raise Exception('Sim_world must be cart, gambler, or hanoi.')
 

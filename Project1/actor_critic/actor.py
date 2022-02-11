@@ -34,8 +34,10 @@ class Actor():
 
         if state not in self.policy.keys():
 
+            # print("LEGAL", legal_moves)
             choice = random.choice(legal_moves)
             choice = tuple(choice)
+            # print(choice)
             return choice
 
         if random.uniform(0, 1) < self.epsilon:

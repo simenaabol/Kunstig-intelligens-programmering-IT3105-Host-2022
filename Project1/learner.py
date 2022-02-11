@@ -62,6 +62,8 @@ class RL_learner():
             # Retrieves action based on policy/epsilon
             action = self.actor.get_action(state, legal_moves)
 
+            # print("EPI", action)
+
             episode_actions = []
             episode_reward = 0
             number_steps = 0
@@ -83,6 +85,7 @@ class RL_learner():
 
                 # Checks if the game is done
                 if done or legal_moves == []:
+                    # print("YEET")
                     break
 
                 # Set eligibilities to 1
@@ -109,6 +112,8 @@ class RL_learner():
 
                 # Retrieve the next action
                 next_action = self.actor.get_action(next_state, legal_moves)
+
+                # print("STEP",next_action)
 
                 # Set state and action for next step cycle
                 state = next_state
@@ -140,9 +145,13 @@ class RL_learner():
             self.vals_for_gambler.append((act[0], picked_key[0]))
 
         self.vals_for_gambler.sort(key=lambda x: x[0])
-        # print(self.vals_for_gambler)
 
     def show_learning_graph(self):
+
+        """ Cartpole """
+
+        # x = list(map(lambda x: x[0], self.vals_for_learning_graph))
+        # y = list(map(lambda x: x[1], self.vals_for_learning_graph))
 
         """ Gambler """
         x = list(map(lambda x: x[0], self.vals_for_gambler))
@@ -155,7 +164,7 @@ class RL_learner():
 
         """ Change labels to right game """
         plt.plot(x, y)
-        plt.xlabel("State")
-        plt.ylabel("Bet")
+        plt.xlabel("Episode")
+        plt.ylabel("Steps")
         plt.show()
 
