@@ -57,7 +57,6 @@ class Sim_world():
         elif self.config["problem"] == "hanoi":
             return hanoiConfig
 
-
     def get_visualizing_data(self, actor, ep_step_count, least_steps_list):
 
         return self.problem.visualize(actor, ep_step_count, least_steps_list)

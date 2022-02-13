@@ -123,7 +123,7 @@ class Hanoi():
             
             if pegs_list[0] == []:   
                 if len(peg) == discs:
-                    return [1000, True]
+                    return [100, True]
 
         return [-0.1, False]
 

@@ -1,7 +1,7 @@
 config = {
-    # 'problem': 'hanoi',
+    'problem': 'hanoi',
     # 'problem': 'gambler',
-    'problem': 'cart',
+    # 'problem': 'cart',
 }
 
 
@@ -9,7 +9,7 @@ hanoiConfig = {
 
     'game_config': {
         'pegs': 3, 
-        'discs': 4
+        'discs': 3
     },
 
     'num_episodes': 150,
@@ -21,7 +21,6 @@ hanoiConfig = {
         'discount_factor': 0.9,
         'epsilon': 1,
         'epsilon_decay': 0.99,
-        'goal_epsilon': 0.001,
         'eligibility_decay': 0.99
     },
 

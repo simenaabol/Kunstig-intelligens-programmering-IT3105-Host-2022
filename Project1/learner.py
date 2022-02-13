@@ -32,7 +32,6 @@ class RL_learner():
 
         self.num_episodes = self.parameters["num_episodes"]
         self.max_steps = self.parameters["max_steps"]
-        self.episode = 0
         self.ep_step_count = []
         self.least_steps_list = []
 
@@ -61,15 +60,11 @@ class RL_learner():
             # Retrieves action based on policy/epsilon
             action = self.actor.get_action(state, legal_moves)
 
-            # print("EPI", action)
-
             episode_actions = []
             episode_reward = 0
-            num_of_steps = 0
 
             # Executing the steps for the episode
             for step in range(self.max_steps):
-                num_of_steps += 1
 
                 # Initializing the actor policy with states, and legal moves.
                 self.actor.state_handler(state, legal_moves)
@@ -116,12 +111,13 @@ class RL_learner():
                 state = next_state
                 action = next_action
 
-            self.episode += 1
             self.actor.update_epsilon()
 
-            self.ep_step_count.append((self.episode + 1, num_of_steps))
-            self.least_steps_list.append(num_of_steps)
-            # print("End state", state, "Episode reward:", episode_reward, "Number steps:", num_of_steps)
+            # For visualization
+            self.ep_step_count.append((episode + 1, step))
+            self.least_steps_list.append(step)
+
+            # print("Before end state", state, "Episode reward:", episode_reward, "Number steps:", step)
 
 
     def show_learning_graph(self):

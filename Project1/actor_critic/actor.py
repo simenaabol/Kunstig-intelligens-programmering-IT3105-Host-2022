@@ -110,6 +110,8 @@ class Actor():
 
         self.epsilon *= self.epsilon_decay
 
+        # print("EPS", self.epsilon)
+
     def get_actor_policy(self):
         
         return self.policy
