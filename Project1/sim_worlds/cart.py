@@ -175,10 +175,10 @@ class Cart():
         else:
             return [-1, True]
 
+    def visualize(self, _, ep_step_count, __):
 
+        x_label = "Episodes"
+        y_label = "Steps"
 
+        return ep_step_count, x_label, y_label, None
 
-
-
-# Step = Cart(0.5 , 0.1 , 9.8 , 0.002 )
-# Step.take_action()

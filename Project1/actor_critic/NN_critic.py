@@ -1,3 +1,11 @@
+
+
+class Network():
+
+    def __init__(self):
+        pass
+
+
 class NN_critic():
     def __init__(self) -> None:
         pass

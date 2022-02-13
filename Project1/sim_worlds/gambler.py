@@ -1,9 +1,11 @@
 import random
 
 class Gambler():
-    def __init__(self, wP):
-        self.wP = wP # win probability
+    def __init__(self, win_prob):
+        self.win_prob = win_prob # win probability
         self.coins = random.randint(1, 99)
+
+        self.vals_for_gambler = []
 
     def get_legal_moves(self):
         coin = self.get_state()
@@ -26,10 +28,10 @@ class Gambler():
     def take_action(self, bet):
         # print('BET:', bet)
         # print('Ditt bet',bet[0])
-        wP = self.get_wP()
+        win_prob = self.get_win_prob()
         coins = self.get_state()
 
-        if wP>= random.random():
+        if win_prob>= random.random():
             coins+=bet[0]
             # print('Du vant betten din!:)')
         else:
@@ -47,8 +49,8 @@ class Gambler():
         else:
             return [-1, False]
 
-    def get_wP(self): #get_win_probability
-        return self.wP
+    def get_win_prob(self): #get_win_probability
+        return self.win_prob
     
     def update_coin(self, coin): #get_win_probability
         self.coins = coin
@@ -64,17 +66,25 @@ class Gambler():
         self.coins = random.randint(1, 99)
 
 
+    def visualize(self, actor, _, __):
 
+        pol = actor.get_actor_policy()
 
+        for act, value in pol.items():
+            highest_val = float('-inf')
+            picked_key = None
+            for key, value2 in value.items():
+                if value2 != 0:
+                    if value2 > highest_val:
 
+                        highest_val = value2
+                        picked_key = key
 
-B = Gambler(1.0)
-# print(B.get_wP())
-# print('Du starter med kr:',B.get_state())
-# print('Din vinnersannsynlighet er: ', B.get_wP())
+            self.vals_for_gambler.append((act[0], picked_key[0]))
 
-#print(B.game_done())
-# moves = B.get_legal_moves()
-# B.take_action(random.choice(moves))
+        self.vals_for_gambler.sort(key=lambda x: x[0])
 
+        x_label = "State"
+        y_label = "Wager"
 
+        return self.vals_for_gambler, x_label, y_label, None

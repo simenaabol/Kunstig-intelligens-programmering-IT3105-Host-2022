@@ -1,7 +1,7 @@
 config = {
     # 'problem': 'hanoi',
-    'problem': 'gambler',
-    # 'problem': 'cart',
+    # 'problem': 'gambler',
+    'problem': 'cart',
 }
 
 
@@ -9,7 +9,7 @@ hanoiConfig = {
 
     'game_config': {
         'pegs': 3, 
-        'discs': 3
+        'discs': 4
     },
 
     'num_episodes': 150,

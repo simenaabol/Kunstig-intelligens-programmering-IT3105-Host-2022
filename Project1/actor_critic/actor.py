@@ -1,7 +1,4 @@
 import random
-from sympy import Symbol
-from sympy.solvers import solve
-
 import matplotlib.pyplot as plt
 
 class Actor():

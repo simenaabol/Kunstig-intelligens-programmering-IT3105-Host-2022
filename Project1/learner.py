@@ -33,9 +33,8 @@ class RL_learner():
         self.num_episodes = self.parameters["num_episodes"]
         self.max_steps = self.parameters["max_steps"]
         self.episode = 0
-        self.vals_for_learning_graph = []
-        self.least_steps = []
-        self.vals_for_gambler = []
+        self.ep_step_count = []
+        self.least_steps_list = []
 
 
     def training(self):
@@ -66,11 +65,11 @@ class RL_learner():
 
             episode_actions = []
             episode_reward = 0
-            number_steps = 0
+            num_of_steps = 0
 
             # Executing the steps for the episode
             for step in range(self.max_steps):
-                number_steps += 1
+                num_of_steps += 1
 
                 # Initializing the actor policy with states, and legal moves.
                 self.actor.state_handler(state, legal_moves)
@@ -85,7 +84,7 @@ class RL_learner():
 
                 # Checks if the game is done
                 if done or legal_moves == []:
-                    # print("YEET")
+                    # print("GAME OVER", done)
                     break
 
                 # Set eligibilities to 1
@@ -113,58 +112,30 @@ class RL_learner():
                 # Retrieve the next action
                 next_action = self.actor.get_action(next_state, legal_moves)
 
-                # print("STEP",next_action)
-
                 # Set state and action for next step cycle
                 state = next_state
                 action = next_action
 
             self.episode += 1
             self.actor.update_epsilon()
-            self.vals_for_learning_graph.append((self.episode + 1, number_steps))
-            self.least_steps.append(number_steps)
-            # print("End state", state, "Episode reward:", episode_reward, "Number steps:", number_steps)
 
+            self.ep_step_count.append((self.episode + 1, num_of_steps))
+            self.least_steps_list.append(num_of_steps)
+            # print("End state", state, "Episode reward:", episode_reward, "Number steps:", num_of_steps)
 
-        """ PUT THESE IN THEIR OWN FILES """
-
-        """ VISUAL CONFIG FOR GAMBLER """
-
-        pol = self.actor.get_actor_policy()
-
-        for act, value in pol.items():
-            highest_val = float('-inf')
-            picked_key = None
-            for key, value2 in value.items():
-                if value2 != 0:
-                    if value2 > highest_val:
-
-                        highest_val = value2
-                        picked_key = key
-
-            self.vals_for_gambler.append((act[0], picked_key[0]))
-
-        self.vals_for_gambler.sort(key=lambda x: x[0])
 
     def show_learning_graph(self):
 
-        """ Cartpole """
+        vals_for_graph, x_label, y_label, least_steps = self.sim_world.get_visualizing_data(self.actor, self.ep_step_count, self.least_steps_list)
 
-        # x = list(map(lambda x: x[0], self.vals_for_learning_graph))
-        # y = list(map(lambda x: x[1], self.vals_for_learning_graph))
+        x = list(map(lambda x: x[0], vals_for_graph))
+        y = list(map(lambda x: x[1], vals_for_graph))
 
-        """ Gambler """
-        x = list(map(lambda x: x[0], self.vals_for_gambler))
-        y = list(map(lambda x: x[1], self.vals_for_gambler))
+        if least_steps:
+            print("Least amount of steps", least_steps)
 
-        """ Hanoi """
-        # x = list(map(lambda x: x[0], self.vals_for_learning_graph))
-        # y = list(map(lambda x: x[1], self.vals_for_learning_graph))
-        # print("Least amount of steps", min(self.least_steps))
-
-        """ Change labels to right game """
         plt.plot(x, y)
-        plt.xlabel("Episode")
-        plt.ylabel("Steps")
+        plt.xlabel(x_label)
+        plt.ylabel(y_label)
         plt.show()
 

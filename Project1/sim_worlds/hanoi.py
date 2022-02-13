@@ -1,3 +1,4 @@
+from tkinter import Y
 from turtle import color
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
@@ -161,6 +162,21 @@ class Hanoi():
         ax.plot([0, (dWith+2)*number_of_pegs], [dWith, dWith], color = "white")
 
         return plt.show()
+
+
+    def visualize(self, _, ep_step_count, least_steps_list):
+
+        x_label = "Episodes"
+        y_label = "Steps"
+
+        return ep_step_count, x_label, y_label, min(least_steps_list)
+
+
+
+
+
+
+
 
 
 
