@@ -105,7 +105,7 @@ class RL_learner():
                 else:
                     self.critic.update_weights(td_error)
 
-                list_of_states.append(from_state)
+                # list_of_states.append(from_state)
 
                 # Checks if the game is done
                 if done or legal_moves == []:
@@ -117,7 +117,7 @@ class RL_learner():
                 # Retrieve the next action
                 next_action = self.actor.get_action(current_state, legal_moves)
 
-                list_of_states.append(from_state)
+                # list_of_states.append(from_state)
 
                 # Set state and action for next step cycle
                 from_state = current_state
@@ -128,7 +128,7 @@ class RL_learner():
             self.actor.update_epsilon()
 
             # For visualization
-            self.ep_step_count.append((episode + 1, step))
+            self.ep_step_count.append((episode + 1, step + 1))
             self.least_steps_list.append(step)
 
             # print("STATE:", episode_actions[0][0])

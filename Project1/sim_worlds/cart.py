@@ -2,6 +2,8 @@ from random import randrange
 import random
 import math
 
+import matplotlib.pyplot as plt
+
 
 import numpy as np
 
@@ -180,11 +182,11 @@ class Cart():
         T = self.T
         # print('T: ', step)
         if (nX < x0 and pX > x0 and thM> th0 and th0 > -thM and step == T):
-            return [1000, True]
+            return [1, True]
         elif(nX < x0 and pX > x0 and thM> th0 and th0 > -thM):
-            return [10, False]
+            return [1, False]
         else:
-            return [-100, True]
+            return [0, True]
 
     def visualize(self, _, ep_step_count, __):
 
@@ -192,4 +194,22 @@ class Cart():
         y_label = "Steps"
 
         return ep_step_count, x_label, y_label, None
+
+    def get_graphic(self, best_game):
+
+        graph_vals = []
+
+        for i, state in enumerate(best_game):
+
+            graph_vals.append((i + 1, state[0]))
+
+
+        x = list(map(lambda x: x[0], graph_vals))
+        y = list(map(lambda x: x[1], graph_vals))
+
+        plt.plot(x, y)
+        plt.xlabel("Timesteps")
+        plt.ylabel("Angle")
+        plt.show()
+
 

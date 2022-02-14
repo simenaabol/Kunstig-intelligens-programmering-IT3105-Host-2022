@@ -1,11 +1,11 @@
 config = {
-    'problem': 'hanoi',
+    # 'problem': 'hanoi',
     # 'problem': 'gambler',
-    # 'problem': 'cart',
+    'problem': 'cart',
 
 
-    # 'critic': 'table',
-    'critic': 'nn'
+    'critic': 'table',
+    # 'critic': 'nn'
 }
 
 
@@ -34,10 +34,10 @@ hanoiConfig = {
     },
 
     'anncritic_config': {
-        'learning_rate': 0.1,
-        'discount_factor': 0.9,
-        'input_size': 1,
-        'num_layers': [25]
+        'learning_rate': 0.2,
+        'discount_factor': 0.7,
+        'input_size': 4,
+        'num_layers': (15, 20, 30, 10)
     }
 } 
 
@@ -111,10 +111,10 @@ cartConfig = {
     },
 
     'anncritic_config': {
-        'learning_rate': 1e-3,
-        'discount_factor': 0.90,
-        'input_size': 1,
-        'num_layers': 25
+        'learning_rate': 0.2,
+        'discount_factor': 0.7,
+        'input_size': 4,
+        'num_layers': (4, 5, 4)
     }
 }
 

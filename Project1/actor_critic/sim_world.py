@@ -64,15 +64,21 @@ class Sim_world():
 
     def set_visualizing_data(self, list_of_states):
         if self.config["problem"] == "cart":
-            pass
-            # self.problem.get_graphic()
-        elif self.config["problem"] == "gambler":
-            Continue
-        elif self.config["problem"] == "hanoi":
+
             if self.best_game == None:
                 self.best_game = list_of_states
 
-            elif len(list_of_states) <  len(self.best_game):
+            elif len(list_of_states) >= len(self.best_game):
+                self.best_game = list_of_states
+
+        elif self.config["problem"] == "gambler":
+            Continue
+        elif self.config["problem"] == "hanoi":
+
+            if self.best_game == None:
+                self.best_game = list_of_states
+
+            elif len(list_of_states) < len(self.best_game):
                 self.best_game = list_of_states
 
             
@@ -80,16 +86,8 @@ class Sim_world():
     # At the moment only used in Hanoi
     def render(self):
         if self.config["problem"] == "cart":
-            pass
-            # Continue
-            # self.problem.get_graphic()
+            self.problem.get_graphic(self.best_game)
         elif self.config["problem"] == "gambler":
             Continue
         elif self.config["problem"] == "hanoi":
             self.problem.get_graphic(self.best_game)
-
-    
-
-            
-
-    

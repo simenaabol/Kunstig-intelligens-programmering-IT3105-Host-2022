@@ -161,6 +161,9 @@ class Hanoi():
     
     def get_graphic(self, best_game):
 
+
+        print(best_game, len(best_game))
+
         best_game.append(best_game[-1])
         dWith = self.get_number_of_discs()
         number_of_pegs = self.get_number_of_pegs()
