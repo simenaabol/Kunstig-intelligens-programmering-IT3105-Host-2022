@@ -2,6 +2,9 @@ from random import randrange
 import random
 import math
 
+
+import numpy as np
+
 from parameters import cartConfig
 
 
@@ -38,6 +41,8 @@ class Cart():
 
         self.B = 0 # the bang-bang force, either F or -F, where F is the magnitude of that force. (F=10)
 
+        self.screen = None
+
     def reset_game(self):
         self.L = cartConfig['game_config']['L']
         self.Mp = cartConfig['game_config']['Mp']
@@ -64,6 +69,8 @@ class Cart():
         self.x2 = 0.0
 
         self.B = 0
+
+        self.screen = None
 
     def get_th0(self):
         return self.th0

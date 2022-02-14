@@ -2,6 +2,7 @@ from tkinter import Y
 from turtle import color
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
+# import matplotlib.animation as animation
 import numpy as np
 
 
@@ -10,6 +11,8 @@ class Hanoi():
 
         self.number_of_pegs = pegs
         self.number_of_discs = discs
+
+
 
         pegs_list = []   # List that rep. all the pegs with the discs. Higer int = bigger discs 
         for i in range(pegs): # create a list with nested lists
@@ -62,6 +65,9 @@ class Hanoi():
 
     def reset_game(self):
 
+        self.this_game= []
+        self.this_game_steps = 0
+
         pegs = self.number_of_pegs
         discs = self.number_of_discs
         pegs_list = self.pegs_list
@@ -108,6 +114,9 @@ class Hanoi():
             
                               
     def take_action(self, move):
+        # print('this_game: ', self.this_game) 
+
+
         pegs_list = self.get_pegs_list()
         from_peg = move[0]
         to_peg = move[1]
@@ -115,11 +124,15 @@ class Hanoi():
         pegs_list[from_peg].pop()
 
 
+
+
+
     def game_done(self):
         pegs_list = self.get_pegs_list()
         discs = self.get_number_of_discs()
 
         for peg in pegs_list:
+ 
             
             if pegs_list[0] == []:   
                 if len(peg) == discs:
@@ -137,9 +150,18 @@ class Hanoi():
     def get_pegs_list(self):
         return self.pegs_list
 
+
+
+
+            
+                
+
+
+
     
-    def get_graphic(self):
-        pegs_list = self.get_pegs_list()
+    def get_graphic(self, best_game):
+
+        best_game.append(best_game[-1])
         dWith = self.get_number_of_discs()
         number_of_pegs = self.get_number_of_pegs()
         dWithG = dWith+3
@@ -149,19 +171,23 @@ class Hanoi():
         fig, ax = plt.subplots()
 
         #add rectangle to plot
-        for i, peg in enumerate(pegs_list):
-            ax.plot([(dWith*0.5)-0.5+i*(dWithG), (dWith*0.5)-0.5+i*(dWithG)], [0, dWith-0.5])
-            
-            for j,disc in enumerate(peg):
-                if len(peg) != 0:
-                    ax.add_patch(Rectangle((j*0.5+i*dWithG, j), disc, 1,  
-                    edgecolor ="blue", linewidth=1, facecolor  ='yellow'))
-              
+        for j, peg_list in enumerate(best_game):
+            for i, peg in enumerate(peg_list):
+                ax.plot([(dWith*0.5)-0.5+i*(dWithG), (dWith*0.5)-0.5+i*(dWithG)], [0, dWith-0.5])
+                
+                for j,disc in enumerate(peg):
+                    if len(peg) != 0:
+                        ax.add_patch(Rectangle((j*0.5+i*dWithG, j), disc, 1,  
+                        edgecolor ="blue", linewidth=1, facecolor  ='yellow'))
+                
 
-        #create simple line plot.
-        ax.plot([0, (dWith+2)*number_of_pegs], [dWith, dWith], color = "white")
+                    #create simple line plot.
+                    ax.plot([0, (dWith+2)*number_of_pegs], [dWith, dWith], color = "white")
+            plt.pause(0.00000001)
+            ax.clear()
 
-        return plt.show()
+        # plt.show()
+         
 
 
     def visualize(self, _, ep_step_count, least_steps_list):
@@ -184,14 +210,19 @@ class Hanoi():
 
 
 Game = Hanoi(3,3)#Pegs and discs
-''' print('Sate of the game', Game.get_pegs_list())
-moves = Game.get_legal_moves()
-print('Legal moves', moves)
-Game.take_action([0,4])
-print('Sate of the game', Game.get_pegs_list())
-moves = Game.get_legal_moves()
-print('Legal moves', moves)
-print(Game.game_done()) '''
+
+# løse med tre discs og tre pegs
+# Game.get_graphic()
+# Game.take_action([0,2])
+# Game.take_action([0,1])
+# Game.take_action([2,1])
+# Game.take_action([0,2])
+# Game.take_action([1,0])
+# Game.take_action([1,2])
+# Game.take_action([0,2])
+# Game.game_done()
+# Game.get_graphic()
+
 
 
 # print(Game.get_pegs_list())
@@ -203,9 +234,9 @@ print(Game.game_done()) '''
 # Game.get_graphic()
 
 
-Game.take_action([0,2])
-Game.take_action([0,1])
-#print(Game.get_legal_moves())
+# Game.take_action([0,2])
+# Game.take_action([0,1])
+# print(Game.get_legal_moves())
 
 # Game.get_graphic()
 
@@ -215,16 +246,21 @@ Game.take_action([0,1])
 
 
 
-''' Game.get_graphic()
-Game.take_action([0,1])
-Game.get_graphic()
-Game.take_action([0,2])
-Game.get_graphic()
-Game.take_action([0,4])
-Game.get_graphic()
- '''
 
 
 
 
+        
+
+"""     def get_graphic(self, best_game = [((3, 2), (), (1,)), ((3,), (2,), (1,)), ((3,), (2, 1), ()), ((), (2, 1), (3,)), ((1,), (2,), (3,)), ((1,), (), (3, 2))]):
+
+        lines =''
+        for j, one_peg_list in enumerate(best_game):
+            for i, one_peg in enumerate(one_peg_list):
+                for disc in one_peg:
+
+                    lines += disc*'*' +  '\n'
+
+            print(lines)
+ """
 

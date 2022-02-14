@@ -1,3 +1,4 @@
+from ast import Continue
 import sys # added!
 sys.path.append("..") # added!
 
@@ -10,6 +11,7 @@ from parameters import cartConfig, gamblerConfig, hanoiConfig
 
 class Sim_world():
     def __init__(self, config):
+        self.best_game = None
 
         if config["problem"] == "cart":
             self.problem = Cart(cartConfig['game_config']['L'], 
@@ -61,6 +63,31 @@ class Sim_world():
 
         return self.problem.visualize(actor, ep_step_count, least_steps_list)
 
-    def get_best_episode(self, list_of_states):
+    def set_visualizing_data(self, list_of_states):
+        if self.config["problem"] == "cart":
+            self.problem.get_graphic()
+        elif self.config["problem"] == "gambler":
+            Continue
+        elif self.config["problem"] == "hanoi":
+            if self.best_game == None:
+                self.best_game = list_of_states
 
-        pass
+            elif len(list_of_states) <  len(self.best_game):
+                self.best_game = list_of_states
+
+            
+       
+
+    def render(self):
+        if self.config["problem"] == "cart":
+            self.problem.get_graphic()
+        elif self.config["problem"] == "gambler":
+            Continue
+        elif self.config["problem"] == "hanoi":
+            self.problem.get_graphic(self.best_game)
+
+    
+
+            
+
+    
