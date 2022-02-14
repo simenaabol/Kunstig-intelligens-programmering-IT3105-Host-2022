@@ -4,8 +4,8 @@ config = {
     # 'problem': 'cart',
 
 
-    'critic': 'table',
-    # 'critic': 'nn'
+    # 'critic': 'table',
+    'critic': 'nn'
 }
 
 
@@ -36,8 +36,8 @@ hanoiConfig = {
     'anncritic_config': {
         'learning_rate': 1e-3,
         'discount_factor': 0.90,
-        'eligibility_decay': 0.99,
-        'layers': [25]
+        'input_size': 1,
+        'num_layers': 25
     }
 } 
 
@@ -68,8 +68,8 @@ gamblerConfig = {
     'anncritic_config': {
         'learning_rate': 1e-3,
         'discount_factor': 0.90,
-        'eligibility_decay': 0.99,
-        'layers': [25]
+        'input_size': 1,
+        'num_layers': 25
     }
 }
 
@@ -113,8 +113,8 @@ cartConfig = {
     'anncritic_config': {
         'learning_rate': 1e-3,
         'discount_factor': 0.90,
-        'eligibility_decay': 0.99,
-        'layers': [25]
+        'input_size': 1,
+        'num_layers': 25
     }
 }
 
