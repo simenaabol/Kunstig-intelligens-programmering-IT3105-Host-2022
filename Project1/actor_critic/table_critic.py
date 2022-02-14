@@ -10,18 +10,20 @@ class Table_critic():
         self.value_table = {}
 
     def reset_eligibilites(self):
-        """ 
-        Resets the eligibilities for the table critic to 
-        """
-        self.eligibilites = {}
+        
+        """ VELDIG LIKT, EVT SE PÅ ELIG = {} """
+        """ DANGER ZONE """
+        for state in self.eligibilites: 
+            self.eligibilites[state] = 0
 
     def state_handler(self, state):
         if state not in self.value_table.keys():
             self.value_table[state] = random.uniform(0, 1)
 
+    """ DANGER ZONE """
     def set_initial_eligibility(self, state):
         
-        self.eligibilites[state] = {1}
+        self.eligibilites[state] = 1
 
     def add_state_to_value_table(self, state):
         """ Initialize the state with a small, random value. """
@@ -44,13 +46,15 @@ class Table_critic():
 
     def update_eligibilities(self, state, current_state):
 
+        """ DANGER ZONE """
         if state == current_state:
             self.eligibilites[state] = 1
         else:
             self.eligibilites[state] *= self.discount_factor * self.eligibility_decay
 
     def update_values(self, state, td_error):
-
+        
+        """ DANGER ZONE """
         if state not in self.value_table.keys():
             self.add_state_to_value_table(state)
 

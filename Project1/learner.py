@@ -1,8 +1,9 @@
-import matplotlib.pyplot as plt
 from actor_critic.actor import Actor
 from actor_critic.sim_world import Sim_world
 from actor_critic.NN_critic import NN_critic
 from actor_critic.table_critic import Table_critic
+
+import matplotlib.pyplot as plt
 
 class RL_learner():
     def __init__(self, config):
@@ -31,15 +32,11 @@ class RL_learner():
 
         self.num_episodes = self.parameters["num_episodes"]
         self.max_steps = self.parameters["max_steps"]
-        self.episode = 0
-        self.vals_for_learning_graph = []
-        self.least_steps = []
+        self.ep_step_count = []
+        self.least_steps_list = []
 
 
     def training(self):
-
-        """ Used for reward graph if we want """
-        rewards = []
         
         for episode in range(self.num_episodes):
  
@@ -65,16 +62,14 @@ class RL_learner():
 
             episode_actions = []
             episode_reward = 0
-            number_steps = 0
 
             # Executing the steps for the episode
             for step in range(self.max_steps):
-                number_steps += 1
 
-                # Adds all states and actions to the actor
+                # Initializing the actor policy with states, and legal moves.
                 self.actor.state_handler(state, legal_moves)
 
-                # Adds all states in the table critic
+                # Initializing the value table with small random values
                 if isinstance(self.critic, Table_critic):
                     self.critic.state_handler(state)
 
@@ -82,9 +77,9 @@ class RL_learner():
                 next_state, reward, done, legal_moves = self.sim_world.step(action)
                 episode_reward += reward
 
+                # Checks if the game is done
                 if done or legal_moves == []:
-                    # print(done)
-                    #print("Game is done")
+                    # print("GAME OVER", done)
                     break
 
                 # Set eligibilities to 1
@@ -97,37 +92,46 @@ class RL_learner():
                 # Calculating temporal difference error as well as the target- and current state value
                 target_val, curr_state_val, td_error = self.critic.calc_td_error(state, reward, next_state)
 
-                # Update policy for actor
-                self.actor.update_eligibilities_and_policy(episode_actions, td_error, state)
-
-                # print("STEP!!!")
-                next_action = self.actor.get_action(next_state, legal_moves)
-
+                # Append the SAP with the td error
                 episode_actions.append((state, td_error, action))
 
-                # Update table or NN
+                # Update the eligibilities and policy for the actor
+                self.actor.update_eligibilities_and_policy(episode_actions, td_error, state)
+
+                # Update values for the table critic or the NN-critic
                 if isinstance(self.critic, Table_critic):
                     self.critic.update_eligibilities_and_values(episode_actions, td_error)
                 else:
                     self.critic.update_weights(episode_actions, target_val, curr_state_val)
 
+                # Retrieve the next action
+                next_action = self.actor.get_action(next_state, legal_moves)
+
+                # Set state and action for next step cycle
                 state = next_state
                 action = next_action
 
-            self.episode += 1
             self.actor.update_epsilon()
-            self.vals_for_learning_graph.append((self.episode + 1, number_steps))
-            self.least_steps.append(number_steps)
-            # print("End state", state, "Episode reward:", episode_reward, "Number steps:", number_steps)
+
+            # For visualization
+            self.ep_step_count.append((episode + 1, step))
+            self.least_steps_list.append(step)
+
+            # print("Before end state", state, "Episode reward:", episode_reward, "Number steps:", step)
+
 
     def show_learning_graph(self):
-        x = list(map(lambda x: x[0], self.vals_for_learning_graph))
-        y = list(map(lambda x: x[1], self.vals_for_learning_graph))
-        print("Least amount of steps",min(self.least_steps))
+
+        vals_for_graph, x_label, y_label, least_steps = self.sim_world.get_visualizing_data(self.actor, self.ep_step_count, self.least_steps_list)
+
+        x = list(map(lambda x: x[0], vals_for_graph))
+        y = list(map(lambda x: x[1], vals_for_graph))
+
+        if least_steps:
+            print("Least amount of steps", least_steps)
 
         plt.plot(x, y)
-        plt.xlabel("Episode")
-        plt.ylabel("Number of steps")
+        plt.xlabel(x_label)
+        plt.ylabel(y_label)
         plt.show()
-        
 
