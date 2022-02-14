@@ -1,7 +1,7 @@
 config = {
-    # 'problem': 'hanoi',
+    'problem': 'hanoi',
     # 'problem': 'gambler',
-    'problem': 'cart',
+    # 'problem': 'cart',
 
 
     'critic': 'table',
@@ -111,10 +111,10 @@ cartConfig = {
     },
 
     'anncritic_config': {
-        'learning_rate': 0.2,
-        'discount_factor': 0.7,
-        'input_size': 4,
-        'num_layers': (4, 5, 4)
+        'learning_rate': 0.1,
+        'discount_factor': 0.9,
+        'input_size': 1,
+        'num_layers': [128]
     }
 }
 

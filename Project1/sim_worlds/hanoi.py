@@ -198,7 +198,7 @@ class Hanoi():
         x_label = "Episodes"
         y_label = "Steps"
 
-        return ep_step_count, x_label, y_label, min(least_steps_list)
+        return ep_step_count, x_label, y_label, min(least_steps_list) + 1
 
 
 
