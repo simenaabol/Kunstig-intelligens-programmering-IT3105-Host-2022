@@ -17,12 +17,12 @@ class RL_learner():
                             self.parameters["actor_config"]["epsilon_decay"], 
                             self.parameters["actor_config"]["eligibility_decay"])
 
-        if self.parameters["critic"] == "table":
+        if config["critic"] == "table":
             self.critic = Table_critic(self.parameters["critic_config"]["learning_rate"], 
                                         self.parameters["critic_config"]["discount_factor"], 
                                         self.parameters["critic_config"]["eligibility_decay"])
 
-        elif self.parameters["critic"] == "nn":
+        elif config["critic"] == "nn":
             """ Expand with the right values """
             self.critic = NN_critic(self.parameters)
 
@@ -39,6 +39,8 @@ class RL_learner():
     def training(self):
         
         for episode in range(self.num_episodes):
+
+            list_of_states = []
  
             # Print every tenth episode to keep track
             if episode % 10 == 0:
@@ -77,10 +79,7 @@ class RL_learner():
                 next_state, reward, done, legal_moves = self.sim_world.step(action)
                 episode_reward += reward
 
-                # Checks if the game is done
-                if done or legal_moves == []:
-                    # print("GAME OVER", done)
-                    break
+
 
                 # Set eligibilities to 1
                 # Actor needs SAP-based eligibilites
@@ -107,9 +106,21 @@ class RL_learner():
                 # Retrieve the next action
                 next_action = self.actor.get_action(next_state, legal_moves)
 
+                list_of_states.append(state)
+
                 # Set state and action for next step cycle
                 state = next_state
                 action = next_action
+
+                list_of_states.append(next_state)
+
+
+                # Checks if the game is done
+                if done or legal_moves == []:
+                    # print("GAME OVER", done)
+                    break                
+
+                
 
             self.actor.update_epsilon()
 
@@ -117,10 +128,19 @@ class RL_learner():
             self.ep_step_count.append((episode + 1, step))
             self.least_steps_list.append(step)
 
+            # print("STATE:", episode_actions[0][0])
+
+           
+
+            self.sim_world.set_visualizing_data(list_of_states)
+
+
             # print("Before end state", state, "Episode reward:", episode_reward, "Number steps:", step)
 
 
     def show_learning_graph(self):
+
+        self.sim_world.render()
 
         vals_for_graph, x_label, y_label, least_steps = self.sim_world.get_visualizing_data(self.actor, self.ep_step_count, self.least_steps_list)
 
@@ -134,4 +154,3 @@ class RL_learner():
         plt.xlabel(x_label)
         plt.ylabel(y_label)
         plt.show()
-

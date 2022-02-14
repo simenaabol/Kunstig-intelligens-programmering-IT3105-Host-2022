@@ -1,20 +1,20 @@
 config = {
-    # 'problem': 'hanoi',
+    'problem': 'hanoi',
     # 'problem': 'gambler',
-    'problem': 'cart',
+    # 'problem': 'cart',
+    'critic': 'table'
 }
 
 
 hanoiConfig = {
 
     'game_config': {
-        'pegs': 3, 
-        'discs': 3
+        'pegs': 4, 
+        'discs':4,
     },
 
     'num_episodes': 150,
     'max_steps': 300,
-    'critic': 'table',
 
     'actor_config': {
         'learning_rate': 0.01,
