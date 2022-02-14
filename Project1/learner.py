@@ -24,7 +24,10 @@ class RL_learner():
 
         elif config["critic"] == "nn":
             """ Expand with the right values """
-            self.critic = NN_critic(self.parameters)
+            self.critic = NN_critic(self.parameters["anncritic_config"]["learning_rate"], 
+                                    self.parameters["critic_config"]["discount_factor"], 
+                                    self.parameters["critic_config"]["input_size"], 
+                                    self.parameters["critic_config"]["num_layers"])
 
         else:
             raise Exception("Choose either 'table' or 'nn'")
