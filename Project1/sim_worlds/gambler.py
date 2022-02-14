@@ -43,9 +43,14 @@ class Gambler():
         if self.get_state() == 100:
             return [1000, True]
         elif self.get_state() == 0:
-            return [0, True]
+            return [-1000, True]
         else:
             return [-1, False]
+
+
+
+
+            
 
     def get_wP(self): #get_win_probability
         return self.wP
