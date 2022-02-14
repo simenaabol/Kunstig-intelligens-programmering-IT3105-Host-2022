@@ -59,8 +59,9 @@ class RL_learner():
                 print("No legal moves", state)
                 break
 
-            # Retrieves action based on policy/epsilon
+            # Retrieves ONE action based on policy/epsilon (or a random one)
             action = self.actor.get_action(state, legal_moves)
+            # print('action', action)
 
             episode_actions = []
             episode_reward = 0

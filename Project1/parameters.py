@@ -12,8 +12,8 @@ config = {
 hanoiConfig = {
 
     'game_config': {
-        'pegs': 4, 
-        'discs':4,
+        'pegs': 3, 
+        'discs':3,
     },
 
     'num_episodes': 150,

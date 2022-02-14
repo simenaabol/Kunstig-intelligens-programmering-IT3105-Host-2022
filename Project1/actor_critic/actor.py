@@ -29,21 +29,40 @@ class Actor():
 
     def get_action(self, state, legal_moves):
 
-        if state not in self.policy.keys():
 
-            # print("LEGAL", legal_moves)
+        # print(self.policy.keys())
+        # Gir alle states som actor har sett. 
+
+        # Gjør noe random hvis man ikke har sett staten
+        if state not in self.policy.keys():
             choice = random.choice(legal_moves)
             choice = tuple(choice)
-            # print(choice)
             return choice
 
+        #Har ikke sett staten før, men velger å gjøre et ???
         if random.uniform(0, 1) < self.epsilon:
 
             """ DANGER ZONE """
+            # print('self.policy[state].items()', self.policy[state].items())
+            # Gir ut alle actions med en verdi bak. Verdien er hvor bra trekket er
 
-            moves_to_choose_from = list(filter(lambda x: x[1] == 0, self.policy[state].items()))
-            return random.choice(moves_to_choose_from)[0] if len(moves_to_choose_from) > 0 else random.choice(list(self.policy[state].keys()))
 
+            # print('self.policy[state].', self.policy[state])
+            # Her så veit vi at state ligger i self.policy.keys():
+
+            # Gjør et move som ikke er gjort før, hvis alle er testet, gjør noe random
+
+            for find_state in self.policy.keys():
+                if find_state == state:
+                    for action in self.policy[state]:
+                        if self.policy[state][action] == 0:
+                                return action
+                
+            choice = random.choice(legal_moves)
+            choice = tuple(choice)
+            return choice
+                            
+           
         greedy_action = None
         highest_val = float('-inf')
 
