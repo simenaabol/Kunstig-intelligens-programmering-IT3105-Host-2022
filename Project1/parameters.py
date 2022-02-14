@@ -2,7 +2,10 @@ config = {
     'problem': 'hanoi',
     # 'problem': 'gambler',
     # 'problem': 'cart',
-    'critic': 'table'
+
+
+    'critic': 'table',
+    # 'critic': 'nn'
 }
 
 
@@ -46,7 +49,6 @@ gamblerConfig = {
 
     'num_episodes': 15000,
     'max_steps': 300,
-    'critic': 'table',
 
     'actor_config': {
         'learning_rate': 0.01,
@@ -92,7 +94,6 @@ cartConfig = {
 
     'num_episodes': 200,
     'max_steps': 300,
-    'critic': 'table',
 
     'actor_config': {
         'learning_rate': 0.01,
