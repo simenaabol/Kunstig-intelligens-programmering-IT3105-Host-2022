@@ -183,7 +183,7 @@ class Hanoi():
 
                     #create simple line plot.
                     ax.plot([0, (dWith+2)*number_of_pegs], [dWith, dWith], color = "white")
-            plt.pause(0.00000001)
+            plt.pause(0.000000001)
             ax.clear()
 
         # plt.show()

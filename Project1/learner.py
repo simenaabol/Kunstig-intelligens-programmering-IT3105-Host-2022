@@ -55,15 +55,16 @@ class RL_learner():
                 self.critic.reset_eligibilites()
 
             # Retrieve initial state for sim world
-            state, done, legal_moves = self.sim_world.get_initial_game_state()
+            from_state, done, legal_moves = self.sim_world.get_initial_game_state()
 
             # Check for legal moves
             if legal_moves == []:
-                print("No legal moves", state)
+                print("No legal moves", from_state)
                 break
 
-            # Retrieves action based on policy/epsilon
-            action = self.actor.get_action(state, legal_moves)
+            # Retrieves ONE action based on policy/epsilon (or a random one)
+            action = self.actor.get_action(from_state, legal_moves)
+            # print('action', action)
 
             episode_actions = []
             episode_reward = 0
@@ -71,32 +72,32 @@ class RL_learner():
             # Executing the steps for the episode
             for step in range(self.max_steps):
 
-                # Initializing the actor policy with states, and legal moves.
-                self.actor.state_handler(state, legal_moves)
+                # Initializing the actor policy with states, and legal moves, with 0's
+                self.actor.state_handler(from_state, legal_moves)
 
-                # Initializing the value table with small random values
+                # Initializing the value table with small random values (0,1)
                 if isinstance(self.critic, Table_critic):
-                    self.critic.state_handler(state)
+                    self.critic.state_handler(from_state)
 
-                # Retrieves info for the next step in the episode
-                next_state, reward, done, legal_moves = self.sim_world.step(action)
+                # Retrieve new values after a action
+                current_state, reward, done, legal_moves = self.sim_world.step(action)
                 episode_reward += reward
 
                 # Set eligibilities to 1
-                # Actor needs SAP-based eligibilites
-                self.actor.set_initial_eligibility(state, action)
+                # Actor needs SAP-based eligibilites (actor)
+                self.actor.set_initial_eligibility(from_state, action)
                 if isinstance(self.critic, Table_critic):
                     # Critic needs state-based eligibilities
-                    self.critic.set_initial_eligibility(state)
+                    self.critic.set_initial_eligibility(from_state)
 
                 # Calculating temporal difference error as well as the target- and current state value
-                target_val, curr_state_val, td_error = self.critic.calc_td_error(state, reward, next_state)
+                target_val, curr_state_val, td_error = self.critic.calc_td_error(from_state, reward, current_state)
 
                 # Append the SAP with the td error
-                episode_actions.append((state, td_error, action))
+                episode_actions.append((from_state, td_error, action))
 
                 # Update the eligibilities and policy for the actor
-                self.actor.update_eligibilities_and_policy(episode_actions, td_error, state)
+                self.actor.update_eligibilities_and_policy(episode_actions, td_error, from_state)
 
                 # Update values for the table critic or the NN-critic
                 if isinstance(self.critic, Table_critic):
@@ -114,13 +115,15 @@ class RL_learner():
                     break    
 
                 # Retrieve the next action
-                next_action = self.actor.get_action(next_state, legal_moves)
+                next_action = self.actor.get_action(current_state, legal_moves)
+
+                list_of_states.append(from_state)
 
                 # Set state and action for next step cycle
-                state = next_state
+                from_state = current_state
                 action = next_action
 
-                list_of_states.append(next_state)
+                list_of_states.append(current_state)
 
             self.actor.update_epsilon()
 

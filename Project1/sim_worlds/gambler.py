@@ -78,7 +78,6 @@ class Gambler():
                 # print(value2)
                 if value2 != 0:
                     if value2 > highest_val:
-
                         highest_val = value2
                         picked_key = key
 
