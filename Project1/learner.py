@@ -25,9 +25,9 @@ class RL_learner():
         elif config["critic"] == "nn":
             """ Expand with the right values """
             self.critic = NN_critic(self.parameters["anncritic_config"]["learning_rate"], 
-                                    self.parameters["critic_config"]["discount_factor"], 
-                                    self.parameters["critic_config"]["input_size"], 
-                                    self.parameters["critic_config"]["num_layers"])
+                                    self.parameters["anncritic_config"]["discount_factor"], 
+                                    self.parameters["anncritic_config"]["input_size"], 
+                                    self.parameters["anncritic_config"]["num_layers"])
 
         else:
             raise Exception("Choose either 'table' or 'nn'")
@@ -82,8 +82,6 @@ class RL_learner():
                 next_state, reward, done, legal_moves = self.sim_world.step(action)
                 episode_reward += reward
 
-
-
                 # Set eligibilities to 1
                 # Actor needs SAP-based eligibilites
                 self.actor.set_initial_eligibility(state, action)
@@ -104,26 +102,25 @@ class RL_learner():
                 if isinstance(self.critic, Table_critic):
                     self.critic.update_eligibilities_and_values(episode_actions, td_error)
                 else:
-                    self.critic.update_weights(episode_actions, target_val, curr_state_val)
+                    self.critic.update_weights(td_error)
+
+                list_of_states.append(state)
+
+                # Checks if the game is done
+                if done or legal_moves == []:
+                    state = next_state
+                    list_of_states.append(next_state)
+                    # print("GAME OVER", done)
+                    break    
 
                 # Retrieve the next action
                 next_action = self.actor.get_action(next_state, legal_moves)
-
-                list_of_states.append(state)
 
                 # Set state and action for next step cycle
                 state = next_state
                 action = next_action
 
                 list_of_states.append(next_state)
-
-
-                # Checks if the game is done
-                if done or legal_moves == []:
-                    # print("GAME OVER", done)
-                    break                
-
-                
 
             self.actor.update_epsilon()
 
@@ -132,8 +129,6 @@ class RL_learner():
             self.least_steps_list.append(step)
 
             # print("STATE:", episode_actions[0][0])
-
-           
 
             self.sim_world.set_visualizing_data(list_of_states)
 

@@ -184,7 +184,7 @@ class Cart():
         elif(nX < x0 and pX > x0 and thM> th0 and th0 > -thM):
             return [10, False]
         else:
-            return [-1, True]
+            return [-100, True]
 
     def visualize(self, _, ep_step_count, __):
 

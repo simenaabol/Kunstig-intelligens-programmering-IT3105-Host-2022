@@ -12,8 +12,8 @@ config = {
 hanoiConfig = {
 
     'game_config': {
-        'pegs': 4, 
-        'discs':4,
+        'pegs': 3, 
+        'discs':3,
     },
 
     'num_episodes': 150,
@@ -34,10 +34,10 @@ hanoiConfig = {
     },
 
     'anncritic_config': {
-        'learning_rate': 1e-3,
-        'discount_factor': 0.90,
+        'learning_rate': 0.1,
+        'discount_factor': 0.9,
         'input_size': 1,
-        'num_layers': 25
+        'num_layers': [25]
     }
 } 
 

@@ -65,7 +65,8 @@ class Sim_world():
 
     def set_visualizing_data(self, list_of_states):
         if self.config["problem"] == "cart":
-            self.problem.get_graphic()
+            pass
+            # self.problem.get_graphic()
         elif self.config["problem"] == "gambler":
             Continue
         elif self.config["problem"] == "hanoi":
@@ -80,7 +81,9 @@ class Sim_world():
 
     def render(self):
         if self.config["problem"] == "cart":
-            self.problem.get_graphic()
+            pass
+            # Continue
+            # self.problem.get_graphic()
         elif self.config["problem"] == "gambler":
             Continue
         elif self.config["problem"] == "hanoi":
