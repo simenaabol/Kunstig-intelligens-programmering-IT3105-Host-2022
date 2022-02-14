@@ -165,7 +165,6 @@ class Cart():
         step = self.step
         # print('Angel: ', th0)
         x0 = self.x0
-<<<<<<< HEAD
         nX = self.nX
         pX = self.pX
 
@@ -174,26 +173,11 @@ class Cart():
         T = self.T
         # print('T: ', step)
         if (nX < x0 and pX > x0 and thM> th0 and th0 > -thM and step == T):
-=======
-
-        T = self.T
-        # print('T: ', step)
-        if (thM> th0 and th0 > -thM and step == T):
->>>>>>> b5ea1c4f6abb26dc4291a8d54d8485426ebb18ee
             return [1000, True]
         elif(nX < x0 and pX > x0 and thM> th0 and th0 > -thM):
             return [10, False]
         else:
             return [-1, True]
-<<<<<<< HEAD
-
-    def visualize(self, _, ep_step_count, __):
-
-        x_label = "Episodes"
-        y_label = "Steps"
-
-        return ep_step_count, x_label, y_label, None
-=======
 
     def visualize(self, _, ep_step_count, __):
 
@@ -202,4 +186,3 @@ class Cart():
 
         return ep_step_count, x_label, y_label, None
 
->>>>>>> b5ea1c4f6abb26dc4291a8d54d8485426ebb18ee

@@ -17,12 +17,12 @@ class RL_learner():
                             self.parameters["actor_config"]["epsilon_decay"], 
                             self.parameters["actor_config"]["eligibility_decay"])
 
-        if self.parameters["critic"] == "table":
+        if config["critic"] == "table":
             self.critic = Table_critic(self.parameters["critic_config"]["learning_rate"], 
                                         self.parameters["critic_config"]["discount_factor"], 
                                         self.parameters["critic_config"]["eligibility_decay"])
 
-        elif self.parameters["critic"] == "nn":
+        elif config["critic"] == "nn":
             """ Expand with the right values """
             self.critic = NN_critic(self.parameters)
 
@@ -39,6 +39,8 @@ class RL_learner():
     def training(self):
         
         for episode in range(self.num_episodes):
+
+            list_of_states = []
  
             # Print every tenth episode to keep track
             if episode % 10 == 0:
@@ -111,11 +113,20 @@ class RL_learner():
                 state = next_state
                 action = next_action
 
+                list_of_states.append(state)
+
             self.actor.update_epsilon()
 
             # For visualization
             self.ep_step_count.append((episode + 1, step))
             self.least_steps_list.append(step)
+
+            # print("STATE:", episode_actions[0][0])
+
+            print("yeet", list_of_states)
+
+            best_ep = self.sim_world.get_best_episode(list_of_states)
+
 
             # print("Before end state", state, "Episode reward:", episode_reward, "Number steps:", step)
 

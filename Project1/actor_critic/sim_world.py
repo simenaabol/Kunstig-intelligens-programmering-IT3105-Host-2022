@@ -60,3 +60,7 @@ class Sim_world():
     def get_visualizing_data(self, actor, ep_step_count, least_steps_list):
 
         return self.problem.visualize(actor, ep_step_count, least_steps_list)
+
+    def get_best_episode(self, list_of_states):
+
+        pass

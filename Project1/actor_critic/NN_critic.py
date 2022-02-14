@@ -1,3 +1,6 @@
+import numpy as np
+import tensorflow as tf
+import keras
 
 
 class Network():
@@ -7,11 +10,8 @@ class Network():
 
 
 class NN_critic():
-    def __init__(self) -> None:
+    def __init__(self):
         pass
-
-    def reset_eligibilites(self):
-        raise NotImplementedError
 
     def calc_td_error(self, state, reward, next_state):
         raise NotImplementedError
