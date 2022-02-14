@@ -17,6 +17,11 @@ class Table_critic():
             self.eligibilites[state] = 0
 
     def state_handler(self, state):
+        # printer alle states som er sett
+        # print(self.value_table.keys())
+
+        # print(self.value_table)
+        # Gir hver state en random verdi.. why?
         if state not in self.value_table.keys():
             self.value_table[state] = random.uniform(0, 1)
 

@@ -39,10 +39,9 @@ class Actor():
             choice = tuple(choice)
             return choice
 
-        #Har ikke sett staten før, men velger å gjøre et ???
+        #Har sett staten før, men vi prøver å gjøre et valg som ikke er gjort før
         if random.uniform(0, 1) < self.epsilon:
 
-            """ DANGER ZONE """
             # print('self.policy[state].items()', self.policy[state].items())
             # Gir ut alle actions med en verdi bak. Verdien er hvor bra trekket er
 
@@ -62,25 +61,27 @@ class Actor():
             choice = tuple(choice)
             return choice
                             
-           
+
+        #Hvis man har sett staten og skal gjøre noe grådig   
         greedy_action = None
         highest_val = float('-inf')
 
         for action, value in self.policy[state].items():
+            # print(action, value)
             
             if value > highest_val and value != 0:
                 highest_val = value
-                greedy_action = action
-
+                greedy_action = action        
+        
+        
         """ DANGER ZONE """
-        greedy_action = max(self.policy[state].items(), key=lambda x: x[0])[0] if greedy_action is None else greedy_action
+        # greedy_action = max(self.policy[state].items(), key=lambda x: x[0])[0] if greedy_action is None else greedy_action
         return greedy_action
 
     """ DANGER ZONE """
     def set_initial_eligibility(self, state, action):
         action = tuple(action)
         if state not in self.eligibilities.keys():
-            
             self.eligibilities[state] = {action: 1}
 
         else:

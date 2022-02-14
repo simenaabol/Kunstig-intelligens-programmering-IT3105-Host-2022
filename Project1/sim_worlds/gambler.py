@@ -71,12 +71,12 @@ class Gambler():
         pol = actor.get_actor_policy()
 
         for act, value in pol.items():
+            print('act', act)
             highest_val = float('-inf')
             picked_key = None
             for key, value2 in value.items():
                 if value2 != 0:
                     if value2 > highest_val:
-
                         highest_val = value2
                         picked_key = key
 

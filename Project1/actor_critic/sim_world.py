@@ -1,7 +1,6 @@
 from ast import Continue
-import sys # added!
-sys.path.append("..") # added!
-
+import sys 
+sys.path.append("..") 
 
 from sim_worlds.gambler import Gambler
 from sim_worlds.cart import Cart
@@ -77,10 +76,10 @@ class Sim_world():
 
             
        
-
+    # At the moment only used in Hanoi
     def render(self):
         if self.config["problem"] == "cart":
-            self.problem.get_graphic()
+            Continue
         elif self.config["problem"] == "gambler":
             Continue
         elif self.config["problem"] == "hanoi":
