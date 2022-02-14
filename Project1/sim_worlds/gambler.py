@@ -45,26 +45,12 @@ class Gambler():
         if self.get_state() == 100:
             return [1000, True]
         elif self.get_state() == 0:
-<<<<<<< HEAD
-            return [-1000, True]
-        else:
-            return [-1, False]
-
-
-
-
-            
-
-    def get_wP(self): #get_win_probability
-        return self.wP
-=======
             return [self.coins, True]
         else:
             return [-1, False]
 
     def get_win_prob(self): #get_win_probability
         return self.win_prob
->>>>>>> b5ea1c4f6abb26dc4291a8d54d8485426ebb18ee
     
     def update_coin(self, coin): #get_win_probability
         self.coins = coin

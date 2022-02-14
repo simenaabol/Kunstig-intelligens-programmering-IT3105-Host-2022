@@ -1,7 +1,7 @@
 config = {
-    'problem': 'hanoi',
+    # 'problem': 'hanoi',
     # 'problem': 'gambler',
-    # 'problem': 'cart',
+    'problem': 'cart',
 }
 
 
