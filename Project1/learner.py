@@ -105,12 +105,12 @@ class RL_learner():
                 else:
                     self.critic.update_weights(td_error)
 
-                list_of_states.append(state)
+                list_of_states.append(from_state)
 
                 # Checks if the game is done
                 if done or legal_moves == []:
-                    state = next_state
-                    list_of_states.append(next_state)
+                    from_state = current_state
+                    list_of_states.append(current_state)
                     # print("GAME OVER", done)
                     break    
 
