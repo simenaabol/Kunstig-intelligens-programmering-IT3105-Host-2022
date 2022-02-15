@@ -146,6 +146,7 @@ class Actor():
         """
 
         action = tuple(action)
+
         self.policy_dict[state][action] += self.learning_rate * td_error * self.eligibility_dict[state][action]
 
 
