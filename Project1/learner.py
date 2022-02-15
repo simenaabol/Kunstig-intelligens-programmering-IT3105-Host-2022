@@ -7,6 +7,9 @@ import matplotlib.pyplot as plt
 
 class RL_learner():
     def __init__(self, config):
+        """ 
+        
+        """
         self.sim_world = Sim_world(config)
 
         self.parameters = self.sim_world.get_parameters()
@@ -23,7 +26,6 @@ class RL_learner():
                                         self.parameters["critic_config"]["eligibility_decay"])
 
         elif config["critic"] == "nn":
-            """ Expand with the right values """
             self.critic = NN_critic(self.parameters["anncritic_config"]["learning_rate"], 
                                     self.parameters["anncritic_config"]["discount_factor"], 
                                     self.parameters["anncritic_config"]["input_size"], 
@@ -45,7 +47,7 @@ class RL_learner():
 
             list_of_states = []
  
-            # Print every tenth episode to keep track
+            # Print some episodes to keep track of progress
             if episode % 10 == 0:
                 print("Episode nr. ", episode)
 
