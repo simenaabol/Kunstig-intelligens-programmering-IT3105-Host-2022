@@ -126,9 +126,12 @@ class Actor():
             self.update_policy(state, action, td_error)
             self.update_eligibilities(state, action, current_state)
 
-    def update_epsilon(self):
-
-        self.epsilon *= self.epsilon_decay
+    def update_epsilon(self, forced):
+        if forced == 0:
+            # print('sehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
+            self.epsilon = 0
+        else:
+            self.epsilon *= self.epsilon_decay
 
         # print("EPS", self.epsilon)
 

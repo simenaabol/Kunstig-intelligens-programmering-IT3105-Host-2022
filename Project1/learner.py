@@ -1,6 +1,6 @@
 from actor_critic.actor import Actor
 from actor_critic.sim_world import Sim_world
-from actor_critic.NN_critic import NN_critic
+# from actor_critic.NN_critic import NN_critic
 from actor_critic.table_critic import Table_critic
 
 import matplotlib.pyplot as plt
@@ -46,8 +46,8 @@ class RL_learner():
             list_of_states = []
  
             # Print every tenth episode to keep track
-            if episode % 10 == 0:
-                print("Episode nr. ", episode)
+            # if episode % 10 == 0:
+                # print("Episode nr. ", episode)
 
             # Reset eligibilities in actor and table-based critic
             self.actor.reset_eligibilites()
@@ -80,7 +80,7 @@ class RL_learner():
                     self.critic.state_handler(from_state)
 
                 # Retrieve new values after a action
-                current_state, reward, done, legal_moves = self.sim_world.step(action)
+                current_state, reward, done, legal_moves = self.sim_world.step(action, self.actor, self.parameters, episode )
                 episode_reward += reward
 
 
@@ -126,7 +126,7 @@ class RL_learner():
 
                 
 
-            self.actor.update_epsilon()
+            self.actor.update_epsilon(-1)
 
             # For visualization
             self.ep_step_count.append((episode + 1, step))
