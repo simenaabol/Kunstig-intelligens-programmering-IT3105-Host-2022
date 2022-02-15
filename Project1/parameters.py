@@ -1,6 +1,6 @@
 config = {
 
-    'problem': 'gambler',
+    'problem': 'hanoi',
     'critic': 'table',
     'visualize': False, 
     'frame_delay': 0.1

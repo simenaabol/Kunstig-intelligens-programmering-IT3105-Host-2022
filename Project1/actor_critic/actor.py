@@ -169,14 +169,12 @@ class Actor():
             self.eligibility_dict[from_state][action] *= self.discount_factor * self.eligibility_decay
 
 
-    def update_epsilon(self):
+    def update_epsilon(self, forced):
         """
 
         Method for updating the epsilon.
 
         """
-
-    def update_epsilon(self, forced):
         if forced == 0:
             self.epsilon = 0
         else:
