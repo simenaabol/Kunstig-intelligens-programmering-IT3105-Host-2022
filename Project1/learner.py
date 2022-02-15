@@ -8,8 +8,15 @@ import matplotlib.pyplot as plt
 class RL_learner():
     def __init__(self, config):
         """ 
-        
+
+        Initializing the learning process with the Sim World, Actor, and Critic depending
+        on which critic is chosen. ALL parameters are retrieved from a single file, called
+        'parameters.py'.
+
+        The Sim World is acting like a central hub for all of the toy problems.
+
         """
+
         self.sim_world = Sim_world(config)
 
         self.parameters = self.sim_world.get_parameters()
@@ -34,17 +41,25 @@ class RL_learner():
         else:
             raise Exception("Choose either 'table' or 'nn'")
 
-
+        # Variables for limiting how many runs and episodes the system runs
         self.num_episodes = self.parameters["num_episodes"]
         self.max_steps = self.parameters["max_steps"]
+
+        # Lists for visualization
         self.ep_step_count = []
         self.least_steps_list = []
 
-
     def training(self):
+        """ 
+
+        Runs a training loop for the system depending on the amount of episodes and steps
+        from the parameters.
+
+        """
         
         for episode in range(self.num_episodes):
 
+            # Another list for visualization
             list_of_states = []
  
             # Print some episodes to keep track of progress
@@ -56,17 +71,16 @@ class RL_learner():
             if isinstance(self.critic, Table_critic):
                 self.critic.reset_eligibilites()
 
-            # Retrieve initial state for sim world
-            from_state, done, legal_moves = self.sim_world.get_initial_game_state()
+            # Retrieve initial state from the Sim World chosen.
+            from_state, is_finished, legal_moves = self.sim_world.get_initial_game_state()
 
             # Check for legal moves
             if legal_moves == []:
                 print("No legal moves", from_state)
                 break
 
-            # Retrieves ONE action based on policy/epsilon (or a random one)
+            # Retrieves ONE action based on the actor's policy or a random move
             action = self.actor.get_action(from_state, legal_moves)
-            # print('action', action)
 
             episode_actions = []
             episode_reward = 0
@@ -82,17 +96,18 @@ class RL_learner():
                     self.critic.state_handler(from_state)
 
                 # Retrieve new values after a action
-                current_state, reward, done, legal_moves = self.sim_world.step(action)
+                current_state, reward, is_finished, legal_moves = self.sim_world.step(action)
                 episode_reward += reward
 
                 # Set eligibilities to 1
-                # Actor needs SAP-based eligibilites (actor)
+                # Actor needs SAP-based eligibilites
                 self.actor.set_initial_eligibility(from_state, action)
                 if isinstance(self.critic, Table_critic):
-                    # Critic needs state-based eligibilities
+                    # Table critic needs state-based eligibilities
                     self.critic.set_initial_eligibility(from_state)
 
                 # Calculating temporal difference error as well as the target- and current state value
+                """ MAYBE CHANGE THIS IF WE DONT NEED THE TWO FIRST VALS """
                 target_val, curr_state_val, td_error = self.critic.calc_td_error(from_state, reward, current_state)
 
                 # Append the SAP with the td error
@@ -107,45 +122,41 @@ class RL_learner():
                 else:
                     self.critic.update_weights(td_error)
 
-                # list_of_states.append(from_state)
+                # Checks if the game is finished
+                if is_finished or legal_moves == []:
 
-                # Checks if the game is done
-                if done or legal_moves == []:
+                    # Append the last state for visualization
                     from_state = current_state
                     list_of_states.append(current_state)
-                    # print("GAME OVER", done)
+
                     break    
 
-                # Retrieve the next action
+                # Retrieve the next action based on the current state, and legal moves.
                 next_action = self.actor.get_action(current_state, legal_moves)
-
-                # list_of_states.append(from_state)
 
                 # Set state and action for next step cycle
                 from_state = current_state
                 action = next_action
 
+                # For visualization
                 list_of_states.append(current_state)
 
+            # Decrease the epsilon at the end of an episode
             self.actor.update_epsilon()
 
             # For visualization
             self.ep_step_count.append((episode + 1, step + 1))
             self.least_steps_list.append(step)
-
-            # print("STATE:", episode_actions[0][0])
-
             self.sim_world.set_visualizing_data(list_of_states)
 
+            # print("End state", from_state, "Episode reward:", episode_reward, "Number steps:", step)
 
-            # print("Before end state", from_state, "Episode reward:", episode_reward, "Number steps:", step)
+    def show_learning_graph(self, visualize=False):
+        """ 
 
+        Shows the learning graph as well as visualizing the best episode if this option is chosen.
 
-    def show_learning_graph(self):
-
-        # print(self.actor.get_actor_policy())
-
-        self.sim_world.render()
+        """
 
         vals_for_graph, x_label, y_label, least_steps = self.sim_world.get_visualizing_data(self.actor, self.ep_step_count, self.least_steps_list)
 
@@ -159,3 +170,6 @@ class RL_learner():
         plt.xlabel(x_label)
         plt.ylabel(y_label)
         plt.show()
+
+        if visualize:
+            self.sim_world.render()

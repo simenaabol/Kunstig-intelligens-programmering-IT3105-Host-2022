@@ -6,6 +6,8 @@ config = {
 
     'critic': 'table',
     # 'critic': 'nn'
+
+    'visualize': True, 
 }
 
 
