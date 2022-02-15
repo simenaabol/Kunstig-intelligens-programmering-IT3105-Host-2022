@@ -30,8 +30,7 @@ class Sim_world():
                                 cartConfig['game_config']['pX'], 
                                 cartConfig['game_config']['T'], 
                                 cartConfig['game_config']['step'], 
-                                cartConfig['game_config']['nF'], 
-                                cartConfig['game_config']['pF'])
+                                cartConfig['game_config']['F'])
 
         elif config["problem"] == "gambler":
             self.problem = Gambler(gamblerConfig['game_config']['win_prob'])
@@ -64,7 +63,7 @@ class Sim_world():
         return self.problem.get_state_key(), self.problem.game_done()[1], self.problem.get_legal_moves()
 
 
-    def step(self, action):
+    def step(self, action, actor, parameters, episode):
         """
 
         Makes the learner do an action, and retrieves relevant values from this action.
@@ -75,6 +74,15 @@ class Sim_world():
         """
 
         self.problem.take_action(action)
+
+        if self.config["problem"] == "cart":
+            # print('Episode', episode)
+            if episode == parameters['num_episodes']-10:
+                actor.update_epsilon(0)
+        elif self.config["problem"] == "hanoi":
+            if episode == parameters['num_episodes']-10:
+                actor.update_epsilon(0)
+
         
         # game_done[0] is reward, and game_done[1] is a boolean.
         return self.problem.get_state_key(), self.problem.game_done()[0], self.problem.game_done()[1], self.problem.get_legal_moves()

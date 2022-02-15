@@ -83,8 +83,7 @@ cartConfig = {
         'pX': 2.4,
         'T': 300,
         'step': 0,
-        'nF': -10,
-        'pF': 10
+        'F': 10
     },
 
     'num_episodes': 200,
@@ -93,7 +92,7 @@ cartConfig = {
     'actor_config': {
         'learning_rate': 0.0002,
         'discount_factor': 0.99,
-        'epsilon': 0.85,
+        'epsilon': 0.99,
         'epsilon_decay': 0.99,
         'eligibility_decay': 0.99
     },
