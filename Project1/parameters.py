@@ -98,7 +98,7 @@ cartConfig = {
     'actor_config': {
         'learning_rate': 0.0002,
         'discount_factor': 0.99,
-        'epsilon': 0.85,
+        'epsilon': 0.99,
         'epsilon_decay': 0.99,
         'eligibility_decay': 0.99
     },
