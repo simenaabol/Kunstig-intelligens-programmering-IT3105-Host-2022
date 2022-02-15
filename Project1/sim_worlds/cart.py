@@ -26,6 +26,7 @@ class Cart():
         self.step = step
         self.nF = nF # F is the magnitude of that force. (F = 10)
         self.pF = pF
+
         
         self.th0 = random.uniform(-(self.thM), self.thM) # angle og the pole (in radians) with respect to the vertical // Theta
         # self.th0 = 0.0
@@ -40,6 +41,7 @@ class Cart():
         self.x2 = 0.0 # horizontal acceleration of the cart
 
         self.B = 0 # the bang-bang force, either F or -F, where F is the magnitude of that force. (F=10)
+        self.step_reward = 0.0
 
         self.screen = None
 
@@ -69,6 +71,7 @@ class Cart():
         self.x2 = 0.0
 
         self.B = 0
+        self.step_reward = 0.0
 
         self.screen = None
 
@@ -79,8 +82,8 @@ class Cart():
     # 2.1 -> update/set th2
     def update_th2(self, g, th0, pF, Mp, B, L, th1, Mc):
         
-        return ((g * math.sin(th0) + math.cos(th0) * ((- B - Mp * L * (th1**2) * math.sin(th0)) / (Mc + Mp))) /         
-                (L * (4.0/3.0 - ((Mp * math.cos(th0)**2) / (Mc + Mp)))))
+        return ((g * math.sin(th0) +(    (  math.cos(th0) * ((- B - Mp * L * (th1**2) * math.sin(th0))) / (Mc + Mp))) )/         
+                (L * (4.0/3.0 - (   (Mp * math.cos(th0)**2)    / (Mc + Mp)))))
 
         return (g*math.sin(th0)+math.cos(th0)* (( (-pF-Mp*B*(th1**2)*math.sin(th0)) )  / (Mp+Mc)  )    / (B*(4.0/3.0 -( (Mp*math.cos(th0)**2 )/(Mp+Mc)  )) )   )
         
@@ -158,9 +161,37 @@ class Cart():
     def get_state(self):
         return self.th0
 
-    def get_state_key(self):
+    def get_state_key(self): 
+        # linear position, angular position, linear velocity, angular velocity
         ret_list = []
-        ret_list.append(self.th0)
+        
+        th0 = self.th0
+        # th0 = tuple(th0)
+        ret_list.append(math.sin(th0))
+        ret_list.append(math.cos(th0))
+
+
+        th1 = self.th1
+        # th1 = tuple(th1)
+        ret_list.append(th1)
+        
+
+        th2 = self.th2
+        # th1 = tuple(th1)
+        ret_list.append(th2)
+
+        x0 = self.x0
+        # x0 = tuple(x0)
+        ret_list.append(x0)
+
+        x1 = self.x1
+        # x1 = tuple(x1)
+        ret_list.append(x1)
+
+        x2 = self.x2
+        # x2 = tuple(x2)
+        # ret_list.append(x2)
+                
         return tuple(ret_list)  
 
     def get_legal_moves(self):
@@ -173,18 +204,30 @@ class Cart():
         # print('Angel: ', th0)
         x0 = self.x0
         nX = self.nX
-        pX = self.pX
-
+        pX = self.pX    
+    
+        ret = [-1, False]
 
 
         T = self.T
         # print('T: ', step)
         if (nX < x0 and pX > x0 and thM> th0 and th0 > -thM and step == T):
-            return [1000, True]
+            return [10, True]
         elif(nX < x0 and pX > x0 and thM> th0 and th0 > -thM):
-            return [10, False]
+            # (1 - (x0 ** 2) / 11.52 - (th0 ** 2) / 288)
+            # It's alive
+            ret[1] = False
+            if (nX/10 < x0 and pX/10 > x0 and thM/10> th0 and th0/10 > -thM):
+                ret[0] = 10
+            elif (nX/5 < x0 and pX/5 > x0 and thM/5> th0 and th0/5 > -thM):
+                ret[0] = 3.5
+            elif (nX/2 < x0 and pX/2 > x0 and thM/2> th0 and th0/2 > -thM):
+                 ret[0] = 2
+            else:
+                 ret[0] = 1
+            return ret                           
         else:
-            return [-1, True]
+            return [-0.1, True]
 
     def visualize(self, _, ep_step_count, __):
 

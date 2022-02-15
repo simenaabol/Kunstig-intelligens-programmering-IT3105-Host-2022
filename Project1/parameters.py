@@ -93,20 +93,19 @@ cartConfig = {
     },
 
     'num_episodes': 200,
-    'max_steps': 300,
+    'max_steps': 301,
 
     'actor_config': {
-        'learning_rate': 0.01,
-        'discount_factor': 0.9,
-        'epsilon': 1,
+        'learning_rate': 0.0002,
+        'discount_factor': 0.99,
+        'epsilon': 0.85,
         'epsilon_decay': 0.99,
-        'goal_epsilon': 0.001,
         'eligibility_decay': 0.99
     },
 
     'critic_config': {
-        'learning_rate': 0.1,
-        'discount_factor': 0.9,
+        'learning_rate': 0.001,
+        'discount_factor': 0.99,
         'eligibility_decay': 0.99
     },
 

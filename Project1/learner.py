@@ -139,10 +139,12 @@ class RL_learner():
             self.sim_world.set_visualizing_data(list_of_states)
 
 
-            # print("Before end state", state, "Episode reward:", episode_reward, "Number steps:", step)
+            # print("Before end state", from_state, "Episode reward:", episode_reward, "Number steps:", step)
 
 
     def show_learning_graph(self):
+
+        # print(self.actor.get_actor_policy())
 
         self.sim_world.render()
 

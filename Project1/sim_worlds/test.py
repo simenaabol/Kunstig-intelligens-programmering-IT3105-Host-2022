@@ -1,7 +1,5 @@
-test = [1, 2, 3]
+int = 1.12345678
 
-print(test[-1])
+int2 = round(int, 1)
 
-test.insert(test[0], 0)
-
-print(test)
+print(int2)
