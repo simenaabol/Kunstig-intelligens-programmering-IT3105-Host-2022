@@ -186,7 +186,7 @@ class Hanoi():
                 if len(peg) == discs:
                     return [100, True]
 
-        return [-0.1, False]
+        return [-10, False]
 
 
     """ DENNE SKAL VEL FJERNES? """

@@ -33,14 +33,42 @@ class NN_critic():
 
         target_val = reward + self.discount_factor * self.state_value(next_state)
         curr_state_val = self.state_value(state)
+
+        curr_state_val = tf.reshape(curr_state_val, tf.shape(target_val))
+
         td_error = target_val - curr_state_val
 
-        return target_val, curr_state_val, td_error
+        float(td_error[0])
+
+        print(td_error[0])
+
+        return td_error
 
     def state_value(self, state):
 
-        state = np.asarray([hash(state)])
-        # CHANGE THIS^^^^^^^^
+        state = [list(i) for i in state]
+
+        max_len = float('-inf')
+
+        for i in state:
+
+            if len(i) != 0:
+                if max_len < max(i):
+
+                    max_len = max(i)
+
+        for i in state:
+            if len(i) != max_len:
+                for j in range(max_len):
+                    if len(i) != max_len:
+                        i.append(0)
+
+        if len(state[0]) > len(state):
+
+            state.append([0] * len(state[0]))
+
+        state = np.array([np.array(i) for i in state], dtype=object)
+
         state = tf.convert_to_tensor(state, dtype=tf.float32)
 
         return state
@@ -48,6 +76,8 @@ class NN_critic():
     def update_weights(self, td_error):
 
         loss_func = td_error ** 2
+
+        print("DETTE ER LOSS FUNC", loss_func)
 
         self.model.compile(optimizer=tf.keras.optimizers.Adagrad(learning_rate=self.learning_rate), 
                             loss=loss_func)
