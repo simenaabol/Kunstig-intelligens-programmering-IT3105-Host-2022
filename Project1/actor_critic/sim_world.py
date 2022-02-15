@@ -76,7 +76,6 @@ class Sim_world():
         self.problem.take_action(action)
 
         if self.config["problem"] == "cart":
-            # print('Episode', episode)
             if episode == parameters['num_episodes']-10:
                 actor.update_epsilon(0)
         elif self.config["problem"] == "hanoi":
