@@ -1,7 +1,7 @@
 config = {
 
     'problem': 'hanoi',
-    'critic': 'table',
+    'critic': 'nn',
     'visualize': False, 
     'frame_delay': 0.1
 }

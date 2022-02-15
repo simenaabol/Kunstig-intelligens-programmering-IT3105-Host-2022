@@ -38,10 +38,6 @@ class NN_critic():
 
         td_error = target_val - curr_state_val
 
-        float(td_error[0])
-
-        print(td_error[0])
-
         return td_error
 
     def state_value(self, state):
@@ -63,17 +59,25 @@ class NN_critic():
                     if len(i) != max_len:
                         i.append(0)
 
+        for i in state:
+            for ind, j in enumerate(i):
+                i[ind] = float(j)
+
         if len(state[0]) > len(state):
 
-            state.append([0] * len(state[0]))
+            state.append([0.0] * len(state[0]))
 
-        state = np.array([np.array(i) for i in state], dtype=object)
+        state = np.asarray([np.asarray(i) for i in state])
 
-        state = tf.convert_to_tensor(state, dtype=tf.float32)
+        # print(state)
+
+        state = tf.convert_to_tensor(state)
 
         return state
 
     def update_weights(self, td_error):
+
+        print(td_error)
 
         loss_func = td_error ** 2
 
