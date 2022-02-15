@@ -107,8 +107,7 @@ class RL_learner():
                     self.critic.set_initial_eligibility(from_state)
 
                 # Calculating temporal difference error as well as the target- and current state value
-                """ MAYBE CHANGE THIS IF WE DONT NEED THE TWO FIRST VALS """
-                target_val, curr_state_val, td_error = self.critic.calc_td_error(from_state, reward, current_state)
+                td_error = self.critic.calc_td_error(from_state, reward, current_state)
 
                 # Append the SAP with the td error
                 episode_actions.append((from_state, td_error, action))
@@ -155,6 +154,8 @@ class RL_learner():
         """ 
 
         Shows the learning graph as well as visualizing the best episode if this option is chosen.
+
+        PARAMS: visualizer bool
 
         """
 

@@ -1,88 +1,119 @@
-from tkinter import Y
-from turtle import color
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-# import matplotlib.animation as animation
-import numpy as np
 
+from parameters import config
 
 class Hanoi():
-    def __init__(self, pegs, discs) :   
+    def __init__(self, pegs, discs):
+        """  
+
+        Class representing the Towers of Hanoi problem.
+
+        PARAMS: number of pegs, number of discs
+
+        """
 
         self.number_of_pegs = pegs
         self.number_of_discs = discs
 
+        # List that represents all the pegs with the discs. Higher int = bigger discs
+        # For example, if there are 5 discs in the game, then disc with int: 5 is the biggest.
+        pegs_list = []
 
-
-        pegs_list = []   # List that rep. all the pegs with the discs. Higer int = bigger discs 
-        for i in range(pegs): # create a list with nested lists
+        # Create a list with nested lists to represent the game
+        for i in range(pegs):
             pegs_list.append([])
             for n in range(discs):
+                # Place the discs in the first peg
                 if i == 0:
-                    pegs_list[i].append(discs-n) # Place the discs in the first peg
-                #else:
-                #   pegs_list[i].append(0) # fills nested lists with data
+                    pegs_list[i].append(discs-n)
+
         self.pegs_list = pegs_list
 
-    def get_state(self):
-        return self.pegs_list
-
-    def get_state_key(self):
-        # print(tuple(map(tuple, self.pegs_list)))
-        return tuple(map(tuple, self.pegs_list))
 
     def get_legal_moves(self):
+        """  
 
-        peg_with_disc = self.peg_with_disc()
-        # print('peg_with_disc:',  peg_with_disc)
+        Method for retrieving all the legal moves for a state.
+
+        RETURNS: list of all legal moves
+
+        """
+
+        peg_with_disc = self.get_pegs_with_discs()
 
         moves_list = []
         for peg in peg_with_disc:
             temp_moves = self.get_legal_move_from_peg(peg)
+
             if len(temp_moves) != 0:
                 moves_list += temp_moves
-            # moves_list+=(self.get_legal_move_from_peg(peg))
-        # print('LMOVES',moves_list)
+
         return moves_list
 
-    def get_legal_move_from_peg(self, peg_with_disc): #peg_with_disc is the peg which disc is from
+
+    def get_legal_move_from_peg(self, peg_with_disc):
+        """
+
+        Helping method for retrieving all legal moves.
+
+        PARAMS: peg_with_disc, meaning the peg where the disc is from
+
+        """
+
         move = []
         pegs_list = self.get_pegs_list()
-
-        #for i in range(len(peg_with_disc)+1): # i blir hvilken peg vi henter fra
         highest_disc = pegs_list[peg_with_disc][-1]
-        # print('highest_disc', highest_disc)
-        for j, peg in enumerate(pegs_list): # J er hvilken peg vi er i
-                
-                if 0 == len(peg):
-                    move.append([peg_with_disc, j])
-                elif peg[-1] > highest_disc:
-                    move.append([peg_with_disc, j]) # legger til hvilken peg man kan flytt fra, og til
-                else:
-                    continue
+
+        # j signifies which peg we are examining
+        for j, peg in enumerate(pegs_list):
+
+            # Appending the peg a move can be taken from and to
+            if 0 == len(peg):
+                move.append([peg_with_disc, j])
+
+            elif peg[-1] > highest_disc:
+                move.append([peg_with_disc, j])
+
+            else:
+                continue
                         
         return move
 
-    def reset_game(self):
 
-        self.this_game= []
-        self.this_game_steps = 0
+    def reset_game(self):
+        """
+
+        Method for reseting the game to its initial state. Much like the init-method.
+
+        """
 
         pegs = self.number_of_pegs
         discs = self.number_of_discs
         pegs_list = self.pegs_list
 
-        pegs_list = []   # List that rep. all the pegs with the discs. Higer int = bigger discs 
-        for i in range(pegs): # create a list with nested lists
+        pegs_list = []
+
+        for i in range(pegs):
             pegs_list.append([])
+
             for n in range(discs):
+
                 if i == 0:
-                    pegs_list[i].append(discs-n) # Place the discs in the first peg
-                #else:
-                #   pegs_list[i].append(0) # fills nested lists with data
+                    pegs_list[i].append(discs-n)
+
         self.pegs_list = pegs_list
 
-    def peg_with_disc(self):
+
+    def get_pegs_with_discs(self):
+        """
+
+        Method for retrieving all pegs that contain disc(s).
+
+        RETURNS: list of pegs that has disc(s)
+
+        """
+
         pegs_list = self.get_pegs_list()
         pegs = []
 
@@ -93,46 +124,63 @@ class Hanoi():
         return pegs
 
 
-
     def find_highest_disc_in_peg(self):
+        """
+
+        Method for finding the highest disc for a peg.
+
+        RETURNS: the highest disc
+
+        """
+
         pegs_list = self.get_pegs_list()
-        
-        
- 
-        #Get the highest disc in thepeg [pegNumber]
         highest_disc = 0
+
         for peg in pegs_list:
-            for disc in peg:
-                if 0 != len(peg):
 
-                    # print(peg)
-                    highest_disc = peg[-1]
+            if 0 != len(peg):
+                highest_disc = peg[-1]
 
-                else:
-                    break
+            else:
+                break
+
         return highest_disc
             
                               
-    def take_action(self, move):
-        # print('this_game: ', self.this_game) 
+    def take_action(self, action):
+        """  
 
+        Method that does the action the Sim World gives to the Hanoi game.
+
+        PARAMS: action
+
+        """
 
         pegs_list = self.get_pegs_list()
-        from_peg = move[0]
-        to_peg = move[1]
-        pegs_list[to_peg].append(pegs_list[from_peg][-1]) # Adds the disc to the new peg
+        from_peg = action[0]
+        to_peg = action[1]
+
+        # Adds the disc to the new peg
+        pegs_list[to_peg].append(pegs_list[from_peg][-1])
+
+        # Removes the disc to the old peg
         pegs_list[from_peg].pop()
 
 
-
-
-
     def game_done(self):
+        """
+
+        Method that returns if the game is done or not, in addition to the reward
+        for the action.
+
+        RETURNS: list of reward and bool
+
+        """
+
         pegs_list = self.get_pegs_list()
         discs = self.get_number_of_discs()
 
         for peg in pegs_list:
- 
             
             if pegs_list[0] == []:   
                 if len(peg) == discs:
@@ -141,129 +189,105 @@ class Hanoi():
         return [-0.1, False]
 
 
+    """ DENNE SKAL VEL FJERNES? """
     def get_number_of_pegs(self):
+        """
+
+        Helping method to retrieve number of pegs.
+
+        RETURNS: number of pegs
+
+        """
+
         return self.number_of_pegs
 
+
+    """ DENNE SKAL VEL FJERNES? """
     def get_number_of_discs(self):
+        """
+
+        Helping method to retrieve number of discs.
+
+        RETURNS: number of discs
+
+        """
+
         return self.number_of_discs
 
+
+    """ DENNE SKAL VEL FJERNES? """
     def get_pegs_list(self):
+        """
+
+        Helping method to retrieve the list of pegs.
+
+        RETURNS: list of pegs and discs
+
+        """
+
         return self.pegs_list
 
 
+    def get_state_key(self):
+        """
+
+        Method for getting the state for which the sim world will send to the learner.
+
+        RETURNS: a tuple of the state (the list of pegs discs)
+
+        """
+
+        return tuple(map(tuple, self.pegs_list))
 
 
-            
-                
-
-
-
-    
     def get_graphic(self, best_game):
+        """
 
+        Method for visualizing the best game of a run.
 
-        print(best_game, len(best_game))
+        PARAMS: best game (game with the lowest amount of moves)
+
+        """
 
         best_game.append(best_game[-1])
-        dWith = self.get_number_of_discs()
+        disc_width = self.get_number_of_discs()
         number_of_pegs = self.get_number_of_pegs()
-        dWithG = dWith+3
+        disc_width_margin = disc_width + 3
 
-        
-        #define Matplotlib figure and axis
-        fig, ax = plt.subplots()
+        # Define Matplotlib figure and axis
+        _, ax = plt.subplots()
 
-        #add rectangle to plot
+        # Add rectangle to plot
         for j, peg_list in enumerate(best_game):
+
             for i, peg in enumerate(peg_list):
-                ax.plot([(dWith*0.5)-0.5+i*(dWithG), (dWith*0.5)-0.5+i*(dWithG)], [0, dWith-0.5])
+                ax.plot([(disc_width * 0.5) - 0.5 + i * (disc_width_margin), (disc_width * 0.5) - 0.5 + i * (disc_width_margin)], [0, disc_width - 0.5])
                 
-                for j,disc in enumerate(peg):
+                for j, disc in enumerate(peg):
+
                     if len(peg) != 0:
-                        ax.add_patch(Rectangle((j*0.5+i*dWithG, j), disc, 1,  
-                        edgecolor ="blue", linewidth=1, facecolor  ='yellow'))
+                        ax.add_patch(Rectangle((j * 0.5 + i * disc_width_margin, j), disc, 1,  
+                        edgecolor = "blue", linewidth = 1, facecolor = 'yellow'))
                 
+                    # Create simple line plot.
+                    ax.plot([0, (disc_width + 2) * number_of_pegs], [disc_width, disc_width], color = "white")
 
-                    #create simple line plot.
-                    ax.plot([0, (dWith+2)*number_of_pegs], [dWith, dWith], color = "white")
-            plt.pause(0.000000001)
+            # Frame delay from parameters file
+            plt.pause(config['frame_delay'])
             ax.clear()
-
-        # plt.show()
          
 
-
     def visualize(self, _, ep_step_count, least_steps_list):
+        """
+
+        Method for visualizing the learning graph.
+
+        PARAMS: list of episodes and steps, list of just steps
+        RETURNS: list of episodes and steps, x label, y label, lowest step in the run
+
+        """
 
         x_label = "Episodes"
         y_label = "Steps"
 
         return ep_step_count, x_label, y_label, min(least_steps_list) + 1
-
-
-
-
-
-
-
-
-
-
-
-
-
-Game = Hanoi(3,3)#Pegs and discs
-
-# løse med tre discs og tre pegs
-# Game.get_graphic()
-# Game.take_action([0,2])
-# Game.take_action([0,1])
-# Game.take_action([2,1])
-# Game.take_action([0,2])
-# Game.take_action([1,0])
-# Game.take_action([1,2])
-# Game.take_action([0,2])
-# Game.game_done()
-# Game.get_graphic()
-
-
-
-# print(Game.get_pegs_list())
-
-# print(Game.get_legal_moves())
-# Game.get_graphic()
-
-# Game.take_action([0,1])
-# Game.get_graphic()
-
-
-# Game.take_action([0,2])
-# Game.take_action([0,1])
-# print(Game.get_legal_moves())
-
-# Game.get_graphic()
-
-# print(Game.get_legal_moves())
-# print(Game.game_done())
-# print(Game.get_state())
-
-
-
-
-
-
-
-        
-
-"""     def get_graphic(self, best_game = [((3, 2), (), (1,)), ((3,), (2,), (1,)), ((3,), (2, 1), ()), ((), (2, 1), (3,)), ((1,), (2,), (3,)), ((1,), (), (3, 2))]):
-
-        lines =''
-        for j, one_peg_list in enumerate(best_game):
-            for i, one_peg in enumerate(one_peg_list):
-                for disc in one_peg:
-
-                    lines += disc*'*' +  '\n'
-
-            print(lines)
- """
-

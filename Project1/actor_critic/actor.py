@@ -1,137 +1,189 @@
 import random
-import matplotlib.pyplot as plt
 
 class Actor():
     def __init__(self, learning_rate, discount_factor, epsilon, epsilon_decay, eligibility_decay):
+        """  
+
+        Class representing the actor in the actor-critic architecture. Contains methods mostly
+        used in the learner.
+
+        PARAMS: learning rate, discount factor, epsilon, epsilon decay, and eligibility decay
+
+        """
+
         self.learning_rate = learning_rate
         self.discount_factor = discount_factor
         self.epsilon = epsilon
         self.epsilon_decay = epsilon_decay
         self.eligibility_decay = eligibility_decay
-        self.eligibilities = {}
-        self.policy = {}
 
-        
-    def state_handler(self, state, legal_moves):
-        if state not in self.policy.keys():
-            self.policy[state] = {}
-            for move in legal_moves:
-                move = tuple(move)
-                self.policy[state][move] = 0
+        self.eligibility_dict = {}
+        self.policy_dict = {}
 
-    def reset_eligibilites(self):
 
-        """ VELDIG LIKT, EVT SE PÅ ELIG = {} """
-        """ DANGER ZONE """
-        for state in self.eligibilities:
-            for action in self.eligibilities[state]:
-                self.eligibilities[state][action] = 0
+    def state_handler(self, state, legal_moves): # ISH
+        """  
+
+        Method for adding all states, and their legal moves into the actor's policy.
+
+        PARAMS: state, legal moves
+
+        """
+
+        if state not in self.policy_dict.keys():
+            self.policy_dict[state] = {}
+
+            for action in legal_moves:
+                action = tuple(action)
+                self.policy_dict[state][action] = 0
+
+
+    def reset_eligibilites(self): # ISH
+        """  
+
+        Method for reseting the eligibilites for the actor. Sets the eligibility for
+        the state, action pair to zero.
+
+        """
+
+        for state in self.eligibility_dict:
+            for action in self.eligibility_dict[state]:
+                self.eligibility_dict[state][action] = 0
+
+
+    def set_initial_eligibility(self, state, action): # ISH
+        """
+
+        Method for setting the eligibilites to 1, before they are updated
+        later on, as the learner progresses.
+
+        PARAMS: state, action
+
+        """
+
+        action = tuple(action)
+
+        if state not in self.eligibility_dict.keys():
+            self.eligibility_dict[state] = {action: 1}
+
+        else:
+            self.eligibility_dict[state][action] = 1
+
 
     def get_action(self, state, legal_moves):
+        """
 
+        Method for retrieving an action for the learner to use. The three different
+        kinds of actions this method returns are:
 
-        # print(self.policy.keys())
-        # Gir alle states som actor har sett. 
+        - A random action if the state is not in the policy
+        - A random action if a random number between 0 and 1 is less than epsilon.
+        - A greedy action (usually when the epsilon is low) that takes the best action
+        according to the actors' policy.
 
-        # Gjør noe random hvis man ikke har sett staten
-        if state not in self.policy.keys():
+        PARAMS: state, legal moves
+        RETURNS: the action chosen
+
+        """
+
+        # Not seen state -> random action
+        if state not in self.policy_dict.keys():
             choice = random.choice(legal_moves)
             choice = tuple(choice)
             return choice
 
-        #Har sett staten før, men vi prøver å gjøre et valg som ikke er gjort før
+        # Seen state, but random value is less than epsilon -> random action
         if random.uniform(0, 1) < self.epsilon:
 
-            # print('self.policy[state].items()', self.policy[state].items())
-            # Gir ut alle actions med en verdi bak. Verdien er hvor bra trekket er
-
-
-            # print('self.policy[state].', self.policy[state])
-            # Her så veit vi at state ligger i self.policy.keys():
-
-            # Gjør et move som ikke er gjort før, hvis alle er testet, gjør noe random
-
-            for find_state in self.policy.keys():
+            # Choose an action that has not been tried before
+            for find_state in self.policy_dict.keys():
                 if find_state == state:
-                    for action in self.policy[state]:
-                        if self.policy[state][action] == 0:
+                    for action in self.policy_dict[state]:
+                        if self.policy_dict[state][action] == 0:
                                 return action
-                
+            
+            # If it can't find a new move, choose a random move from legal moves.
             choice = random.choice(legal_moves)
             choice = tuple(choice)
+
             return choice
                             
-
-        #Hvis man har sett staten og skal gjøre noe grådig   
+        # Picks a greedy action from the policy if it should not be random.
         greedy_action = None
         highest_val = float('-inf')
 
-        for action, value in self.policy[state].items():
-            # print(action, value)
+        for action, value in self.policy_dict[state].items():
             
             if value > highest_val and value != 0:
                 highest_val = value
                 greedy_action = action        
         
-        
-        """ DANGER ZONE """
-        # greedy_action = max(self.policy[state].items(), key=lambda x: x[0])[0] if greedy_action is None else greedy_action
         return greedy_action
 
-    """ DANGER ZONE """
-    def set_initial_eligibility(self, state, action):
-        action = tuple(action)
-        if state not in self.eligibilities.keys():
-            self.eligibilities[state] = {action: 1}
 
-        else:
+    def update_eligibilities_and_policy(self, episode_actions, td_error, current_state): # ISH
+        """
 
-            self.eligibilities[state][action] = 1
+        Method for calling the update methods for the eligibilites and policy.
+
+        PARAMS: list of from_state and action, the temporal difference error, and the current state
+
+        """
+
+        for from_state, _, action in episode_actions:
+            self.update_policy(from_state, action, td_error)
+            self.update_eligibility_dict(from_state, action, current_state)
 
 
     def update_policy(self, state, action, td_error):
+        """
+
+        Method for updating the actors' policy depending on the learning rate, temporal
+        difference error and the value already in the policy.
+
+        PARAMS: state, action, temporal difference error
+
+        """
+
+        action = tuple(action)
+        self.policy_dict[state][action] += self.learning_rate * td_error * self.eligibility_dict[state][action]
+
+
+    def update_eligibility_dict(self, from_state, action, current_state):
+        """
+
+        Method for updating the eligibility dictionary.
+
+        PARAMS: from state, action, and the current state
+
+        """
 
         action = tuple(action)
 
-        """ DANGER ZONE ish """
-        if state not in self.policy.keys():
+        # If the from state is the current state, set the eligibility to 1
+        if from_state == current_state:
+            self.eligibility_dict[from_state][action] = 1
 
-            self.policy[state] = {
-                action: 0
-            }
-
-        if self.policy[state].get(action) is None:
-
-            self.policy[state] = {
-                action: 0
-            }
-
-
-        """ DANGER ZONE """
-        self.policy[state][action] += self.learning_rate * td_error * self.eligibilities[state][action]
-
-    def update_eligibilities(self, state, action, current_state):
-        action = tuple(action)
-
-        """ DANGER ZONE ish """
-        if state == current_state:
-            self.eligibilities[state][action] = 1
+        # If not, set the eligibility to the formula below.
         else:
-            self.eligibilities[state][action] *= self.discount_factor * self.eligibility_decay
+            self.eligibility_dict[from_state][action] *= self.discount_factor * self.eligibility_decay
 
-
-    def update_eligibilities_and_policy(self, episode_actions, td_error, current_state):
-
-        for state, _, action in episode_actions:
-            self.update_policy(state, action, td_error)
-            self.update_eligibilities(state, action, current_state)
 
     def update_epsilon(self):
+        """
+
+        Method for updating the epsilon.
+
+        """
 
         self.epsilon *= self.epsilon_decay
 
-        # print("EPS", self.epsilon)
 
     def get_actor_policy(self):
+        """
+
+        Method used for visualizing the gambler problem, since it needs the actor's policy.
+
+        """
         
-        return self.policy
+        return self.policy_dict

@@ -40,6 +40,7 @@ class NN_critic():
     def state_value(self, state):
 
         state = np.asarray([hash(state)])
+        # CHANGE THIS^^^^^^^^
         state = tf.convert_to_tensor(state, dtype=tf.float32)
 
         return state

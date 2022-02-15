@@ -2,12 +2,30 @@ import random
 
 class Gambler():
     def __init__(self, win_prob):
-        self.win_prob = win_prob # win probability
+        """
+
+        Class representing the Gambler problem.
+
+        PARAMS: win probability
+
+        """
+
+        self.win_prob = win_prob
         self.coins = random.randint(1, 99)
 
+        # For visualization
         self.vals_for_gambler = []
 
+
     def get_legal_moves(self):
+        """
+
+        Method for retrieving all legal moves for a state.
+
+        RETURNS: legal moves
+
+        """
+
         coin = self.get_state()
         moves = []
 
@@ -15,67 +33,111 @@ class Gambler():
             moves.append([-1])
 
         elif coin<51:
-            for lCoin in range(coin):
-                moves.append([lCoin+1])
+            for low_coin in range(coin):
+                moves.append([low_coin + 1])
 
-        else: # coin>51:
-            for hCoin in range(100-coin):
-                moves.append([hCoin+1])
-                
+        else: # Coin > 51:
+            for high_coin in range(100-coin):
+                moves.append([high_coin + 1])  
         
         return moves
 
     def take_action(self, bet):
-        # print('BET:', bet)
-        # print('Ditt bet',bet[0])
+        """
+
+        Method that does the action (bet), from the sim world.
+
+        PARAMS: bet/action
+
+        RETURNS
+
+        """
+
         win_prob = self.get_win_prob()
         coins = self.get_state()
 
-        if win_prob>= random.random():
-            coins+=bet[0]
-            # print('Du vant betten din!:)')
+        if win_prob > random.random():
+            coins += bet[0]
+
         else:
-            coins-=bet[0]
-            # print('Du tapte betten din:(')
+            coins -= bet[0]
+
         self.update_coin(coins)
-        return None
         
 
     def game_done(self):
+        """
+
+        Method for checking if the game is over or not.
+
+        RETURNS: list with reward and bool
+
+        """
+
         if self.get_state() == 100:
             return [1000, True]
+
         elif self.get_state() == 0:
             return [self.coins, True]
+
         else:
             return [-1, False]
 
-    def get_win_prob(self): #get_win_probability
+
+    """ DENNE SKAL VEL FJERNES? """
+    def get_win_prob(self):
         return self.win_prob
     
-    def update_coin(self, coin): #get_win_probability
+    """ DENNE KAN VEL OGSÅ FJERNES? """
+    def update_coin(self, coin):
         self.coins = coin
         
+
     def get_state_key(self):
+        """
+
+        Method for returning the state of the game to the sim world
+
+        RETURNS: a tuple with the amount of coins in a list
+
+        """
+
         list = [self.coins]
         return tuple(list)
     
+    """ DENNE SKAL VEL FJERNES? """
     def get_state(self):
         return self.coins
 
+
     def reset_game(self):
+        """
+
+        Method for reseting the game. Sets the coin to a random value between 1 and 99.
+
+        """
+
         self.coins = random.randint(1, 99)
 
 
     def visualize(self, actor, _, __):
+        """
+
+        Method for visualizing the actor's policy, for the gambler problem.
+
+        PARAMS: the actor
+        RETURNS: list of x and y values, x label, y label
+
+        """
 
         pol = actor.get_actor_policy()
 
         for act, value in pol.items():
-            # print("act", value)
             highest_val = float('-inf')
             picked_key = None
+
             for key, value2 in value.items():
-                # print(value2)
+
                 if value2 != 0:
                     if value2 > highest_val:
                         highest_val = value2
