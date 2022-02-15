@@ -177,7 +177,11 @@ class Actor():
 
         """
 
-        self.epsilon *= self.epsilon_decay
+    def update_epsilon(self, forced):
+        if forced == 0:
+            self.epsilon = 0
+        else:
+            self.epsilon *= self.epsilon_decay
 
 
     def get_actor_policy(self):
