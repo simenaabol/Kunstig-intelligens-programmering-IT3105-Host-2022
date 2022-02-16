@@ -53,16 +53,12 @@ class Gambler():
 
         """
 
-        win_prob = self.win_prob
-        coins = self.coins
 
-        if win_prob > random.random():
-            coins += bet[0]
+        if self.win_prob > random.random():
+            self.coins += bet[0]
 
         else:
-            coins -= bet[0]
-
-        self.update_coin(coins)
+            self.coins -= bet[0]
         
 
     def game_done(self):
