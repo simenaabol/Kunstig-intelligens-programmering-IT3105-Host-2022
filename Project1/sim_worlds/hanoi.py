@@ -175,12 +175,12 @@ class Hanoi():
         PARAMS: action
 
         """
+
         self.current_action = action
 
         self.this_game.append(copy.deepcopy(self.pegs_list))
 
         if self.reset == 1:
-            print('hallo')
             self.first_game.append(copy.deepcopy(self.pegs_list))
 
         from_peg = action[0]
@@ -192,11 +192,11 @@ class Hanoi():
 
         
     def Reverse(self, tuple):
+
         new_tuple= ()
         for i in reversed(tuple):
             new_tuple = new_tuple + (i,)
         return new_tuple
-
 
 
     def game_done(self):
@@ -221,7 +221,6 @@ class Hanoi():
 
         # Return negative reward for placing the dics back where it come from
         if self.last_action == current_action_reversed:
-            # print(self.last_action, ' == ',  current_action_reversed )
             rew = -2
         self.last_action = self.current_action
 
@@ -266,7 +265,6 @@ class Hanoi():
         RETURNS: a tuple of the state (the list of pegs discs)
 
         """
-        # print(self.pegs_list)
 
         return tuple(map(tuple, self.pegs_list))
 
@@ -286,8 +284,6 @@ class Hanoi():
 
         # Define Matplotlib figure and axis
         _, ax = plt.subplots()
-
-
         
         for j, peg_list in enumerate(self.best_game):
             for i, peg in enumerate(peg_list):
@@ -304,7 +300,6 @@ class Hanoi():
             plt.pause(config['frame_delay'])
             ax.clear()
 
-
         for j, peg_list in enumerate(self.first_game):
             for i, peg in enumerate(peg_list):
                 ax.plot([(disc_width * 0.5) - 0.5 + i * (disc_width_margin), (disc_width * 0.5) - 0.5 + i * (disc_width_margin)], [0, disc_width - 0.5])
@@ -319,7 +314,6 @@ class Hanoi():
             # Frame delay from parameters file
             plt.pause(config['frame_delay'])
             ax.clear()
-
      
 
     def visualize(self, _, ep_step_count, least_steps_list):

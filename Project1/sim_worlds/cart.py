@@ -39,6 +39,7 @@ class Cart():
 
         self.reset = 0
 
+
     def reset_game(self):
         self.L = cartConfig['game_config']['L']
         self.Mp = cartConfig['game_config']['Mp']
@@ -53,7 +54,6 @@ class Cart():
         self.step = cartConfig['game_config']['step']
         self.F = cartConfig['game_config']['F']
     
-        
         self.th0 = random.uniform(-(self.thM), self.thM)
         self.Fs = [[-self.F], [self.F]]
         
@@ -69,8 +69,10 @@ class Cart():
 
         self.reset += 1
 
+
     def get_step(self):
         return self.step
+
 
     # 2.1 -> update/set th2
     def update_th2(self, g, th0, Mp, B, L, th1, Mc):
@@ -78,10 +80,12 @@ class Cart():
         return ((g * math.sin(th0) + ( ( math.cos(th0) * ((- B - Mp * L * (th1**2) * math.sin(th0)) ) / (Mc + Mp) ) ) )/         
                 (L * (4.0 / 3.0 - (   (Mp * math.cos(th0)**2)    / (Mc + Mp)))))       
 
+
     #2.2  -> update/set x2
     def update_x2(self, Mp, B, th1, th0, Mc, th2, L):
         
         return (B + Mp * L * ((th1**2) * math.sin(th0)-th2*math.cos(th0))   )/(Mc+Mp)
+
 
     def take_action(self, action):
         
@@ -90,7 +94,6 @@ class Cart():
 
         if self.reset == 1:
             self.first_game.append(self.th0)
-
 
         # 1. The controller chooses a value for B (either F or -F),
         self.B = action[0]
@@ -116,8 +119,8 @@ class Cart():
         #2.6  -> update/set
         self.x0 = self.x0 + (self.t*self.x1)
 
-
         self.step = self.step+1
+
 
     def get_state_key(self): 
         ret_list = []
@@ -136,10 +139,13 @@ class Cart():
                 
         return tuple(ret_list)  
 
+
     def get_legal_moves(self):
         return self.Fs
 
+
     def game_done(self):
+
         th0 = self.th0
         thM = self.thM
         step = self.step
@@ -155,7 +161,6 @@ class Cart():
             # Update best_game to the latest win
             if self.this_game != []:
                 self.best_game = self.this_game
-   
 
             # Reset this_game
             self.this_game = []            
@@ -186,6 +191,7 @@ class Cart():
 
             return [-225, True] 
 
+
     def visualize(self, _, ep_step_count, __):
 
         x_label = "Episodes"
@@ -193,9 +199,11 @@ class Cart():
 
         return ep_step_count, x_label, y_label, None
 
+
     def get_graphic(self):
 
-        #first try
+        #First try
+
         graph_vals = []
 
         print('ff:', self.first_game)
@@ -212,10 +220,6 @@ class Cart():
         plt.xlabel("Timesteps")
         plt.ylabel("Angle")
         plt.show()
-
-
-
-
 
         # Best/latest try
         graph_vals = []
