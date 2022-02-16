@@ -26,7 +26,7 @@ class Gambler():
 
         """
 
-        coin = self.get_state()
+        coin = self.coins
         moves = []
 
         if coin == 0:
@@ -54,7 +54,7 @@ class Gambler():
         """
 
         win_prob = self.get_win_prob()
-        coins = self.get_state()
+        coins = self.coins
 
         if win_prob > random.random():
             coins += bet[0]
@@ -74,10 +74,10 @@ class Gambler():
 
         """
 
-        if self.get_state() == 100:
+        if self.coins == 100:
             return [1000, True]
 
-        elif self.get_state() == 0:
+        elif self.coins == 0:
             return [self.coins, True]
 
         else:
@@ -104,11 +104,7 @@ class Gambler():
 
         list = [self.coins]
         return tuple(list)
-    
-    """ DENNE SKAL VEL FJERNES? """
-    def get_state(self):
-        return self.coins
-
+        
 
     def reset_game(self):
         """

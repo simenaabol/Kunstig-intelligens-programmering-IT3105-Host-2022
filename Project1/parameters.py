@@ -1,6 +1,6 @@
 config = {
 
-    'problem': 'hanoi',
+    'problem': 'gambler',
     'critic': 'table',
     # 'critic': 'nn',
     'visualize': True, 
