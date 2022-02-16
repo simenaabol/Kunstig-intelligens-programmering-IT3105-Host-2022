@@ -73,10 +73,9 @@ class Hanoi():
         """
 
         move = []
-        highest_disc = pegs_list[peg_with_disc][-1]
+        highest_disc = self.pegs_list[peg_with_disc][-1]
 
         # j signifies which peg we are examining
-        pegs_list = self.pegs_list
         for j, peg in enumerate(self.pegs_list):
 
             # Appending the peg a move can be taken from and to

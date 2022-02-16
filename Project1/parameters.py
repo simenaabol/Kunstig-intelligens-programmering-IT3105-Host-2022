@@ -1,7 +1,7 @@
 config = {
 
-    'problem': 'gambler',
-    'critic': 'table',
+    'problem': 'cart',
+    'critic': 'nn',
     'visualize': True, 
     'frame_delay': 0.1
 }
@@ -33,7 +33,7 @@ hanoiConfig = {
     'anncritic_config': {
         'learning_rate': 0.0001,
         'discount_factor': 0.9,
-        'input_size': 6,
+        'input_size': 4,
         'hidden_layers': (5,)
     }
 } 
@@ -82,7 +82,6 @@ cartConfig = {
         'nX': -2.4,
         'pX': 2.4,
         'T': 300,
-        'step': 0,
         'F': 10
     },
 
