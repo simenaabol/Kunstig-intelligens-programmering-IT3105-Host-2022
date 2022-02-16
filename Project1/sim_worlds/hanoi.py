@@ -35,14 +35,12 @@ class Hanoi():
         
         self.highest_peg = 0
 
-
         self.first_game = []
         self.this_game = []
         self.best_game = []
 
         self.reset = 0
     
-
 
     def get_legal_moves(self):
         """  
@@ -116,7 +114,6 @@ class Hanoi():
 
         self.this_game = []
         self.reset += 1
-    
 
 
     def get_pegs_with_discs(self):
@@ -191,12 +188,12 @@ class Hanoi():
         RETURNS: tuple
 
         """
+        new_tuple = ()
 
-        new_tuple= ()
         for i in reversed(tuple):
             new_tuple = new_tuple + (i,)
-        return new_tuple
 
+        return new_tuple
 
 
     def game_done(self):
@@ -211,6 +208,7 @@ class Hanoi():
 
         # Reverse the action
         is_tuple = type(self.current_action) is tuple
+
         if is_tuple:
             current_action_reversed = self.Reverse(self.current_action)
         else:
@@ -221,14 +219,15 @@ class Hanoi():
 
         # Return negative reward for placing the dics back where it come from
         if self.last_action == current_action_reversed:
-            # print(self.last_action, ' == ',  current_action_reversed )
             rew = -2
+
         self.last_action = self.current_action
 
         # Return a positive reward for builig a peg with a new height  
         for i, peg in enumerate(self.pegs_list):
             if i == 0:
                 continue
+
             else:
                 if len(peg) > self.highest_peg:
                     rew = 1
@@ -313,7 +312,6 @@ class Hanoi():
             plt.pause(config['frame_delay'])
             ax.clear()
 
-     
 
     def visualize(self, _, ep_step_count, least_steps_list):
         """

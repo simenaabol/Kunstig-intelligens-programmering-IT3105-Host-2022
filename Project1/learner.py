@@ -58,9 +58,6 @@ class RL_learner():
         """
         
         for episode in range(self.num_episodes):
-
-            # Another list for visualization
-            list_of_states = []
  
             # Print some episodes to keep track of progress
             if episode % 10 == 0:
@@ -115,7 +112,6 @@ class RL_learner():
                 # Update the eligibilities and policy for the actor
                 self.actor.update_eligibilities_and_policy(episode_actions, td_error, from_state)
                 
-
                 # Update values for the table critic or the NN-critic
                 if isinstance(self.critic, Table_critic):
                     self.critic.update_eligibilities_and_values(episode_actions, td_error)
@@ -124,11 +120,6 @@ class RL_learner():
 
                 # Checks if the game is finished
                 if is_finished or legal_moves == []:
-
-                    # Append the last state for visualization
-                    from_state = current_state
-                    list_of_states.append(current_state)
-
                     break    
 
                 # Retrieve the next action based on the current state, and legal moves.
@@ -137,12 +128,9 @@ class RL_learner():
                 # Set state and action for next step cycle
                 from_state = current_state
                 action = next_action
-
-                # For visualization
-                list_of_states.append(current_state)
                 
             # Decrease the epsilon at the end of an episode
-            self.actor.update_epsilon(-1)
+            self.actor.update_epsilon(None)
 
             # For visualization
             self.ep_step_count.append((episode + 1, step + 1))
