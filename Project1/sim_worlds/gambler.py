@@ -48,7 +48,6 @@ class Gambler():
         Method that does the action (bet), from the sim world.
 
         PARAMS: bet/action
-
         RETURNS
 
         """

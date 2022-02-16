@@ -52,8 +52,8 @@ class Hanoi():
         """
 
         peg_with_disc = self.get_pegs_with_discs()
-
         moves_list = []
+
         for peg in peg_with_disc:
             temp_moves = self.get_legal_move_from_peg(peg)
 
@@ -163,6 +163,7 @@ class Hanoi():
         PARAMS: action
 
         """
+
         self.current_action = action
 
         self.this_game.append(copy.deepcopy(self.pegs_list))
@@ -187,6 +188,7 @@ class Hanoi():
         RETURNS: tuple
 
         """
+        
         new_tuple = ()
 
         for i in reversed(tuple):
