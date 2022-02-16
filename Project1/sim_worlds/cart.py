@@ -64,8 +64,7 @@ class Cart():
         self.thM = cartConfig['game_config']['thM'] 
         self.nX = cartConfig['game_config']['nX']
         self.pX = cartConfig['game_config']['pX']
-        self.T = cartConfig['game_config']['T'] 
-        self.step = cartConfig['game_config']['step']
+        self.T = cartConfig['game_config']['T']
         self.F = cartConfig['game_config']['F']
     
         self.th0 = random.uniform(-(self.thM), self.thM)
