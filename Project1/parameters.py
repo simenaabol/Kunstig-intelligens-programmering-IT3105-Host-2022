@@ -2,7 +2,8 @@ config = {
 
     'problem': 'hanoi',
     'critic': 'table',
-    'visualize': False, 
+    # 'critic': 'nn',
+    'visualize': True, 
     'frame_delay': 0.1
 }
 
@@ -17,17 +18,17 @@ hanoiConfig = {
     'max_steps': 300,
 
     'actor_config': {
-        'learning_rate': 0.01, #0.01
+        'learning_rate': 0.1, #0.01
         'discount_factor': 0.9,
         'epsilon': 1,
         'epsilon_decay': 0.99,
-        'eligibility_decay': 0.99
+        'eligibility_decay': 0.9
     },
 
     'critic_config': {
         'learning_rate': 0.1,#0.1
         'discount_factor': 0.9,
-        'eligibility_decay': 0.99
+        'eligibility_decay': 0.9
     },
 
     'anncritic_config': {
@@ -45,7 +46,7 @@ gamblerConfig = {
     },
 
     'num_episodes': 15000,
-    'max_steps': 300,
+    'max_steps': 310,
 
     'actor_config': {
         'learning_rate': 0.01,
@@ -87,7 +88,7 @@ cartConfig = {
     },
 
     'num_episodes': 200,
-    'max_steps': 301,
+    'max_steps': 310,
 
     'actor_config': {
         'learning_rate': 0.0002,

@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-
+import copy
 from parameters import config
 
 class Hanoi():
@@ -34,6 +34,13 @@ class Hanoi():
         self.current_action = [(0,0)]    
         
         self.highest_peg = 0
+
+
+        self.first_game = []
+        self.this_game = []
+        self.best_game = []
+
+        self.reset = 0
     
 
 
@@ -68,7 +75,7 @@ class Hanoi():
         """
 
         move = []
-        pegs_list = self.get_pegs_list()
+        pegs_list = self.pegs_list
         highest_disc = pegs_list[peg_with_disc][-1]
 
         # j signifies which peg we are examining
@@ -112,6 +119,12 @@ class Hanoi():
         self.highest_peg = 0
 
 
+
+        self.this_game = []
+        self.reset += 1
+    
+
+
     def get_pegs_with_discs(self):
         """
 
@@ -121,7 +134,7 @@ class Hanoi():
 
         """
 
-        pegs_list = self.get_pegs_list()
+        pegs_list = self.pegs_list
         pegs = []
 
         for i, peg in enumerate(pegs_list):
@@ -140,7 +153,7 @@ class Hanoi():
 
         """
 
-        pegs_list = self.get_pegs_list()
+        pegs_list = self.pegs_list
         highest_disc = 0
 
         for peg in pegs_list:
@@ -166,20 +179,29 @@ class Hanoi():
         #     self.last_action = action
         # else:
         self.current_action = action
- 
-        
 
-        pegs_list = self.get_pegs_list()
+        # print("TG", self.pegs_list)
+        # Update this_game
+        self.this_game.append(copy.deepcopy(self.pegs_list))
+        # print('this_game_ from action: ', self.this_game)
+
+        # if self.first_game != self.T:
+        if self.reset == 1:
+            print('hallo')
+            self.first_game.append(copy.deepcopy(self.pegs_list))
+        # print('First_game: ', self.first_game)
+
+        # pegs_list = self.get_pegs_list()
         from_peg = action[0]
         to_peg = action[1]
 
         # Adds the disc to the new peg
-        pegs_list[to_peg].append(pegs_list[from_peg][-1])
+        self.pegs_list[to_peg].append(self.pegs_list[from_peg][-1])
 
         # Removes the disc to the old peg
-        pegs_list[from_peg].pop()
+        self.pegs_list[from_peg].pop()
 
-
+        
     def Reverse(self, tuple):
         new_tuple= ()
         for i in reversed(tuple):
@@ -206,23 +228,19 @@ class Hanoi():
         else:
             current_action_reversed = self.Reverse(self.current_action[0])
 
+        # Default reward for a move
+        rew = -1
 
-       
-        # Return negative reward for placin the dics back where it come from
-        rew = 0
+        # Return negative reward for placing the dics back where it come from
         if self.last_action == current_action_reversed:
             # print(self.last_action, ' == ',  current_action_reversed )
-            rew = -1
+            rew = -2
         self.last_action = self.current_action
 
-
-
-
         # Return a positive reward for builig a peg with a new height
-        pegs_list = self.get_pegs_list()
-        discs = self.get_number_of_discs()
-
-        
+        pegs_list = self.pegs_list
+        discs = self.number_of_discs
+    
         for i, peg in enumerate(pegs_list):
             if i == 0:
                 continue
@@ -230,56 +248,26 @@ class Hanoi():
                 if len(peg) > self.highest_peg:
                     rew = 1
                     self.highest_peg = len(peg)
-
-    
+ 
         # Check if done
-        for peg in pegs_list:
-            
-            if pegs_list[0] == []:   
+        for peg in self.pegs_list:
+            if pegs_list[0] == []:                
                 if len(peg) == discs:
-                    rew = 200
+
+                    rew = 100
+                    self.reset +=1
+
+                    if self.this_game != []:
+                        self.best_game = (self.this_game)
+                        
+                        self.best_game.append(self.pegs_list)
+
+                    # Reset this_game
+                    self.this_game = []    
+
                     return [rew, True]
 
-        return [-rew, False]
-
-
-    """ DENNE SKAL VEL FJERNES? """
-    def get_number_of_pegs(self):
-        """
-
-        Helping method to retrieve number of pegs.
-
-        RETURNS: number of pegs
-
-        """
-
-        return self.number_of_pegs
-
-
-    """ DENNE SKAL VEL FJERNES? """
-    def get_number_of_discs(self):
-        """
-
-        Helping method to retrieve number of discs.
-
-        RETURNS: number of discs
-
-        """
-
-        return self.number_of_discs
-
-
-    """ DENNE SKAL VEL FJERNES? """
-    def get_pegs_list(self):
-        """
-
-        Helping method to retrieve the list of pegs.
-
-        RETURNS: list of pegs and discs
-
-        """
-
-        return self.pegs_list
+        return [rew, False]
 
 
     def get_state_key(self):
@@ -290,11 +278,12 @@ class Hanoi():
         RETURNS: a tuple of the state (the list of pegs discs)
 
         """
+        # print(self.pegs_list)
 
         return tuple(map(tuple, self.pegs_list))
 
 
-    def get_graphic(self, best_game):
+    def get_graphic(self):
         """
 
         Method for visualizing the best game of a run.
@@ -303,22 +292,20 @@ class Hanoi():
 
         """
 
-        best_game.append(best_game[-1])
-        disc_width = self.get_number_of_discs()
-        number_of_pegs = self.get_number_of_pegs()
+        # best_game.append(best_game[-1])
+        disc_width = self.number_of_discs
+        number_of_pegs = self.number_of_pegs
         disc_width_margin = disc_width + 3
 
         # Define Matplotlib figure and axis
         _, ax = plt.subplots()
 
-        # Add rectangle to plot
-        for j, peg_list in enumerate(best_game):
 
+        
+        for j, peg_list in enumerate(self.best_game):
             for i, peg in enumerate(peg_list):
-                ax.plot([(disc_width * 0.5) - 0.5 + i * (disc_width_margin), (disc_width * 0.5) - 0.5 + i * (disc_width_margin)], [0, disc_width - 0.5])
-                
+                ax.plot([(disc_width * 0.5) - 0.5 + i * (disc_width_margin), (disc_width * 0.5) - 0.5 + i * (disc_width_margin)], [0, disc_width - 0.5]) 
                 for j, disc in enumerate(peg):
-
                     if len(peg) != 0:
                         ax.add_patch(Rectangle((j * 0.5 + i * disc_width_margin, j), disc, 1,  
                         edgecolor = "blue", linewidth = 1, facecolor = 'yellow'))
@@ -329,7 +316,24 @@ class Hanoi():
             # Frame delay from parameters file
             plt.pause(config['frame_delay'])
             ax.clear()
-         
+
+
+        for j, peg_list in enumerate(self.first_game):
+            for i, peg in enumerate(peg_list):
+                ax.plot([(disc_width * 0.5) - 0.5 + i * (disc_width_margin), (disc_width * 0.5) - 0.5 + i * (disc_width_margin)], [0, disc_width - 0.5])
+                for j, disc in enumerate(peg):
+                    if len(peg) != 0:
+                        ax.add_patch(Rectangle((j * 0.5 + i * disc_width_margin, j), disc, 1,  
+                        edgecolor = "blue", linewidth = 1, facecolor = 'yellow'))
+                
+                    # Create simple line plot.
+                    ax.plot([0, (disc_width + 2) * number_of_pegs], [disc_width, disc_width], color = "white")
+
+            # Frame delay from parameters file
+            plt.pause(config['frame_delay'])
+            ax.clear()
+
+     
 
     def visualize(self, _, ep_step_count, least_steps_list):
         """
