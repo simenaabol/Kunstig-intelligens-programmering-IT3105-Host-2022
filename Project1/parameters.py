@@ -1,7 +1,7 @@
 config = {
 
     'problem': 'cart',
-    'critic': 'nn',
+    'critic': 'table',
     'visualize': True, 
     'frame_delay': 0.1
 }

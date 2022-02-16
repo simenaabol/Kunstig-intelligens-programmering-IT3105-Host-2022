@@ -28,8 +28,7 @@ class Sim_world():
                                 cartConfig['game_config']['thM'], 
                                 cartConfig['game_config']['nX'], 
                                 cartConfig['game_config']['pX'], 
-                                cartConfig['game_config']['T'], 
-                                cartConfig['game_config']['step'], 
+                                cartConfig['game_config']['T'],  
                                 cartConfig['game_config']['F'])
 
         elif config["problem"] == "gambler":
