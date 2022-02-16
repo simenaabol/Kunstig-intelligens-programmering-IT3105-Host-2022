@@ -70,10 +70,6 @@ class Cart():
         self.reset += 1
 
 
-    def get_step(self):
-        return self.step
-
-
     # 2.1 -> update/set th2
     def update_th2(self, g, th0, Mp, B, L, th1, Mc):
         
