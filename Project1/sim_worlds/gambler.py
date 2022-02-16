@@ -26,18 +26,17 @@ class Gambler():
 
         """
 
-        coin = self.coins
         moves = []
 
-        if coin == 0:
+        if self.coins == 0:
             moves.append([-1])
 
-        elif coin<51:
-            for low_coin in range(coin):
+        elif self.coins<51:
+            for low_coin in range(self.coins):
                 moves.append([low_coin + 1])
 
         else: # Coin > 51:
-            for high_coin in range(100-coin):
+            for high_coin in range(100-self.coins):
                 moves.append([high_coin + 1])  
         
         return moves
