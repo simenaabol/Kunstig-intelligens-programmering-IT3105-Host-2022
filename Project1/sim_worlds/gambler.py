@@ -53,7 +53,6 @@ class Gambler():
 
         """
 
-
         if self.win_prob > random.random():
             self.coins += bet[0]
 
