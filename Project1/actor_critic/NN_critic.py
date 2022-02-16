@@ -1,19 +1,24 @@
 import numpy as np
 import tensorflow as tf
-# import keras
 import keras.layers as klayers
-# import tf.keras.optimizers
 import keras.losses as losses
 
 
 class NN_critic():
 
-    def __init__(self, learning_rate, discount_factor, input_size, hidden_layers_size):
+    def __init__(self, learning_rate, discount_factor, input_size, hidden_layers):
+        """
+
+        Class representing the neural network critic.
+
+        PARAMS: learning rate, discount factor, input size, hidden layers
+
+        """
 
         self.learning_rate = learning_rate
         self.discount_factor = discount_factor
         self.input_size = input_size
-        self.hidden_layer_size = hidden_layers_size
+        self.hidden_layer_size = hidden_layers
 
         self.model = tf.keras.Sequential()
 
@@ -28,18 +33,37 @@ class NN_critic():
                             loss=losses.MeanSquaredError())
 
 
+    def calc_td_error(self, from_state, reward, current_state):
+        """
 
-    def calc_td_error(self, state, reward, next_state):
+        Method for calculating the temporal difference error.
 
-        target_val = reward + self.discount_factor * self.state_value(next_state)
-        curr_state_val = self.state_value(state)
+        PARAMS: from state, reward, current state
 
-        td_error = target_val - curr_state_val
+        RETURNS: temporal difference error
+
+        """
+
+        target_val = reward + self.discount_factor * self.state_value(current_state)
+        from_state_val = self.state_value(from_state)
+
+        td_error = target_val - from_state_val
 
         return td_error
 
-    def state_value(self, state):
 
+    def state_value(self, state):
+        """
+
+        Method for using tensors to help evaluate the td_error
+
+        PARAMS: state
+
+        RETURNS: float
+
+        """
+
+        # Try this code to use if the state is multiple elements
         try:
             state = [list(i) for i in state]
 
@@ -67,7 +91,15 @@ class NN_critic():
 
         return self.model(state).numpy()[0][0]
 
+
     def update_weights(self, td_error):
+        """
+
+        Method for recompiling the neural network using the new loss function as td_error squared.
+
+        PARAMS: temporal difference error
+
+        """
 
         loss_func = td_error ** 2
 
