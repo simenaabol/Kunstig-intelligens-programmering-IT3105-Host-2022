@@ -36,7 +36,7 @@ class RL_learner():
             self.critic = NN_critic(self.parameters["anncritic_config"]["learning_rate"], 
                                     self.parameters["anncritic_config"]["discount_factor"], 
                                     self.parameters["anncritic_config"]["input_size"], 
-                                    self.parameters["anncritic_config"]["num_layers"])
+                                    self.parameters["anncritic_config"]["hidden_layers"])
 
         else:
             raise Exception("Choose either 'table' or 'nn'")
