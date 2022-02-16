@@ -1,8 +1,8 @@
 config = {
 
     'problem': 'hanoi',
-    'critic': 'nn',
-    'visualize': False, 
+    'critic': 'table',
+    'visualize': True, 
     'frame_delay': 0.1
 }
 
@@ -32,9 +32,9 @@ hanoiConfig = {
 
     'anncritic_config': {
         'learning_rate': 0.0001,
-        'discount_factor': 0.7,
-        'input_size': 4,
-        'num_layers': (15, 20, 30, 10)
+        'discount_factor': 0.9,
+        'input_size': 6,
+        'hidden_layers': (5,)
     }
 } 
 
@@ -44,7 +44,7 @@ gamblerConfig = {
         'win_prob': 0.4, 
     },
 
-    'num_episodes': 15000,
+    'num_episodes': 25000,
     'max_steps': 300,
 
     'actor_config': {
@@ -65,7 +65,7 @@ gamblerConfig = {
         'learning_rate': 0.0001,
         'discount_factor': 0.90,
         'input_size': 1,
-        'num_layers': (15, 20, 30, 10)
+        'hidden_layers': (15,)
     }
 }
 
@@ -86,7 +86,7 @@ cartConfig = {
         'F': 10
     },
 
-    'num_episodes': 200,
+    'num_episodes': 100,
     'max_steps': 301,
 
     'actor_config': {
@@ -107,7 +107,7 @@ cartConfig = {
         'learning_rate': 0.0001,
         'discount_factor': 0.9,
         'input_size': 1,
-        'num_layers': (15, 20, 30, 10)
+        'hidden_layers': (2, 5, 3)
     }
 }
 
