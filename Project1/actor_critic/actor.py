@@ -174,13 +174,14 @@ class Actor():
             self.eligibility_dict[from_state][action] *= self.discount_factor * self.eligibility_decay
 
 
-    def update_epsilon(self, forced):
+    def update_epsilon(self, forced=False):
         """
 
         Method for updating the epsilon.
 
         """
-        if forced == 0:
+
+        if forced:
             self.epsilon = 0
         else:
             self.epsilon *= self.epsilon_decay
@@ -190,6 +191,8 @@ class Actor():
         """
 
         Method used for visualizing the gambler problem, since it needs the actor's policy.
+
+        RETURNS: actor policy
 
         """
         

@@ -78,13 +78,13 @@ class Sim_world():
         if self.config["problem"] == "cart":
             pass
             # if episode == parameters['num_episodes']-10:
-            #     actor.update_epsilon(0)
+            #     actor.update_epsilon(True)
         elif self.config["problem"] == "hanoi":
             if episode == parameters['num_episodes']-10:
-                actor.update_epsilon(0)
+                actor.update_epsilon(True)
         elif self.config["problem"] == "gambler":
             if episode == parameters['num_episodes']-10:
-                actor.update_epsilon(0)
+                actor.update_epsilon(True)
 
         
         # game_done[0] is reward, and game_done[1] is a boolean.

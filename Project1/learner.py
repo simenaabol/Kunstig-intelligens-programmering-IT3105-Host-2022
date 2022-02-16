@@ -93,7 +93,7 @@ class RL_learner():
                     self.critic.state_handler(from_state)
 
                 # Retrieve new values after a action
-                current_state, reward, is_finished, legal_moves = self.sim_world.step(action, self.actor, self.parameters, episode )
+                current_state, reward, is_finished, legal_moves = self.sim_world.step(action, self.actor, self.parameters, episode)
                 episode_reward += reward
 
                 # Set eligibilities to 1
@@ -130,7 +130,7 @@ class RL_learner():
                 action = next_action
                 
             # Decrease the epsilon at the end of an episode
-            self.actor.update_epsilon(None)
+            self.actor.update_epsilon()
 
             # For visualization
             self.ep_step_count.append((episode + 1, step + 1))
