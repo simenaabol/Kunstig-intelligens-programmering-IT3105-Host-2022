@@ -87,10 +87,7 @@ class Cart():
         
         # Update this_game
         self.this_game.append(self.th0)
-        # print(self.this_game)
 
-
-        # if self.first_game != self.T:
         if self.reset == 1:
             self.first_game.append(self.th0)
 
@@ -154,9 +151,6 @@ class Cart():
         nX = self.nX
         pX = self.pX    
 
-
-
-    
         ret = [-1, False]
 
         if (nX < x0 and pX > x0 and thM> th0 and th0 > -thM and step == self.T):
@@ -194,7 +188,7 @@ class Cart():
             return ret                           
         else:
 
-            return [-225, True] # før 200 og 250
+            return [-225, True] 
 
     def visualize(self, _, ep_step_count, __):
 
