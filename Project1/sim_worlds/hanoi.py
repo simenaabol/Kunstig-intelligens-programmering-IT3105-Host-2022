@@ -270,9 +270,8 @@ class Hanoi():
     def get_graphic(self):
         """
 
-        Method for visualizing the best game of a run.
+        Method for visualizing the first and the best game of a run.
 
-        PARAMS: best game (game with the lowest amount of moves)
 
         """
 
