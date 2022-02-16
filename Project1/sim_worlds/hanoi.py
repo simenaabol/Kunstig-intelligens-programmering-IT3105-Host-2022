@@ -175,30 +175,19 @@ class Hanoi():
         PARAMS: action
 
         """
-        # if len(self.current_action) == 0:
-        #     self.last_action = action
-        # else:
         self.current_action = action
 
-        # print("TG", self.pegs_list)
-        # Update this_game
         self.this_game.append(copy.deepcopy(self.pegs_list))
-        # print('this_game_ from action: ', self.this_game)
 
-        # if self.first_game != self.T:
         if self.reset == 1:
             print('hallo')
             self.first_game.append(copy.deepcopy(self.pegs_list))
-        # print('First_game: ', self.first_game)
 
-        # pegs_list = self.get_pegs_list()
         from_peg = action[0]
         to_peg = action[1]
 
-        # Adds the disc to the new peg
         self.pegs_list[to_peg].append(self.pegs_list[from_peg][-1])
 
-        # Removes the disc to the old peg
         self.pegs_list[from_peg].pop()
 
         
@@ -219,7 +208,6 @@ class Hanoi():
         RETURNS: list of reward and bool
 
         """
-
 
         # Reverse the action
         is_tuple = type(self.current_action) is tuple
@@ -292,7 +280,6 @@ class Hanoi():
 
         """
 
-        # best_game.append(best_game[-1])
         disc_width = self.number_of_discs
         number_of_pegs = self.number_of_pegs
         disc_width_margin = disc_width + 3
