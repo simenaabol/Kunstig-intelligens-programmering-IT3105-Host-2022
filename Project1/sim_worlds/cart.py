@@ -98,7 +98,6 @@ class Cart():
 
         # 2.1 -> update/set th2
         self.th2 =  self.update_th2(self.g, self.th0, self.Mp, self.B, self.L, self.th1, self.Mc)
-        # print ('th2: ', self.th2)
 
         #2.2  -> update/set x2
         self.x2 = self.update_x2(self.Mp, self.B, self.th1, self.th0, self.Mc, self.th2, self.L)
@@ -201,8 +200,6 @@ class Cart():
         # First try
         graph_vals = []
 
-        print('ff:', self.first_game)
-
         for i, state in enumerate(self.first_game):
 
             graph_vals.append((i + 1, state))
@@ -218,8 +215,6 @@ class Cart():
 
         # Best/latest try
         graph_vals = []
-
-        print('best_game', self.best_game)
 
         for i, state in enumerate(self.best_game):
 
