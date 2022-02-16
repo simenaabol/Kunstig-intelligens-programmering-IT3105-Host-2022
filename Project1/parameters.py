@@ -2,7 +2,6 @@ config = {
 
     'problem': 'gambler',
     'critic': 'table',
-    # 'critic': 'nn',
     'visualize': True, 
     'frame_delay': 0.1
 }
@@ -18,7 +17,7 @@ hanoiConfig = {
     'max_steps': 300,
 
     'actor_config': {
-        'learning_rate': 0.1, #0.01
+        'learning_rate': 0.1,
         'discount_factor': 0.9,
         'epsilon': 1,
         'epsilon_decay': 0.99,
@@ -26,7 +25,7 @@ hanoiConfig = {
     },
 
     'critic_config': {
-        'learning_rate': 0.1,#0.1
+        'learning_rate': 0.1,
         'discount_factor': 0.9,
         'eligibility_decay': 0.9
     },

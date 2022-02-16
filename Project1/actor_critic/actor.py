@@ -168,7 +168,6 @@ class Actor():
         # If the from state is the current state, set the eligibility to 1
         if from_state == current_state:
             self.eligibility_dict[from_state][action] = 1
-            #why this?
 
         # If not, set the eligibility to the formula below.
         else:

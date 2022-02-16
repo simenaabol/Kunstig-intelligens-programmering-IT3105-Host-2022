@@ -91,7 +91,7 @@ class RL_learner():
                 # Initializing the actor policy with states, and legal moves, with 0's
                 self.actor.state_handler(from_state, legal_moves)
 
-                # Initializing the value table with small random values (0,1)
+                # Initializing the value table with small random values (0, 1)
                 if isinstance(self.critic, Table_critic):
                     self.critic.state_handler(from_state)
 
@@ -103,9 +103,9 @@ class RL_learner():
                 # Actor needs SAP-based eligibilites -> State-Action-Pairs
                 self.actor.set_initial_eligibility(from_state, action)
 
-                if isinstance(self.critic, Table_critic):   # Hvis Table brukes, så kommen man vell inn hit uansett?
+                if isinstance(self.critic, Table_critic):
                     # Table critic needs state-based eligibilities
-                    self.critic.set_initial_eligibility(from_state) # Disse settes også til 1
+                    self.critic.set_initial_eligibility(from_state)
 
                 td_error = self.critic.calc_td_error(from_state, reward, current_state)
 
@@ -133,7 +133,6 @@ class RL_learner():
 
                 # Retrieve the next action based on the current state, and legal moves.
                 next_action = self.actor.get_action(current_state, legal_moves)
-                # next_action er et move - ikke flere
 
                 # Set state and action for next step cycle
                 from_state = current_state
