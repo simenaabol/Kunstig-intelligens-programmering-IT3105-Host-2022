@@ -11,7 +11,7 @@ class Cart():
         self.g = g # gravity m/sec^2
         self.t = t # the timestep for the simulation, in seconds
 
-        #Pre-defined in the task
+        # Pre-defined in the task
         self.Mc = Mc # mass of the cart, in kg
         self.x0 = x0 # horizontal location of the . 0 is the center
         self.thM = thM # maximum magnitude of th0. Above this (i.e. when |th0| > thM ) the pole is officially 'unbalances' and the episode fails. (thM = 0.21 radians) 
