@@ -39,7 +39,6 @@ class NN_critic():
         Method for calculating the temporal difference error.
 
         PARAMS: from state, reward, current state
-
         RETURNS: temporal difference error
 
         """
@@ -58,7 +57,6 @@ class NN_critic():
         Method for using tensors to help evaluate the td_error
 
         PARAMS: state
-
         RETURNS: float
 
         """
