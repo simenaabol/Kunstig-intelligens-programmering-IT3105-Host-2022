@@ -161,7 +161,7 @@ class RL_learner():
             self.ep_step_count.append((episode + 1, step + 1))
             self.least_steps_list.append(step)
 
-            # print("End state", from_state, "Episode reward:", episode_reward, "Number steps:", step)
+            print("End state", from_state, "Episode reward:", round(episode_reward, 0), "Number steps:", step)
 
     def show_learning_graph(self, visualize=False):
         """ 

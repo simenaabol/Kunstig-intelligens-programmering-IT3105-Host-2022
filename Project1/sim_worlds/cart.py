@@ -33,6 +33,12 @@ class Cart():
 
         self.screen = None
 
+        self.first_game = []
+        self.this_game = []
+        self.best_game = []
+
+        self.reset = 0
+
     def reset_game(self):
         self.L = cartConfig['game_config']['L']
         self.Mp = cartConfig['game_config']['Mp']
@@ -56,9 +62,12 @@ class Cart():
 
         self.x1 = 0.0
         self.x2 = 0.0
-
-
+  
         self.screen = None
+
+        self.this_game = []   
+
+        self.reset += 1
 
     def get_step(self):
         return self.step
@@ -75,6 +84,21 @@ class Cart():
         return (B + Mp * L * ((th1**2) * math.sin(th0)-th2*math.cos(th0))   )/(Mc+Mp)
 
     def take_action(self, action):
+        
+        # Update this_game
+        self.this_game.append(self.th0)
+        # print(self.this_game)
+
+
+        # if self.first_game != self.T:
+        if self.reset == 1:
+            self.first_game.append(self.th0)
+
+
+
+
+
+
         # 1. The controller chooses a value for B (either F or -F),
         self.B = action[0]
 
@@ -113,7 +137,7 @@ class Cart():
 
         ret_list.append(round(self.x0, 0))
 
-        ret_list.append(round(self.x1, 0))
+        ret_list.append(round(self.x1, 1))
 
         ret_list.append(round(self.x2, 0))
                 
@@ -129,11 +153,23 @@ class Cart():
         x0 = self.x0
         nX = self.nX
         pX = self.pX    
+
+
+
     
         ret = [-1, False]
 
         if (nX < x0 and pX > x0 and thM> th0 and th0 > -thM and step == self.T):
             ret[1] = True
+    
+            # Update best_game to the latest win
+            if self.this_game != []:
+                self.best_game = self.this_game
+   
+
+            # Reset this_game
+            self.this_game = []            
+
             if (nX/10 < x0 and pX/10 > x0 and thM/10> th0 and th0/10 > -thM):
                 ret[0] = 2
             elif (nX/5 < x0 and pX/5 > x0 and thM/5> th0 and th0/5 > -thM):
@@ -157,6 +193,7 @@ class Cart():
                  ret[0] = 0.4 # før 0.1
             return ret                           
         else:
+
             return [-225, True] # før 200 og 250
 
     def visualize(self, _, ep_step_count, __):
@@ -166,13 +203,16 @@ class Cart():
 
         return ep_step_count, x_label, y_label, None
 
-    def get_graphic(self, best_game):
+    def get_graphic(self):
 
+        #first try
         graph_vals = []
 
-        for i, state in enumerate(best_game):
+        print('ff:', self.first_game)
 
-            graph_vals.append((i + 1, state[0]))
+        for i, state in enumerate(self.first_game):
+
+            graph_vals.append((i + 1, state))
 
 
         x = list(map(lambda x: x[0], graph_vals))
@@ -182,5 +222,29 @@ class Cart():
         plt.xlabel("Timesteps")
         plt.ylabel("Angle")
         plt.show()
+
+
+
+
+
+        # Best/latest try
+
+        graph_vals = []
+
+        print('best_game', self.best_game)
+
+        for i, state in enumerate(self.best_game):
+
+            graph_vals.append((i + 1, state))
+
+
+        x = list(map(lambda x: x[0], graph_vals))
+        y = list(map(lambda x: x[1], graph_vals))
+
+        plt.plot(x, y)
+        plt.xlabel("Timesteps")
+        plt.ylabel("Angle")
+        plt.show()
+        
 
 
