@@ -12,6 +12,7 @@ class Cart():
         PARAMS: pole length, pole mass, gravity, timestep, mass of the cart, horizontal location of the cart, 
                 maximum magnitude of θ/th0, the left bound on the horizontal cart position, the right bound on the horizontal cart position
                 the length of an episode, the length of an episode, in timesteps, F is the magnitude of that force.
+       
         """
 
         self.L = L # length of the pole, in meter
@@ -93,7 +94,6 @@ class Cart():
         Method that does the action the Sim World gives to the cart pole game.
 
         PARAMS: action
-
 
         """
         
@@ -252,7 +252,6 @@ class Cart():
         """
 
         Method for visualizing the first and latest best game of a run.
-
 
         """
 
