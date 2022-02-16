@@ -116,7 +116,11 @@ class Actor():
             
             if value > highest_val and value != 0:
                 highest_val = value
-                greedy_action = action        
+                greedy_action = action    
+
+        if greedy_action == None:
+            choice = random.choice(legal_moves)
+            greedy_action = tuple(choice)
         
         return greedy_action
 

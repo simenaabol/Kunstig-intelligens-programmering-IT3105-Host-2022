@@ -30,6 +30,12 @@ class Hanoi():
 
         self.pegs_list = pegs_list
 
+        self.last_action = [(0,0)]
+        self.current_action = [(0,0)]    
+        
+        self.highest_peg = 0
+    
+
 
     def get_legal_moves(self):
         """  
@@ -103,6 +109,7 @@ class Hanoi():
                     pegs_list[i].append(discs-n)
 
         self.pegs_list = pegs_list
+        self.highest_peg = 0
 
 
     def get_pegs_with_discs(self):
@@ -155,6 +162,12 @@ class Hanoi():
         PARAMS: action
 
         """
+        # if len(self.current_action) == 0:
+        #     self.last_action = action
+        # else:
+        self.current_action = action
+ 
+        
 
         pegs_list = self.get_pegs_list()
         from_peg = action[0]
@@ -167,6 +180,14 @@ class Hanoi():
         pegs_list[from_peg].pop()
 
 
+    def Reverse(self, tuple):
+        new_tuple= ()
+        for i in reversed(tuple):
+            new_tuple = new_tuple + (i,)
+        return new_tuple
+
+
+
     def game_done(self):
         """
 
@@ -177,16 +198,49 @@ class Hanoi():
 
         """
 
+
+        # Reverse the action
+        is_tuple = type(self.current_action) is tuple
+        if is_tuple:
+            current_action_reversed = self.Reverse(self.current_action)
+        else:
+            current_action_reversed = self.Reverse(self.current_action[0])
+
+
+       
+        # Return negative reward for placin the dics back where it come from
+        rew = 0
+        if self.last_action == current_action_reversed:
+            # print(self.last_action, ' == ',  current_action_reversed )
+            rew = -1
+        self.last_action = self.current_action
+
+
+
+
+        # Return a positive reward for builig a peg with a new height
         pegs_list = self.get_pegs_list()
         discs = self.get_number_of_discs()
 
+        
+        for i, peg in enumerate(pegs_list):
+            if i == 0:
+                continue
+            else:
+                if len(peg) > self.highest_peg:
+                    rew = 1
+                    self.highest_peg = len(peg)
+
+    
+        # Check if done
         for peg in pegs_list:
             
             if pegs_list[0] == []:   
                 if len(peg) == discs:
-                    return [100, True]
+                    rew = 200
+                    return [rew, True]
 
-        return [-10, False]
+        return [-rew, False]
 
 
     """ DENNE SKAL VEL FJERNES? """

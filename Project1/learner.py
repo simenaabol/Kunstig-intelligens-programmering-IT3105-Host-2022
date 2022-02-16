@@ -148,7 +148,7 @@ class RL_learner():
             self.least_steps_list.append(step)
             self.sim_world.set_visualizing_data(list_of_states)
 
-            # print("End state", from_state, "Episode reward:", episode_reward, "Number steps:", step)
+            print("End state", from_state, "Episode reward:", round(episode_reward, 0), "Number steps:", step)
 
     def show_learning_graph(self, visualize=False):
         """ 
