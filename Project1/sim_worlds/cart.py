@@ -4,7 +4,15 @@ import matplotlib.pyplot as plt
 from parameters import cartConfig
 
 class Cart():
-    def __init__(self, L, Mp, g, t, Mc, x0, thM, nX, pX, T, step, F):
+    def __init__(self, L, Mp, g, t, Mc, x0, thM, nX, pX, T, F):
+        """
+
+        Class representing the cart pole problem
+
+        PARAMS: pole length, pole mass, gravity, timestep, mass of the cart, horizontal location of the cart, 
+                maximum magnitude of θ/th0, the left bound on the horizontal cart position, the right bound on the horizontal cart position
+                the length of an episode, the length of an episode, in timesteps, F is the magnitude of that force.
+        """
 
         self.L = L # length of the pole, in meter
         self.Mp = Mp # mass of the pole, in kg
@@ -13,16 +21,16 @@ class Cart():
 
         # Pre-defined in the task
         self.Mc = Mc # mass of the cart, in kg
-        self.x0 = x0 # horizontal location of the . 0 is the center
+        self.x0 = x0 # horizontal location of the cart . 0 is the center
         self.thM = thM # maximum magnitude of th0. Above this (i.e. when |th0| > thM ) the pole is officially 'unbalances' and the episode fails. (thM = 0.21 radians) 
         self.nX = nX # the left bound on the horizontal cart position
         self.pX = pX # the right bound on the horizontal cart position
         self.T = T # the length of an episode, in timesteps 
-        self.step = step
         self.F = F # F is the magnitude of that force. (F = 10)
 
-        
-        self.th0 = random.uniform(-(self.thM), self.thM) # angle og the pole (in radians) with respect to the vertical // Theta
+        self.step = 0
+
+        self.th0 = random.uniform(-(self.thM), self.thM) # angle of the pole (in radians) with respect to the vertical // Theta
         self.Fs = [[-self.F], [self.F]]
             
         self.th1 =  0.0 # first temporal derivative of the pole angle
@@ -41,6 +49,12 @@ class Cart():
 
 
     def reset_game(self):
+        """
+
+        Method for reseting the game to its initial state. Much like the init-method.
+
+        """
+
         self.L = cartConfig['game_config']['L']
         self.Mp = cartConfig['game_config']['Mp']
         self.g = cartConfig['game_config']['g']
@@ -72,6 +86,17 @@ class Cart():
 
     # 2.1 -> update/set th2
     def update_th2(self, g, th0, Mp, B, L, th1, Mc):
+        """
+
+        Method for updating the second temporal derivate of the pole
+
+        PARAMS: gravity, angle of the pole, first temporal derivative of the pole angle, the force, length of the pole,
+                first temporal derivative of the pole angle, mass of the cart
+
+        RETURNS: the second temporal derivate of the pole
+
+        """
+
         
         return ((g * math.sin(th0) + ( ( math.cos(th0) * ((- B - Mp * L * (th1**2) * math.sin(th0)) ) / (Mc + Mp) ) ) )/         
                 (L * (4.0 / 3.0 - (   (Mp * math.cos(th0)**2)    / (Mc + Mp)))))       
@@ -79,11 +104,31 @@ class Cart():
 
     #2.2  -> update/set x2
     def update_x2(self, Mp, B, th1, th0, Mc, th2, L):
+        """
+
+        Method for updating the horizontal acceleration of the cart
+
+        PARAMS: mass of the cart, the force, first temporal derivative of the pole angle, 
+        angle of the pole, mass of the cart, second temporal derivate of the pole, 
+        length of the pole
+
+        RETURNS: the horizontal acceleration of the cart
+
+        """
         
         return (B + Mp * L * ((th1**2) * math.sin(th0)-th2*math.cos(th0))   )/(Mc+Mp)
 
 
     def take_action(self, action):
+        """
+
+        Method that does the action the Sim World gives to the cart pole game.
+
+        PARAMS: 
+
+        RETURNS: the horizontal acceleration of the cart
+
+        """
         
         # Update this_game
         self.this_game.append(self.th0)
