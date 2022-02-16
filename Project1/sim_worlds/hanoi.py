@@ -114,6 +114,30 @@ class Hanoi():
         self.this_game = []
         self.reset += 1
 
+                             
+    def take_action(self, action):
+        """  
+
+        Method that does the action the Sim World gives to the Hanoi game.
+
+        PARAMS: action
+
+        """
+
+        self.current_action = action
+
+        self.this_game.append(copy.deepcopy(self.pegs_list))
+
+        if self.reset == 1:
+            self.first_game.append(copy.deepcopy(self.pegs_list))
+
+        from_peg = action[0]
+        to_peg = action[1]
+
+        self.pegs_list[to_peg].append(self.pegs_list[from_peg][-1])
+
+        self.pegs_list[from_peg].pop()
+        
 
     def get_pegs_with_discs(self):
         """
@@ -154,30 +178,7 @@ class Hanoi():
 
         return highest_disc
             
-                              
-    def take_action(self, action):
-        """  
-
-        Method that does the action the Sim World gives to the Hanoi game.
-
-        PARAMS: action
-
-        """
-
-        self.current_action = action
-
-        self.this_game.append(copy.deepcopy(self.pegs_list))
-
-        if self.reset == 1:
-            self.first_game.append(copy.deepcopy(self.pegs_list))
-
-        from_peg = action[0]
-        to_peg = action[1]
-
-        self.pegs_list[to_peg].append(self.pegs_list[from_peg][-1])
-
-        self.pegs_list[from_peg].pop()
-
+ 
         
     def Reverse(self, tuple):
         """

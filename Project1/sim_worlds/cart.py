@@ -82,40 +82,8 @@ class Cart():
 
         self.reset += 1
 
-
-    # 2.1 -> update/set th2
-    def update_th2(self, g, th0, Mp, B, L, th1, Mc):
-        """
-
-        Method for updating the second temporal derivate of the pole
-
-        PARAMS: gravity, angle of the pole, first temporal derivative of the pole angle, the force, length of the pole,
-                first temporal derivative of the pole angle, mass of the cart
-
-        RETURNS: the second temporal derivate of the pole
-
-        """
-
-        
-        return ((g * math.sin(th0) + ( ( math.cos(th0) * ((- B - Mp * L * (th1**2) * math.sin(th0)) ) / (Mc + Mp) ) ) )/         
-                (L * (4.0 / 3.0 - (   (Mp * math.cos(th0)**2)    / (Mc + Mp)))))       
-
-
-    #2.2  -> update/set x2
-    def update_x2(self, Mp, B, th1, th0, Mc, th2, L):
-        """
-
-        Method for updating the horizontal acceleration of the cart
-
-        PARAMS: mass of the cart, the force, first temporal derivative of the pole angle, 
-        angle of the pole, mass of the cart, second temporal derivate of the pole, 
-        length of the pole
-
-        RETURNS: the horizontal acceleration of the cart
-
-        """
-        
-        return (B + Mp * L * ((th1**2) * math.sin(th0)-th2*math.cos(th0))   )/(Mc+Mp)
+    def get_legal_moves(self):
+        return self.Fs
 
 
     def take_action(self, action):
@@ -158,6 +126,43 @@ class Cart():
         self.x0 = self.x0 + (self.t*self.x1)
 
         self.step = self.step+1
+
+
+    # 2.1 -> update/set th2
+    def update_th2(self, g, th0, Mp, B, L, th1, Mc):
+        """
+
+        Method for updating the second temporal derivate of the pole
+
+        PARAMS: gravity, angle of the pole, first temporal derivative of the pole angle, the force, length of the pole,
+                first temporal derivative of the pole angle, mass of the cart
+
+        RETURNS: the second temporal derivate of the pole
+
+        """
+
+        
+        return ((g * math.sin(th0) + ( ( math.cos(th0) * ((- B - Mp * L * (th1**2) * math.sin(th0)) ) / (Mc + Mp) ) ) )/         
+                (L * (4.0 / 3.0 - (   (Mp * math.cos(th0)**2)    / (Mc + Mp)))))       
+
+
+    #2.2  -> update/set x2
+    def update_x2(self, Mp, B, th1, th0, Mc, th2, L):
+        """
+
+        Method for updating the horizontal acceleration of the cart
+
+        PARAMS: mass of the cart, the force, first temporal derivative of the pole angle, 
+        angle of the pole, mass of the cart, second temporal derivate of the pole, 
+        length of the pole
+
+        RETURNS: the horizontal acceleration of the cart
+
+        """
+        
+        return (B + Mp * L * ((th1**2) * math.sin(th0)-th2*math.cos(th0))   )/(Mc+Mp)
+
+
 
 
     def get_state_key(self): 
@@ -242,23 +247,6 @@ class Cart():
             return [-225, True] 
 
 
-    def visualize(self, _, ep_step_count, __):
-        """
-
-        Method for visualizing the learning graph.
-
-        PARAMS: list of episodes and steps
-        RETURNS: list of episodes and steps, x label, y label
-
-        """
-
-
-        x_label = "Episodes"
-        y_label = "Steps"
-
-        return ep_step_count, x_label, y_label, None
-
-
     def get_graphic(self):
         """
 
@@ -298,6 +286,23 @@ class Cart():
         plt.xlabel("Timesteps")
         plt.ylabel("Angle")
         plt.show()
+
+
+    def visualize(self, _, ep_step_count, __):
+        """
+
+        Method for visualizing the learning graph.
+
+        PARAMS: list of episodes and steps
+        RETURNS: list of episodes and steps, x label, y label
+
+        """
+
+
+        x_label = "Episodes"
+        y_label = "Steps"
+
+        return ep_step_count, x_label, y_label, None
         
 
 
