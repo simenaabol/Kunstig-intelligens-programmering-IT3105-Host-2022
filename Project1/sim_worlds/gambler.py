@@ -54,7 +54,6 @@ class Gambler():
 
         if self.win_prob > random.random():
             self.coins += bet[0]
-
         else:
             self.coins -= bet[0]
         
@@ -118,7 +117,6 @@ class Gambler():
             picked_key = None
 
             for key, value2 in value.items():
-
                 if value2 != 0:
                     if value2 > highest_val:
                         highest_val = value2
