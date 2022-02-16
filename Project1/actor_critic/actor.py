@@ -38,17 +38,22 @@ class Actor():
                 self.policy_dict[state][action] = 0
 
 
-    def reset_eligibilites(self): # ISH
+    def reset_eligibilites(self): # ISH 
         """  
 
         Method for reseting the eligibilites for the actor. Sets the eligibility for
         the state, action pair to zero.
 
         """
+        # self.eligibility_dict:
+        # print('self.eligibility_dict:', self.eligibility_dict)
+        # {((4, 3, 2, 1), (), ()): {(0, 2): 2.9473113001971666e-13, (0, 1): 5.428914532572019e-07},
+        # state, action, og selve eligibilite-en. Hva er dette
 
         for state in self.eligibility_dict:
             for action in self.eligibility_dict[state]:
                 self.eligibility_dict[state][action] = 0
+        #Initer de som er en instans av Table_critic  til 0 mår man starter læringen. 
 
 
     def set_initial_eligibility(self, state, action): # ISH
@@ -95,7 +100,7 @@ class Actor():
         # Seen state, but random value is less than epsilon -> random action
         if random.uniform(0, 1) < self.epsilon:
 
-            # Choose an action that has not been tried before
+            # Choose an (random) action that has not been tried before
             for find_state in self.policy_dict.keys():
                 if find_state == state:
                     for action in self.policy_dict[state]:
@@ -116,12 +121,17 @@ class Actor():
             
             if value > highest_val and value != 0:
                 highest_val = value
-                greedy_action = action        
+                greedy_action = action    
+
+        # Hvis den ikke har en policy for å gjøre et grådig valg
+        if greedy_action == None:
+            choice = random.choice(legal_moves)
+            greedy_action = tuple(choice)
         
         return greedy_action
 
 
-    def update_eligibilities_and_policy(self, episode_actions, td_error, current_state): # ISH
+    def update_eligibilities_and_policy(self, episode_actions, td_error, current_state): # ISH Brukes from_state i learner 
         """
 
         Method for calling the update methods for the eligibilites and policy.
@@ -129,7 +139,7 @@ class Actor():
         PARAMS: list of from_state and action, the temporal difference error, and the current state
 
         """
-
+        # episode_actions sin _ value her er td_error, som ikke trengs her
         for from_state, _, action in episode_actions:
             self.update_policy(from_state, action, td_error)
             self.update_eligibility_dict(from_state, action, current_state)
@@ -164,6 +174,7 @@ class Actor():
         # If the from state is the current state, set the eligibility to 1
         if from_state == current_state:
             self.eligibility_dict[from_state][action] = 1
+            #why this?
 
         # If not, set the eligibility to the formula below.
         else:
