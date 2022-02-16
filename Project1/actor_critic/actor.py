@@ -21,7 +21,7 @@ class Actor():
         self.policy_dict = {}
 
 
-    def state_handler(self, state, legal_moves): # ISH
+    def state_handler(self, state, legal_moves):
         """  
 
         Method for adding all states, and their legal moves into the actor's policy.
@@ -38,7 +38,7 @@ class Actor():
                 self.policy_dict[state][action] = 0
 
 
-    def reset_eligibilites(self): # ISH 
+    def reset_eligibilites(self):
         """  
 
         Method for reseting the eligibilites for the actor. Sets the eligibility for
@@ -51,7 +51,7 @@ class Actor():
                 self.eligibility_dict[state][action] = 0
 
 
-    def set_initial_eligibility(self, state, action): # ISH
+    def set_initial_eligibility(self, state, action):
         """
 
         Method for setting the eligibilites to 1, before they are updated
@@ -125,7 +125,7 @@ class Actor():
         return greedy_action
 
 
-    def update_eligibilities_and_policy(self, episode_actions, td_error, current_state): # ISH
+    def update_eligibilities_and_policy(self, episode_actions, td_error, current_state):
         """
 
         Method for calling the update methods for the eligibilites and policy.

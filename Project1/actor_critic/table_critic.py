@@ -34,7 +34,7 @@ class Table_critic():
             self.value_dict[from_state] = random.uniform(0, 1)
 
 
-    def reset_eligibilites(self): # ISH
+    def reset_eligibilites(self):
         """
 
         Method for reseting the eligibilities for the critic. Sets the eligibilites
@@ -46,7 +46,7 @@ class Table_critic():
             self.eligibility_dict[state] = 0
 
 
-    def set_initial_eligibility(self, state): # ISH
+    def set_initial_eligibility(self, state):
         """
 
         Method for setting the eligibilites to 1, before they are updated
@@ -88,7 +88,7 @@ class Table_critic():
         return td_error
 
 
-    def update_eligibilities_and_values(self, episode_actions, td_error): # ISH
+    def update_eligibilities_and_values(self, episode_actions, td_error):
         """
 
         Method for calling the update methods for the eligibilites and value table.
@@ -102,7 +102,7 @@ class Table_critic():
             self.update_value_dict(from_state, td_error)
 
 
-    def update_eligibility_dict(self, from_state, current_state): # ISH
+    def update_eligibility_dict(self, from_state, current_state):
         """
 
         Method for updating the eligibility dictionary.
@@ -120,7 +120,7 @@ class Table_critic():
             self.eligibility_dict[from_state] *= self.discount_factor * self.eligibility_decay
 
 
-    def update_value_dict(self, from_state, td_error): # ISH
+    def update_value_dict(self, from_state, td_error):
         """
 
         Method for updating the value dictionary depending on the learning rate, temporal
