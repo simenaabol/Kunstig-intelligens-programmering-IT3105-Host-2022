@@ -41,6 +41,7 @@ class Gambler():
         
         return moves
 
+
     def take_action(self, bet):
         """
 
@@ -88,6 +89,7 @@ class Gambler():
         """
 
         list = [self.coins]
+        
         return tuple(list)
 
 
