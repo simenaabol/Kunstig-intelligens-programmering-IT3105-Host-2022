@@ -124,9 +124,8 @@ class Cart():
 
         Method that does the action the Sim World gives to the cart pole game.
 
-        PARAMS: 
+        PARAMS: action
 
-        RETURNS: the horizontal acceleration of the cart
 
         """
         
@@ -163,6 +162,14 @@ class Cart():
 
 
     def get_state_key(self): 
+        """
+
+        Method for getting the state for which the sim world will send to the learner.
+
+        RETURNS: a tuple of the state
+
+        """        
+
         ret_list = []
 
         ret_list.append(round(self.th0, 1))
@@ -180,11 +187,15 @@ class Cart():
         return tuple(ret_list)  
 
 
-    def get_legal_moves(self):
-        return self.Fs
-
-
     def game_done(self):
+        """
+
+        Method that returns if the game is done or not, in addition to the reward
+        for the action.
+
+        RETURNS: list of reward and bool
+
+        """
 
         th0 = self.th0
         thM = self.thM
@@ -233,6 +244,15 @@ class Cart():
 
 
     def visualize(self, _, ep_step_count, __):
+        """
+
+        Method for visualizing the learning graph.
+
+        PARAMS: list of episodes and steps
+        RETURNS: list of episodes and steps, x label, y label
+
+        """
+
 
         x_label = "Episodes"
         y_label = "Steps"
@@ -241,6 +261,12 @@ class Cart():
 
 
     def get_graphic(self):
+        """
+
+        Method for visualizing the first and latest best game of a run.
+
+
+        """
 
         # First try
         graph_vals = []
