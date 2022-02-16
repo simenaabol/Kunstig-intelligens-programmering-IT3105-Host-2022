@@ -53,7 +53,7 @@ class Gambler():
 
         """
 
-        win_prob = self.get_win_prob()
+        win_prob = self.win_prob
         coins = self.coins
 
         if win_prob > random.random():
@@ -84,15 +84,6 @@ class Gambler():
             return [-1, False]
 
 
-    """ DENNE SKAL VEL FJERNES? """
-    def get_win_prob(self):
-        return self.win_prob
-    
-    """ DENNE KAN VEL OGSÅ FJERNES? """
-    def update_coin(self, coin):
-        self.coins = coin
-        
-
     def get_state_key(self):
         """
 
@@ -104,7 +95,7 @@ class Gambler():
 
         list = [self.coins]
         return tuple(list)
-        
+
 
     def reset_game(self):
         """

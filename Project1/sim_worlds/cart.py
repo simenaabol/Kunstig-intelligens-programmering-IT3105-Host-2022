@@ -179,13 +179,13 @@ class Cart():
             # (1 - (x0 ** 2) / 11.52 - (th0 ** 2) / 288) Try to use this if step is not limited to a number
             ret[1] = False
             if (nX/10 < x0 and pX/10 > x0 and thM/10> th0 and th0/10 > -thM):
-                ret[0] = 1.1 # før 2
+                ret[0] = 1.1 # 2
             elif (nX/5 < x0 and pX/5 > x0 and thM/5> th0 and th0/5 > -thM):
-                ret[0] = 0.8 # før 0.8
+                ret[0] = 0.8 # 0.8
             elif (nX/2 < x0 and pX/2 > x0 and thM/2> th0 and th0/2 > -thM):
-                 ret[0] = 0.6 # før 0.5
+                 ret[0] = 0.6 # 0.5
             else:
-                 ret[0] = 0.4 # før 0.1
+                 ret[0] = 0.4 # 0.1
             return ret                           
         else:
 
@@ -222,7 +222,6 @@ class Cart():
         plt.show()
 
         # Best/latest try
-
         graph_vals = []
 
         print('best_game', self.best_game)
