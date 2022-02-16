@@ -202,8 +202,7 @@ class Cart():
 
     def get_graphic(self):
 
-        #First try
-
+        # First try
         graph_vals = []
 
         print('ff:', self.first_game)
