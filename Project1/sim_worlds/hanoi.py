@@ -75,11 +75,11 @@ class Hanoi():
         """
 
         move = []
-        pegs_list = self.pegs_list
         highest_disc = pegs_list[peg_with_disc][-1]
 
         # j signifies which peg we are examining
-        for j, peg in enumerate(pegs_list):
+        pegs_list = self.pegs_list
+        for j, peg in enumerate(self.pegs_list):
 
             # Appending the peg a move can be taken from and to
             if 0 == len(peg):
@@ -101,24 +101,18 @@ class Hanoi():
 
         """
 
-        pegs = self.number_of_pegs
-        discs = self.number_of_discs
-        pegs_list = self.pegs_list
+        init_pegs_list = []
 
-        pegs_list = []
+        for i in range(self.number_of_pegs):
+            init_pegs_list.append([])
 
-        for i in range(pegs):
-            pegs_list.append([])
-
-            for n in range(discs):
+            for n in range(self.number_of_discs):
 
                 if i == 0:
-                    pegs_list[i].append(discs-n)
+                    init_pegs_list[i].append(self.number_of_discs-n)
 
-        self.pegs_list = pegs_list
+        self.pegs_list = init_pegs_list
         self.highest_peg = 0
-
-
 
         self.this_game = []
         self.reset += 1
@@ -178,7 +172,6 @@ class Hanoi():
         self.this_game.append(copy.deepcopy(self.pegs_list))
 
         if self.reset == 1:
-            print('hallo')
             self.first_game.append(copy.deepcopy(self.pegs_list))
 
         from_peg = action[0]
@@ -198,6 +191,7 @@ class Hanoi():
         RETURNS: tuple
 
         """
+
         new_tuple= ()
         for i in reversed(tuple):
             new_tuple = new_tuple + (i,)
@@ -231,11 +225,8 @@ class Hanoi():
             rew = -2
         self.last_action = self.current_action
 
-        # Return a positive reward for builig a peg with a new height
-        pegs_list = self.pegs_list
-        discs = self.number_of_discs
-    
-        for i, peg in enumerate(pegs_list):
+        # Return a positive reward for builig a peg with a new height  
+        for i, peg in enumerate(self.pegs_list):
             if i == 0:
                 continue
             else:
@@ -245,8 +236,8 @@ class Hanoi():
  
         # Check if done
         for peg in self.pegs_list:
-            if pegs_list[0] == []:                
-                if len(peg) == discs:
+            if self.pegs_list[0] == []:                
+                if len(peg) == self.number_of_discs:
 
                     rew = 100
                     self.reset +=1
@@ -286,7 +277,6 @@ class Hanoi():
         """
 
         disc_width = self.number_of_discs
-        number_of_pegs = self.number_of_pegs
         disc_width_margin = disc_width + 3
 
         # Define Matplotlib figure and axis
@@ -301,7 +291,7 @@ class Hanoi():
                         edgecolor = "blue", linewidth = 1, facecolor = 'yellow'))
                 
                     # Create simple line plot.
-                    ax.plot([0, (disc_width + 2) * number_of_pegs], [disc_width, disc_width], color = "white")
+                    ax.plot([0, (disc_width + 2) * self.number_of_pegs], [disc_width, disc_width], color = "white")
 
             # Frame delay from parameters file
             plt.pause(config['frame_delay'])
@@ -317,7 +307,7 @@ class Hanoi():
                         edgecolor = "blue", linewidth = 1, facecolor = 'yellow'))
                 
                     # Create simple line plot.
-                    ax.plot([0, (disc_width + 2) * number_of_pegs], [disc_width, disc_width], color = "white")
+                    ax.plot([0, (disc_width + 2) * self.number_of_pegs], [disc_width, disc_width], color = "white")
 
             # Frame delay from parameters file
             plt.pause(config['frame_delay'])
