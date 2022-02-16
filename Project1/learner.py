@@ -85,41 +85,50 @@ class RL_learner():
             episode_actions = []
             episode_reward = 0
 
-            # Executing the steps for the episode
+            # Executing the steps/actions for the episode
             for step in range(self.max_steps):
 
                 # Initializing the actor policy with states, and legal moves, with 0's
                 self.actor.state_handler(from_state, legal_moves)
+                # adding all states, and their legal moves into the actor's policy.
+                # Setter alt inn i policyen basicly, setter alt til null
 
                 # Initializing the value table with small random values (0,1)
                 if isinstance(self.critic, Table_critic):
                     self.critic.state_handler(from_state)
+                    # Inne i state_handler: Legger kun inn states og en random verdi på nye states
 
                 # Retrieve new values after a action
                 current_state, reward, is_finished, legal_moves = self.sim_world.step(action, self.actor, self.parameters, episode )
                 episode_reward += reward
 
                 # Set eligibilities to 1
-                # Actor needs SAP-based eligibilites
+                # Actor needs SAP-based eligibilites -> State-Action-Pairs
                 self.actor.set_initial_eligibility(from_state, action)
-                if isinstance(self.critic, Table_critic):
+
+                if isinstance(self.critic, Table_critic):   # Hvis Table brukes, så kommen man vell inn hit uansett?
                     # Table critic needs state-based eligibilities
-                    self.critic.set_initial_eligibility(from_state)
+                    self.critic.set_initial_eligibility(from_state) # Disse settes også til 1
 
                 # Calculating temporal difference error as well as the target- and current state value
+                # hø? ->   as well as the target- and current state value
                 td_error = self.critic.calc_td_error(from_state, reward, current_state)
 
                 # Append the SAP with the td error
                 episode_actions.append((from_state, td_error, action))
+                # print('episode_actions: ', episode_actions)
+                # episode_actions:  [(((4, 3, 2, 1), (), ()), 1.0761952615116628, (0, 1)),
 
                 # Update the eligibilities and policy for the actor
                 self.actor.update_eligibilities_and_policy(episode_actions, td_error, from_state)
+                
 
                 # Update values for the table critic or the NN-critic
                 if isinstance(self.critic, Table_critic):
                     self.critic.update_eligibilities_and_values(episode_actions, td_error)
+                    # Her er det bare Table-critic som trenger episode_actions
                 else:
-                    self.critic.update_weights(td_error)
+                    self.critic.update_weights(td_error) #Dette må være for NN?
 
                 # Checks if the game is finished
                 if is_finished or legal_moves == []:
@@ -132,10 +141,15 @@ class RL_learner():
 
                 # Retrieve the next action based on the current state, and legal moves.
                 next_action = self.actor.get_action(current_state, legal_moves)
+                # next_action er et move - ikke flere
 
                 # Set state and action for next step cycle
                 from_state = current_state
                 action = next_action
+                #Tar vare på den gamle action-en for å?
+                # Spør Marcy her
+                # self.sim_world.step bruker jo action, så man ligger evt alltid en bak?#
+                # Man henter inn action ved slutten av hver step, hvorfor ikke i starten?
 
                 # For visualization
                 list_of_states.append(current_state)
@@ -146,9 +160,8 @@ class RL_learner():
             # For visualization
             self.ep_step_count.append((episode + 1, step + 1))
             self.least_steps_list.append(step)
-            self.sim_world.set_visualizing_data(list_of_states)
 
-            # print("End state", from_state, "Episode reward:", episode_reward, "Number steps:", step)
+            print("End state", from_state, "Episode reward:", round(episode_reward, 0), "Number steps:", step)
 
     def show_learning_graph(self, visualize=False):
         """ 

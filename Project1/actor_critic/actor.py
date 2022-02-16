@@ -95,7 +95,7 @@ class Actor():
         # Seen state, but random value is less than epsilon -> random action
         if random.uniform(0, 1) < self.epsilon:
 
-            # Choose an action that has not been tried before
+            # Choose an (random) action that has not been tried before
             for find_state in self.policy_dict.keys():
                 if find_state == state:
                     for action in self.policy_dict[state]:
@@ -116,7 +116,11 @@ class Actor():
             
             if value > highest_val and value != 0:
                 highest_val = value
-                greedy_action = action        
+                greedy_action = action    
+
+        if greedy_action == None:
+            choice = random.choice(legal_moves)
+            greedy_action = tuple(choice)
         
         return greedy_action
 
@@ -164,6 +168,7 @@ class Actor():
         # If the from state is the current state, set the eligibility to 1
         if from_state == current_state:
             self.eligibility_dict[from_state][action] = 1
+            #why this?
 
         # If not, set the eligibility to the formula below.
         else:

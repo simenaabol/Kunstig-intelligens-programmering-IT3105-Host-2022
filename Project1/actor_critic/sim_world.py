@@ -76,9 +76,13 @@ class Sim_world():
         self.problem.take_action(action)
 
         if self.config["problem"] == "cart":
+            pass
+            # if episode == parameters['num_episodes']-10:
+            #     actor.update_epsilon(0)
+        elif self.config["problem"] == "hanoi":
             if episode == parameters['num_episodes']-10:
                 actor.update_epsilon(0)
-        elif self.config["problem"] == "hanoi":
+        elif self.config["problem"] == "gambler":
             if episode == parameters['num_episodes']-10:
                 actor.update_epsilon(0)
 
@@ -115,32 +119,6 @@ class Sim_world():
         return self.problem.visualize(actor, ep_step_count, least_steps_list)
 
 
-    def set_visualizing_data(self, list_of_states):
-        """ 
-
-        Method for setting the best game from the list of states
-
-        PARAMS: list of states, from the learner
-        
-        """
-
-        if self.config["problem"] == "cart":
-
-            if self.best_game == None:
-                self.best_game = list_of_states
-
-            elif len(list_of_states) >= len(self.best_game):
-                self.best_game = list_of_states
-
-        elif self.config["problem"] == "hanoi":
-
-            if self.best_game == None:
-                self.best_game = list_of_states
-
-            elif len(list_of_states) < len(self.best_game):
-                self.best_game = list_of_states
-
-
     def render(self):
         """ 
 
@@ -150,7 +128,7 @@ class Sim_world():
         """
 
         if self.config["problem"] == "cart":
-            self.problem.get_graphic(self.best_game)
+            self.problem.get_graphic()
 
         elif self.config["problem"] == "hanoi":
-            self.problem.get_graphic(self.best_game)
+            self.problem.get_graphic()
