@@ -147,7 +147,7 @@ class RL_learner():
 
         """
 
-        vals_for_graph, x_label, y_label, least_steps = self.sim_world.get_visualizing_data(self.actor, self.ep_step_count, self.least_steps_list)
+        vals_for_graph, x_label, y_label, least_steps, title = self.sim_world.get_visualizing_data(self.actor, self.ep_step_count, self.least_steps_list)
 
         x = list(map(lambda x: x[0], vals_for_graph))
         y = list(map(lambda x: x[1], vals_for_graph))
@@ -155,6 +155,7 @@ class RL_learner():
         if least_steps:
             print("Least amount of steps", least_steps)
 
+        plt.title(title)
         plt.plot(x, y)
         plt.xlabel(x_label)
         plt.ylabel(y_label)

@@ -130,4 +130,6 @@ class Gambler():
         x_label = "State"
         y_label = "Wager"
 
-        return self.vals_for_gambler, x_label, y_label, None
+        title = "Gambler policy"
+
+        return self.vals_for_gambler, x_label, y_label, None, title

@@ -283,6 +283,7 @@ class Hanoi():
         _, ax = plt.subplots()
         
         for j, peg_list in enumerate(self.best_game):
+            plt.title("Best game")
             for i, peg in enumerate(peg_list):
                 ax.plot([(disc_width * 0.5) - 0.5 + i * (disc_width_margin), (disc_width * 0.5) - 0.5 + i * (disc_width_margin)], [0, disc_width - 0.5]) 
                 for j, disc in enumerate(peg):
@@ -296,9 +297,13 @@ class Hanoi():
             # Frame delay from parameters file
             plt.pause(config['frame_delay'])
             ax.clear()
+        plt.close()
 
+        # Define Matplotlib figure and axis
+        _, ax = plt.subplots()
 
         for j, peg_list in enumerate(self.first_game):
+            plt.title("First game")
             for i, peg in enumerate(peg_list):
                 ax.plot([(disc_width * 0.5) - 0.5 + i * (disc_width_margin), (disc_width * 0.5) - 0.5 + i * (disc_width_margin)], [0, disc_width - 0.5])
                 for j, disc in enumerate(peg):
@@ -311,7 +316,9 @@ class Hanoi():
 
             # Frame delay from parameters file
             plt.pause(config['frame_delay'])
-            ax.clear()
+            ax.clear()  
+        plt.close()
+            
 
 
     def visualize(self, _, ep_step_count, least_steps_list):
@@ -327,4 +334,6 @@ class Hanoi():
         x_label = "Episodes"
         y_label = "Steps"
 
-        return ep_step_count, x_label, y_label, min(least_steps_list) + 1
+        title = "Hanoi learning graph"
+
+        return ep_step_count, x_label, y_label, min(least_steps_list) + 1, title

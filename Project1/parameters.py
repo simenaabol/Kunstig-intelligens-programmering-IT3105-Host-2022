@@ -3,7 +3,7 @@ config = {
     'problem': 'hanoi',
     'critic': 'nn',
     'visualize': True, 
-    'frame_delay': 0.2
+    'frame_delay': 0.3
 }
 
 hanoiConfig = {
@@ -13,11 +13,11 @@ hanoiConfig = {
         'discs': 4,
     },
 
-    'num_episodes': 200,
+    'num_episodes': 150,
     'max_steps': 300,
 
     'actor_config': {
-        'learning_rate': 0.1,
+        'learning_rate': 0.01,
         'discount_factor': 0.9,
         'epsilon': 1,
         'epsilon_decay': 0.99,

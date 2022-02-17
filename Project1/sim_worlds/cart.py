@@ -273,6 +273,7 @@ class Cart():
         x = list(map(lambda x: x[0], graph_vals))
         y = list(map(lambda x: x[1], graph_vals))
 
+        plt.title("First game angle graph")
         plt.plot(x, y)
         plt.xlabel("Timesteps")
         plt.ylabel("Angle")
@@ -288,6 +289,7 @@ class Cart():
         x = list(map(lambda x: x[0], graph_vals))
         y = list(map(lambda x: x[1], graph_vals))
 
+        plt.title("Best game angle graph")
         plt.plot(x, y)
         plt.xlabel("Timesteps")
         plt.ylabel("Angle")
@@ -307,8 +309,10 @@ class Cart():
 
         x_label = "Episodes"
         y_label = "Steps"
+        
+        title = "Cartpole learning graph"
 
-        return ep_step_count, x_label, y_label, None
+        return ep_step_count, x_label, y_label, None, title
         
 
 
