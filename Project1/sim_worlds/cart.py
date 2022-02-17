@@ -76,6 +76,8 @@ class Cart():
 
         self.x1 = 0.0
         self.x2 = 0.0
+
+        self.step = 0
   
         self.screen = None
 
@@ -216,7 +218,7 @@ class Cart():
 
         ret = [-1, False]
 
-        if (nX < x0 and pX > x0 and thM> th0 and th0 > -thM and step == self.T):
+        if (nX < x0 and pX > x0 and thM > th0 and th0 > -thM and step == self.T):
             ret[1] = True
     
             # Update best_game to the latest win
@@ -282,7 +284,6 @@ class Cart():
         for i, state in enumerate(self.best_game):
 
             graph_vals.append((i + 1, state))
-
 
         x = list(map(lambda x: x[0], graph_vals))
         y = list(map(lambda x: x[1], graph_vals))

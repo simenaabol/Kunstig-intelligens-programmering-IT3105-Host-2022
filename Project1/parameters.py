@@ -1,9 +1,9 @@
 config = {
 
-    'problem': 'cart',
-    'critic': 'table',
+    'problem': 'hanoi',
+    'critic': 'nn',
     'visualize': True, 
-    'frame_delay': 0.1
+    'frame_delay': 0.2
 }
 
 hanoiConfig = {
@@ -13,7 +13,7 @@ hanoiConfig = {
         'discs': 4,
     },
 
-    'num_episodes': 210,
+    'num_episodes': 200,
     'max_steps': 300,
 
     'actor_config': {

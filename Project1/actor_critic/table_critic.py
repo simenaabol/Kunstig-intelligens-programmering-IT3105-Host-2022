@@ -98,8 +98,8 @@ class Table_critic():
         """
         
         for from_state, _, _ in episode_actions:
-            self.update_eligibility_dict(from_state, episode_actions[-1][0])
             self.update_value_dict(from_state, td_error)
+            self.update_eligibility_dict(from_state, episode_actions[-1][0])
 
 
     def update_eligibility_dict(self, from_state, current_state):
