@@ -1,20 +1,20 @@
 config = {
 
     'problem': 'hanoi',
-    'critic': 'nn',
-    'visualize': True, 
+    'critic': 'table',
+    'visualize': False, 
     'frame_delay': 0.3
 }
 
 hanoiConfig = {
 
     'game_config': {
-        'pegs': 3, 
-        'discs': 4,
+        'pegs': 5, 
+        'discs': 6,
     },
 
-    'num_episodes': 150,
-    'max_steps': 300,
+    'num_episodes': 30,
+    'max_steps': 10,
 
     'actor_config': {
         'learning_rate': 0.01,
@@ -31,20 +31,20 @@ hanoiConfig = {
     },
 
     'anncritic_config': {
-        'learning_rate': 0.0001,
+        'learning_rate': 0.001,
         'discount_factor': 0.9,
         'input_size': 4,
-        'hidden_layers': (5,)
+        'hidden_layers': (30, 30, 30)
     }
 } 
 
 gamblerConfig = {
     
     'game_config': {
-        'win_prob': 0.4, 
+        'win_prob': 0.6, 
     },
 
-    'num_episodes': 15000,
+    'num_episodes': 1500,
     'max_steps': 310,
 
     'actor_config': {

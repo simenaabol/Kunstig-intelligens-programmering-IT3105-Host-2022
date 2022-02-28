@@ -186,7 +186,7 @@ class Cart():
 
         ret_list.append(round(self.th0, 1))
 
-        # ret_list.append(round(self.th1, 0)) # It may be a good idea to use this for NN
+        ret_list.append(round(self.th1, 0)) # It may be a good idea to use this for NN
 
         # ret_list.append(round(self.th2, 0)) # It may be a good idea to use this for NN
 

@@ -104,6 +104,7 @@ class RL_learner():
                     # Table critic needs state-based eligibilities
                     self.critic.set_initial_eligibility(from_state)
 
+                # Calculate the temporal difference error to be used for updating
                 td_error = self.critic.calc_td_error(from_state, reward, current_state)
 
                 # Append the SAP with the td error
