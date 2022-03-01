@@ -21,7 +21,6 @@ hex_config = {
 }
 
 nim_config = {
-    'board_size': 7,
 
     'actor_config': {
         'learning_rate': 0.01, 
