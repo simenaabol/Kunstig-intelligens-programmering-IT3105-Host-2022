@@ -5,7 +5,7 @@ from Parameters import hex_config, nim_config
 
 
 
-class StateManager():
+class StateManager:
 
     def __init__(self, config):
         
@@ -27,7 +27,6 @@ class StateManager():
 
         self.config = config
 
-
     def get_parameters(self):
         
         if isinstance(self.game, Hex):
@@ -42,3 +41,8 @@ class StateManager():
     def is_finished(self):
         raise NotImplementedError
 
+    def get_state(self):
+        raise NotImplementedError
+
+    def do_move(self, move):
+        raise NotImplementedError
