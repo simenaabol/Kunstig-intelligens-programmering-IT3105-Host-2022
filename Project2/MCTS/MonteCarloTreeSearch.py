@@ -10,7 +10,7 @@ import numpy as np
 
 
 
-class mcst:
+class MCTS:
     def ___init___(self, exploration_weight, actor, stateManager):
         self.root = Node(
             state = stateManager.get_state(),
@@ -23,7 +23,7 @@ class mcst:
         self.stateManager = stateManager # obj
 
 
-    def mcst(self):
+    def mcts(self):
 
         if self.stateManager.game_done(self.root.get_state): #Sjekk opp metodNavn til done
             return # Kunne returnert noe her for å skille seg fra kok. 

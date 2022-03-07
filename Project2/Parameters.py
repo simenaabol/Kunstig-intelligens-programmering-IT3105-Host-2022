@@ -17,6 +17,13 @@ hex_config = {
 
         'epsilon': 1, 
         'epsilon_decay': 0.99
+    },
+
+    'mcts_config': {
+        'minibatch_size': 5,
+        'exploration_weight': 0,
+        'epochs': 100,
+        'timout_max_time': 2
     }
 }
 
@@ -32,5 +39,12 @@ nim_config = {
 
         'epsilon': 1, 
         'epsilon_decay': 0.99
+    },
+
+    'mcts_config': {
+        'minibatch_size': 5,
+        'exploration_weight': 0,
+        'epochs': 100,
+        'timout_max_time': 2
     }
 }

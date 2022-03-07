@@ -9,3 +9,6 @@ class ANET:
 
     def update_epsilon(self):
         raise NotImplementedError
+
+    def fit_network(self):
+        raise NotImplementedError

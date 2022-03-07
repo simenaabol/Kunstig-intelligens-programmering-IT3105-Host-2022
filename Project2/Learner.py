@@ -1,5 +1,6 @@
 from StateManager import StateManager
 from Actor import ANET
+from MCTS.MonteCarloTreeSearch import MCTS
 
 import numpy as np
 import time
@@ -24,13 +25,16 @@ class RL_learner:
         self.num_actual_games = config['num_actual_games']
         self.num_search_games = config['num_search_games']
 
-        self.minibatch_size = None # IDK tror denne brukes til trening elns
+        self.minibatch_size = self.parameters['mcts_config']['minibatch_size']
+        self.exploration_weight = self.parameters['mcts_config']['exploration_weight']
+        self.epochs = self.parameters['mcts_config']['epochs']
+        self.timout_max_time = self.parameters['mcts_config']['timout_max_time']
+
         self.save_interval = self.num_actual_games / 4 # Hvor ofte man lagrer nettverket
 
-        self.replay_buffer = []
-
-
     def training(self):
+
+        replay_buffer = []
 
         # Save the initial net
         self.actor.save_net()
@@ -38,46 +42,79 @@ class RL_learner:
         for episode in range(self.num_actual_games):
 
             # Alternating which players' turn it is
-            playing_player = episode % 2 + 1 # Sykt smud linje men er kok
+            playing_player = episode % 2 + 1 # MULIG ENDRE
 
             print('Episode nr.', episode + 1)
 
-            self.state_manager.reset_game()
+            self.state_manager.reset_game(playing_player)
 
-            """ GJØR OM DENNE NÅR MCTS ER FERDIG """
-            monte_carlo = None
+            monte_carlo = MCTS(self.exploration_weight, self.actor, self.state_manager)
 
             finished = self.state_manager.is_finished()
 
             while not finished:
 
+                timeout_start_time = time.perf_counter()
+
                 for search_game in range(self.num_search_games):
 
                     """ Mekke en Node class elns inni her. Typ hvordan thom gjør det. Denne skal
                     vel gjøre rollouts og sånn. Og backpropagating osv. """
-                    monte_carlo.keeg_metode_som_bruker_tree_policy_og_rollout_backpropagate()
 
-                    """ MULIGENS LEGGE TIL EN TIMEOUT FUNKSJON HER """
+                    monte_carlo.mcts()
+
+                    if time.perf_counter() - timeout_start_time > self.timout_max_time:
+                        print("Game", search_game, "timeouted.")
+                        break
 
                 # Used for training the ANET
                 distribution = monte_carlo.get_distribution()
 
                 # Numpy array representing the state
                 state = self.state_manager.get_state()
+                state = np.array(state) # FJERN DENNE LINJEN NÅR get_state() er lagd
 
-                case_for_buffer = None # Thom: (np.concatenate(([player], state.flatten()), axis=None), distribution)
-                self.replay_buffer.append(case_for_buffer)
+                """ DANGER ZONE """
+                case_for_buffer = (np.concatenate(([playing_player], state.flatten()), axis=None), distribution)
+                replay_buffer.append(case_for_buffer)
 
-                move_to_make = None  # Thom: np.unravel_index(np.argmax(distribution), simworld.get_grid().shape)
+                """ DANGER ZONE """
+                move_to_make = np.unravel_index(np.argmax(distribution), self.state_manager.get_state().shape)
 
                 self.state_manager.do_move(move_to_make)
 
-                # Update the root
                 monte_carlo.update_root(move_to_make)
 
-            """ MULIGENS LAG EN PRINT FOR HVEM SOM VINNER """
+            winner = self.state_manager.get_winner()
+            print("Game finished! Player", winner, "won.")
 
+            distr_for_rbuf = []
 
+            """ LOWKEY DANGER ZONE """
+            for i in range(len(replay_buffer)):
+                distr_for_rbuf.append(i ** self.exploration_weight + 1e-10) # USIKKER HVOR INNHOLDET I APPENDEN KOMMER FRA
+
+            distr_for_rbuf = distr_for_rbuf / np.sum(distr_for_rbuf)
+
+            """ DANGER ZONE """
+            if self.minibatch_size > 0:
+                indices_for_minibatch = np.random.choice(len(replay_buffer), 
+                                                        size=self.minibatch_size if self.minibatch_size <= len(replay_buffer) else len(replay_buffer), 
+                                                        p=distr_for_rbuf, 
+                                                        replace=False)
+
+            else:
+                indices_for_minibatch = np.random.choice(len(replay_buffer), 
+                                                        size = int(len(replay_buffer)) * self.minibatch_size,
+                                                        p = distr_for_rbuf,
+                                                        replace = False)
+
+            """ DANGER ZONE """
+            minibatch = np.array(replay_buffer, dtype=tuple)[indices_for_minibatch.astype(int)]
+
+            x_train, y_train = zip(*minibatch)
+
+            ANET.fit_network(x_train, y_train, self.epochs) # MÅ KANSKJE GJØRE OM X OG Y TIL np.array
 
             self.actor.update_epsilon()
 

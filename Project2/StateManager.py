@@ -41,6 +41,9 @@ class StateManager:
     def is_finished(self):
         raise NotImplementedError
 
+    def get_winner(self):
+        raise NotImplementedError
+
     def get_state(self):
         raise NotImplementedError
 
