@@ -29,6 +29,10 @@ hex_config = {
 
 nim_config = {
 
+    'num_stones': 10,
+    'max_removal': 2,
+    'starting_player': 1,
+
     'actor_config': {
         'learning_rate': 0.01, 
         'hidden_layers': (4, 5, 3),
