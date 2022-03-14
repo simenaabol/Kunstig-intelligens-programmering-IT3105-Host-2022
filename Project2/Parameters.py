@@ -35,7 +35,7 @@ nim_config = {
 
     'actor_config': {
         'learning_rate': 0.01, 
-        'hidden_layers': (4, 5, 3),
+        'hidden_layer_size': (4, 5, 3),
         'activation_function': 'relu',
         'output_act': 'softmax',
         'optimizer': 'adam',

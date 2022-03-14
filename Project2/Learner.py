@@ -14,13 +14,14 @@ class RL_learner:
         self.parameters = self.state_manager.get_parameters()
 
         self.actor = ANET(self.parameters['actor_config']['learning_rate'], 
-                            self.parameters['actor_config']['hidden_layers'], 
-                            self.parameters['actor_config']['activation_function'], 
+                            self.parameters['actor_config']['hidden_layer_size'], 
+                            self.parameters['actor_config']['activation_function'],
                             self.parameters['actor_config']['output_act'], 
                             self.parameters['actor_config']['optimizer'], 
                             self.parameters['actor_config']['loss_function'], 
                             self.parameters['actor_config']['epsilon'], 
-                            self.parameters['actor_config']['epsilon_decay'])
+                            self.parameters['actor_config']['epsilon_decay'],
+                            self.state_manager)
 
         self.num_actual_games = config['num_actual_games']
         self.num_search_games = config['num_search_games']

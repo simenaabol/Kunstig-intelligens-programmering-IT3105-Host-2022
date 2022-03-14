@@ -59,3 +59,7 @@ class StateManager:
     def get_playing_player(self):
         
         return self.game.playing_player
+
+    def get_input_size(self):
+
+        return self.game.net_input_size()

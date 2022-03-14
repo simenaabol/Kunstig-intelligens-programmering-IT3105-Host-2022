@@ -62,5 +62,10 @@ class Nim:
             self.playing_player = 1
 
 
+    def net_input_size(self):
+
+        return NotImplementedError
+
+
 # vartest = Nim(4, 6, 1)
 # vartest.get_legal_moves()
