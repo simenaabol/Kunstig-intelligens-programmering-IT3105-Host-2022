@@ -3,8 +3,6 @@ from Environment.Nim import Nim
 
 from Parameters import hex_config, nim_config
 
-
-
 class StateManager:
 
     def __init__(self, config):
@@ -18,9 +16,9 @@ class StateManager:
 
         elif config['game'] == 'nim':
 
-            self.game = Nim(
-
-            )
+            self.game = Nim(nim_config['num_stones'], 
+                            nim_config['max_removal'], 
+                            nim_config['starting_player'])
 
         else:
             raise Exception('Game must be hex or nim.')
@@ -41,8 +39,14 @@ class StateManager:
     def is_finished(self):
         raise NotImplementedError
 
+    def get_winner(self):
+        raise NotImplementedError
+
     def get_state(self):
         raise NotImplementedError
 
     def do_move(self, move):
         raise NotImplementedError
+
+    def get_legal_moves(self):
+        return self.game.get_legal_moves()

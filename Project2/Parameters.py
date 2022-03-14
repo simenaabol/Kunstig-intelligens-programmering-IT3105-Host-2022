@@ -17,10 +17,21 @@ hex_config = {
 
         'epsilon': 1, 
         'epsilon_decay': 0.99
+    },
+
+    'mcts_config': {
+        'minibatch_size': 5,
+        'exploration_weight': 0,
+        'epochs': 100,
+        'timout_max_time': 2
     }
 }
 
 nim_config = {
+
+    'num_stones': 10,
+    'max_removal': 2,
+    'starting_player': 1,
 
     'actor_config': {
         'learning_rate': 0.01, 
@@ -32,5 +43,12 @@ nim_config = {
 
         'epsilon': 1, 
         'epsilon_decay': 0.99
+    },
+
+    'mcts_config': {
+        'minibatch_size': 5,
+        'exploration_weight': 0,
+        'epochs': 100,
+        'timout_max_time': 2
     }
 }
