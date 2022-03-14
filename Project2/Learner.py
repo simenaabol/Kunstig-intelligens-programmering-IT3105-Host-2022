@@ -61,7 +61,7 @@ class RL_learner:
                     """ Mekke en Node class elns inni her. Typ hvordan thom gjør det. Denne skal
                     vel gjøre rollouts og sånn. Og backpropagating osv. """
 
-                    monte_carlo.mcts()
+                    monte_carlo.mcts() # KANSKJE GJØR OM NAVNET TIL DENNE, SIDEN DENNE DELEN ER LITT LIK NÅ
 
                     if time.perf_counter() - timeout_start_time > self.timout_max_time:
                         print("Game", search_game, "timeouted.")
@@ -70,16 +70,17 @@ class RL_learner:
                 # Used for training the ANET
                 distribution = monte_carlo.get_distribution()
 
+                player = self.state_manager.get_playing_player()
                 # Numpy array representing the state
-                state = self.state_manager.get_state()
-                state = np.array(state) # FJERN DENNE LINJEN NÅR get_state() er lagd
+                state = np.array(self.state_manager.get_state()) # Litt usikker på denne
+                state = state.flatten()
 
                 """ DANGER ZONE """
-                case_for_buffer = (np.concatenate(([playing_player], state.flatten()), axis=None), distribution)
+                case_for_buffer = (np.concatenate(([player], state), axis=None), distribution) # MENER DENNE ER GANSKE SMUD, MEN KANSKJE ENDRE LITT
                 replay_buffer.append(case_for_buffer)
 
                 """ DANGER ZONE """
-                move_to_make = np.unravel_index(np.argmax(distribution), self.state_manager.get_state().shape)
+                move_to_make = np.unravel_index(np.argmax(distribution), state.shape) # MÅ EVT ENDRE LITT PÅ DENNE OG
 
                 self.state_manager.do_move(move_to_make)
 
@@ -88,25 +89,25 @@ class RL_learner:
             winner = self.state_manager.get_winner()
             print("Game finished! Player", winner, "won.")
 
-            distr_for_rbuf = []
+            probs_for_rbuf = []
 
             """ LOWKEY DANGER ZONE """
             for i in range(len(replay_buffer)):
-                distr_for_rbuf.append(i ** self.exploration_weight + 1e-10) # USIKKER HVOR INNHOLDET I APPENDEN KOMMER FRA
+                probs_for_rbuf.append(i ** self.exploration_weight + 1e-10) # USIKKER HVOR INNHOLDET I APPENDEN KOMMER FRA
 
-            distr_for_rbuf = distr_for_rbuf / np.sum(distr_for_rbuf)
+            probs_for_rbuf = probs_for_rbuf / np.sum(probs_for_rbuf)
 
             """ DANGER ZONE """
             if self.minibatch_size > 0:
                 indices_for_minibatch = np.random.choice(len(replay_buffer), 
                                                         size=self.minibatch_size if self.minibatch_size <= len(replay_buffer) else len(replay_buffer), 
-                                                        p=distr_for_rbuf, 
+                                                        p=probs_for_rbuf, 
                                                         replace=False)
 
             else:
                 indices_for_minibatch = np.random.choice(len(replay_buffer), 
                                                         size = int(len(replay_buffer)) * self.minibatch_size,
-                                                        p = distr_for_rbuf,
+                                                        p = probs_for_rbuf,
                                                         replace = False)
 
             """ DANGER ZONE """

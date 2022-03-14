@@ -17,8 +17,7 @@ class StateManager:
         elif config['game'] == 'nim':
 
             self.game = Nim(nim_config['num_stones'], 
-                            nim_config['max_removal'], 
-                            nim_config['starting_player'])
+                            nim_config['max_removal'])
 
         else:
             raise Exception('Game must be hex or nim.')
@@ -33,20 +32,30 @@ class StateManager:
         elif isinstance(self.game, Nim):
             return nim_config
 
-    def reset_game(self):
-        raise NotImplementedError
+    def reset_game(self, playing_player):
+
+        self.game.reset(playing_player)
 
     def is_finished(self):
-        raise NotImplementedError
+
+        return self.game.game_done()
 
     def get_winner(self):
-        raise NotImplementedError
+
+        return self.game.player_has_won()
 
     def get_state(self):
-        raise NotImplementedError
+
+        raise self.game.get_state_tuple()
 
     def do_move(self, move):
-        raise NotImplementedError
+
+        self.game.alter_state_from_move(move)
 
     def get_legal_moves(self):
-        return self.game.get_legal_moves()
+
+        return self.game.get_moves()
+
+    def get_playing_player(self):
+        
+        return self.game.playing_player
