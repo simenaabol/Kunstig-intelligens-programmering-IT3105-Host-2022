@@ -19,8 +19,10 @@ class Nim:
         moves = []
 
         for i in range(1, self.max_removal + 1):
-            if i <= self.num_stones:
+            if i <= self.remaining_stones:
                 moves.append(i)
+
+        return moves
 
 
     def reset(self, playing_player):
@@ -32,29 +34,34 @@ class Nim:
 
     def game_done(self):
 
-        if self.num_stones == 0:
+        if self.remaining_stones == 0:
             return True
 
         return False
 
     def player_has_won(self):
 
-        if self.playing_player == 1:
-            return 1
+        if self.game_done():
+            if self.playing_player == 1:
+                return 1
+            else:
+                return 2
         else:
-            return 2
+            raise ValueError("No winner, game broken xD")
 
 
     def get_state_tuple(self):
 
-        return (self.playing_player, self.remaining_stones)
+        """ TROR DENNE BARE SKAL RETURNERE REMAINING STONES """
+        return (self.remaining_stones,)
+
 
     def alter_state_from_move(self, move):
 
         if move not in self.get_moves():
             raise('Not a legal move')
         else:
-            self.num_stones -= move
+            self.remaining_stones -= move
 
         if self.playing_player == 1:
             self.playing_player = 2
@@ -67,5 +74,4 @@ class Nim:
         return NotImplementedError
 
 
-# vartest = Nim(4, 6, 1)
-# vartest.get_legal_moves()
+# vartest = Nim(6, 2)

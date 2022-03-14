@@ -11,7 +11,7 @@ class StateManager:
         if config['game'] == 'hex':
 
             self.game = Hex(
-
+                
             )
 
         elif config['game'] == 'nim':

@@ -38,7 +38,7 @@ class RL_learner:
         replay_buffer = []
 
         # Save the initial net
-        self.actor.save_net()
+        self.actor.save_net(0)
         
         for episode in range(self.num_actual_games):
 
@@ -69,7 +69,7 @@ class RL_learner:
                         break
 
                 # Used for training the ANET
-                distribution = monte_carlo.get_distribution()
+                distribution = monte_carlo.get_normalized_distribution()
 
                 player = self.state_manager.get_playing_player()
                 # Numpy array representing the state
@@ -116,10 +116,10 @@ class RL_learner:
 
             x_train, y_train = zip(*minibatch)
 
-            ANET.fit_network(x_train, y_train, self.epochs) # MÅ KANSKJE GJØRE OM X OG Y TIL np.array
+            ANET.fit_network(np.array(x_train), np.array(y_train), self.epochs)
 
             self.actor.update_epsilon()
 
             # Save the net according to the save interval
             if (episode + 1) % self.save_interval == 0:
-                self.actor.save_net()
+                self.actor.save_net(episode + 1)

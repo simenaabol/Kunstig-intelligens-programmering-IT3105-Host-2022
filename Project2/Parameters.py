@@ -1,5 +1,5 @@
 config = {
-    'game': 'hex',
+    'game': 'nim',
     'num_actual_games': 100,
     'num_search_games': 500
 }

@@ -15,13 +15,19 @@ class ANET:
         self.state_manager = state_manager
         self.epsilon = epsilon
         self.epsilon_decay = epsilon_decay
+        
 
+    def save_net(self, name):
+        
+        self.model.save("./NeuralNets/{name}".format(episode=name))
 
-    def save_net(self):
-        raise NotImplementedError
+    def update_epsilon(self, just_policy=False):
+        
+        self.epsilon *= self.epsilon_decay
 
-    def update_epsilon(self):
-        raise NotImplementedError
+        if just_policy:
+            self.epsilon = 0
 
-    def fit_network(self):
-        raise NotImplementedError
+    def fit_network(self, x, y, epochs):
+        
+        self.model.fit(x, y, epochs)
