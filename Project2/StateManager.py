@@ -1,5 +1,5 @@
 from Environment.Hex import Hex
-from Environment.Nim import Nim
+from Environment.Nim import Nim 
 
 from Parameters import hex_config, nim_config
 
