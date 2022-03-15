@@ -63,3 +63,7 @@ class StateManager:
     def get_input_size(self):
 
         return self.game.net_input_size()
+    
+    def check_if_legal_action(self, state, action):
+        
+        return self.game.is_legal_move(state, action)

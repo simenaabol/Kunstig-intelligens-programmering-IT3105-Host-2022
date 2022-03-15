@@ -14,14 +14,14 @@ class RL_learner:
         self.parameters = self.state_manager.get_parameters()
 
         self.actor = ANET(self.parameters['actor_config']['learning_rate'], 
-                            self.parameters['actor_config']['hidden_layer_size'], 
-                            self.parameters['actor_config']['activation_function'],
-                            self.parameters['actor_config']['output_act'], 
-                            self.parameters['actor_config']['optimizer'], 
-                            self.parameters['actor_config']['loss_function'], 
-                            self.parameters['actor_config']['epsilon'], 
-                            self.parameters['actor_config']['epsilon_decay'],
-                            self.state_manager)
+                          self.parameters['actor_config']['hidden_layer_size'], 
+                          self.parameters['actor_config']['activation_function'],
+                          self.parameters['actor_config']['output_act'], 
+                          self.parameters['actor_config']['optimizer'], 
+                          self.parameters['actor_config']['loss_function'], 
+                          self.parameters['actor_config']['epsilon'], 
+                          self.parameters['actor_config']['epsilon_decay'],
+                          self.state_manager)
 
         self.num_actual_games = config['num_actual_games']
         self.num_search_games = config['num_search_games']
@@ -74,10 +74,10 @@ class RL_learner:
                 player = self.state_manager.get_playing_player()
                 # Numpy array representing the state
                 state = np.array(self.state_manager.get_state()) # Litt usikker på denne
-                state = state.flatten()
+                # state = state.flatten()
 
                 """ DANGER ZONE """
-                case_for_buffer = (np.concatenate(([player], state), axis=None), distribution) # MENER DENNE ER GANSKE SMUD, MEN KANSKJE ENDRE LITT
+                case_for_buffer = (np.concatenate(([player], state.flatten()), axis=None), distribution) # MENER DENNE ER GANSKE SMUD, MEN KANSKJE ENDRE LITT
                 replay_buffer.append(case_for_buffer)
 
                 """ DANGER ZONE """

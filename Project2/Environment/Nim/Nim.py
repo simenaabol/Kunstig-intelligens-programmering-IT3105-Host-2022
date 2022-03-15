@@ -2,6 +2,7 @@ from Parameters import nim_config
 
 class Nim:
     def __init__(self, num_stones, max_removal):
+        
 
         # Variables from config
         self.num_stones = num_stones
@@ -13,13 +14,18 @@ class Nim:
         # The state in this game
         self.remaining_stones = num_stones
 
-    def get_moves(self):
+    def get_moves(self, state=None):
+        
         """ Usikker om man skal hente moves ut ifra en state eller fra self-verdier """
+        
+        if state == None:
+            state = self.remaining_stones
+            
         
         moves = []
 
         for i in range(1, self.max_removal + 1):
-            if i <= self.remaining_stones:
+            if i <= state:
                 moves.append(i)
 
         return moves
@@ -32,14 +38,14 @@ class Nim:
 
         self.remaining_stones = self.num_stones
 
-    def game_done(self):
+    def game_done(self):        
 
         if self.remaining_stones == 0:
             return True
 
         return False
 
-    def player_has_won(self):
+    def player_has_won(self):   
 
         if self.game_done():
             if self.playing_player == 1:
@@ -72,6 +78,14 @@ class Nim:
     def net_input_size(self):
 
         return NotImplementedError
+    
+    def is_legal_move(self, state, action):
+        
+        moves = self.get_moves(state)
+        
+        if action in moves:
+            return True
+        return False
 
 
 # vartest = Nim(6, 2)

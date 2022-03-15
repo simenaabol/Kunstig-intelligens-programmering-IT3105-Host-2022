@@ -5,31 +5,28 @@ from Node import Node
 import numpy as np
 
 # from StateManager import StateManager
-# from parameters import 
-
-
-
+# from Parameters import 
 
 class MCTS:
-    def ___init___(self, exploration_weight, actor, stateManager):
+    def ___init___(self, exploration_weight, actor, state_manager):
         """
 
-        Class for Monte Carlo Searc Tree
+        Class for Monte Carlo Search Tree
 
-        PARAMS: exploration_weight, actor, stateManager
+        PARAMS: exploration_weight, actor, state_manager
 
         RETURN: nothing
 
         """
         self.root = Node(
-            state = stateManager.get_state(),
+            state = state_manager.get_state(),
             parent = None,
-            player = stateManager.get_current_player() # input?
+            player = state_manager.get_playing_player()
             )
 
         self.exp_weight = exploration_weight
         self.actor = actor # obj
-        self.stateManager = stateManager # obj
+        self.state_manager = state_manager # obj
 
 # Main-kok
     def get_normalized_distribution(self):
@@ -49,7 +46,7 @@ class MCTS:
         :return: The normalized distribution
         """
         # Mix med niclas
-        board_shape = self.simworld.get_grid().shape
+        board_shape = self.state_manager.get_state().shape
         distribution = np.zeros(board_shape)
         for action in self.root.kid: #Itererer alle barna til roten? Ikke alle?
                 distribution.append(float(self.root.kid[action].count) / float(self.root.count))
@@ -66,8 +63,6 @@ class MCTS:
 
         
 
-
-
     def mcts(self):
         """
 
@@ -79,7 +74,7 @@ class MCTS:
 
         """
 
-        if self.stateManager.game_done(self.root.get_state): #Sjekk opp metodNavn til done
+        if self.state_manager.is_finished(self.root.get_state()): #Sjekk opp metodNavn til done
             return # Kunne returnert noe her for å skille seg fra kok. 
         
         # Bør legge inn en raise her hvis det ikke eksisterer en node
@@ -89,8 +84,8 @@ class MCTS:
         leaf = self.search() # returns current_node
 
         # Check if the leaf is at the end
-        if self.stateManager.game_done(leaf.get_state()):
-            rew = self.stateManager.get_reward(leaf.get_state())
+        if self.state_manager.is_finished(leaf.get_state()):
+            rew = self.state_manager.get_reward(leaf.get_state())
             self.backpropagation(leaf, rew)
             return
 
@@ -100,13 +95,13 @@ class MCTS:
     # to the nodes housing the child states (a.k.a. child nodes).
 
         # Find ALL the leaf for the input node
-        kids = self.new_leafs(leaf)
+        kids = self.new_leaves(leaf)
 
 
     # 3. Leaf Evaluation - Estimating the value of a leaf node in the tree by doing
     # a rollout simulation using the default policy from the leaf node’s state to a final state
 
-        # Chooses one of the new kids found in new_leafs
+        # Chooses one of the new kids found in new_leaves
         kid = np.random(kids)
 
         # Leaf evaluation // a rollout
@@ -136,9 +131,9 @@ class MCTS:
         _temp_root = self.root.get_kid(action)
         if not _temp_root: # kok - usikker hva som skjer her
             self.root = Node(
-                state = self.stateManager.get_state(),
+                state = self.state_manager.get_state(),
                 parent = None, 
-                player = self.stateManager.get_current_player()
+                player = self.state_manager.get_playing_player()
             )
         self.root = _temp_root
 
@@ -184,7 +179,7 @@ class MCTS:
 
 
     
-    def new_leafs(self, leaf): # Node expansion
+    def new_leaves(self, leaf): # Node expansion
         """
 
         Method - Generating all(atm) child states of a parent state, 
@@ -196,12 +191,12 @@ class MCTS:
         RETURNS: a set of new kids from the input parent 'leaf'
 
         """
-        # merk at denne finne alle nye leafs. 
+        # merk at denne finne alle nye leaves. 
 
         state = leaf.get_state()
         # player = leaf.get_player()
 
-        state_action_list, player = self.stateManager.get_kids(state, player)
+        state_action_list, player = self.state_manager.get_kids(state, player)
         kids = []
 
         for state, action in state_action_list:
@@ -228,22 +223,23 @@ class MCTS:
         
         leaf = from_node.get_state()
         player = from_node.get_player()
-        done = self.stateManager.game_done(leaf) #Sjekk opp metodNavn
+        done = self.state_manager.is_finished(leaf) #Sjekk opp metodNavn
         parent = from_node 
 
         while done == False:
             action = self.actor.get_action(leaf, player)
-            leaf, player = self.stateManager(player, leaf, action)
+            """ TROR NOE RART MED LINJA UNDER? """
+            leaf, player = self.state_manager(player, leaf, action)
             next_leaf = parent.get_kid_with_action(action, rollout = True)
 
             if not next_leaf:
                 next_leaf = Node(leaf, parent, player)
                 parent.add_kid(next_leaf, action, rollout = True)
             parent = next_leaf
-            done = self.stateManager.game_done(leaf) #Sjekk opp metodNavn
+            done = self.state_manager.is_finished(leaf) #Sjekk opp metodNavn
         
         final_leaf = parent.get_state()  # Kan smelle disse sammen
-        rew = self.stateManager.get_reward(final_leaf) # Kan smelle disse sammen
+        rew = self.state_manager.get_reward(final_leaf) # Kan smelle disse sammen
         # Disse to over bør egt ikke lagres som egne variabler, da de ikke brukes    
         return parent , rew
 
