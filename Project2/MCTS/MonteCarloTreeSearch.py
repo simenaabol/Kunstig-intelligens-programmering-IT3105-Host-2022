@@ -6,7 +6,7 @@ import numpy as np
 
 
 class MCTS:
-    def ___init___(self, exploration_weight, actor, state_manager):
+    def __init__(self, exploration_weight, actor, state_manager):
         """
 
         Class for Monte Carlo Search Tree
@@ -100,7 +100,7 @@ class MCTS:
     # a rollout simulation using the default policy from the leaf node’s state to a final state
 
         # Chooses one of the new kids found in new_leaves
-        kid = np.random(kids)
+        kid = np.random.choice(kids)
 
         # Leaf evaluation // a rollout
         leaf, rew = self.leaf_evaluation(kid)
@@ -173,7 +173,8 @@ class MCTS:
 
             flag *= -1
             current_node = current_node.get_kid_with_action(current_best)
-            return current_node
+            
+        return current_node
 
 
     
@@ -192,13 +193,13 @@ class MCTS:
         # merk at denne finne alle nye leaves. 
 
         state = leaf.get_state()
-        # player = leaf.get_player()
+        player = leaf.get_player()
 
         state_action_list, player = self.state_manager.get_kids(state, player)
         kids = []
 
         for state, action in state_action_list:
-            kids = leaf.get_kid_with_action(action, rollout = True)
+            kid = leaf.get_kid_with_action(action, rollout = True)
             leaf.remove_kid(action, rollout = True)
 
             if not kid: # Sjekk om man kan bruke noe annet her

@@ -54,7 +54,7 @@ class Hex:
                 self.player = 1
 
     
-    def get_state(self):
+    def get_current_state(self):
         return self.board
 
 
@@ -132,7 +132,7 @@ class Hex:
                             and c != board_size * (i + dy) + (j + dx):
                         graph.add_edge(c, board_size * (i + dy) + (j + dx))
                 c += 1
-        print(position)
+        # print(position)
         # graph.set_edgecolor('red') 
 
         nx.draw(graph, position, node_color=color_map, node_size=node_with, with_labels=False,
@@ -145,16 +145,16 @@ class Hex:
     
 
 
-obj = Hex(3)
-moves = obj.get_moves()
-obj.alter_state_from_move((2,2))
+# obj = Hex(3)
+# moves = obj.get_moves()
+# obj.alter_state_from_move((2,2))
+# # obj.visualize_state()
+# obj.alter_state_from_move((2,1))
+# # obj.visualize_state()
+# obj.alter_state_from_move((1,1))
+# obj.alter_state_from_move((0,2))
+# obj.alter_state_from_move((0,0))
+# # Seier til 1 (red) -> enere langs radene
+# print(obj.board)
+# # obj.get_graphic()
 # obj.visualize_state()
-obj.alter_state_from_move((2,1))
-# obj.visualize_state()
-obj.alter_state_from_move((1,1))
-obj.alter_state_from_move((0,2))
-obj.alter_state_from_move((0,0))
-# Seier til 1 (red) -> enere langs radene
-print(obj.board)
-# obj.get_graphic()
-obj.visualize_state()

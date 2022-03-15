@@ -28,7 +28,7 @@ class ANET:
 
     def save_net(self, name):        
         
-        self.model.save("./NeuralNets/{name}".format(episode=name))
+        self.model.save("./NeuralNets/{name}".format(name=name))
 
     def update_epsilon(self, just_policy=False):
         
@@ -45,7 +45,9 @@ class ANET:
     def get_action(self, state, player): # BRUKES I MCTS
         
         probability_distribution = self.get_actor_policy(state, player)
+        print("ETTER GET", probability_distribution)
         probability_distribution = self.remove_illegal_moves_from_dist(probability_distribution, state)
+        print("ETTER REMOVE", probability_distribution)
         
         action = np.unravel_index(np.argmax(probability_distribution), self.state_manager.get_state().shape)
         
@@ -64,7 +66,7 @@ class ANET:
     def get_actor_policy(self, state, player):
         
         var = np.concatenate(([player], state), axis=None)
-        var = var.reshape((1,), var.shape)
+        var = var.reshape((1,) + var.shape)
         
         action_prob_arr = self.model(var)
         action_prob_arr = action_prob_arr.numpy()
@@ -75,8 +77,15 @@ class ANET:
     """ MER DANGER ZONE """
     def remove_illegal_moves_from_dist(self, probability_distribution, state):
         
+        print("BEFORE", probability_distribution)
+        
         for i in range(len(probability_distribution)):
             action = np.unravel_index(i, self.state_manager.get_state().shape)
+            
+            print()
+            print("FOR", probability_distribution)
+            print("ACTION", action)
+            print()
             
             if not self.state_manager.check_if_legal_action(state, action):
                 probability_distribution[i] = 0

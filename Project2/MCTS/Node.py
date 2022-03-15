@@ -105,7 +105,7 @@ class Node:
             
 
 
-    def get_kid_with_action(self, action, rollout= False): # kok siste del
+    def get_kid_with_action(self, action, rollout = False): # kok siste del
         """
 
         Method - Fetch a kid with a action 

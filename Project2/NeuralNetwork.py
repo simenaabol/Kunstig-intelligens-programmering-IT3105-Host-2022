@@ -21,10 +21,10 @@ class NeuralNet:
         model.add(kerlayers.Input(shape=input_size))
 
         for size in self.hidden_layer_size:
-            model.add(kerlayers.Dense(size, activation=self.activation_function))
+            model.add(kerlayers.Dense(units=size, activation=self.activation_function))
 
         """ FINN UT HVOR MANGE UNITS DENNE SKAL HA """
-        model.add(kerlayers.Dense(units=None, activation=self.output_act))
+        model.add(kerlayers.Dense(units=1, activation=self.output_act))
 
         # Check for optimizer
         if self.optimizer == "adam":

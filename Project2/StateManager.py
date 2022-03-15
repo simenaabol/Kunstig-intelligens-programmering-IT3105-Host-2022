@@ -2,7 +2,7 @@ import sys
 sys.path.append("..") 
 
 from Environment.Hex import Hex
-from Environment.Nim import Nim 
+from Environment.Nim import Nim
 
 from Parameters import hex_config, nim_config
 
@@ -39,9 +39,9 @@ class StateManager:
 
         self.game.reset(playing_player)
 
-    def is_finished(self):
+    def is_finished(self, state=None):
 
-        return self.game.game_done()
+        return self.game.game_done(state)
 
     def get_winner(self):
 
@@ -49,15 +49,15 @@ class StateManager:
 
     def get_state(self):
 
-        raise self.game.get_state_tuple()
+        return self.game.get_current_state()
 
     def do_move(self, move):
 
         self.game.alter_state_from_move(move)
 
-    def get_legal_moves(self):
+    def get_legal_moves(self, state=None):
 
-        return self.game.get_moves()
+        return self.game.get_moves(state)
 
     def get_playing_player(self):
         
@@ -70,3 +70,24 @@ class StateManager:
     def check_if_legal_action(self, state, action):
         
         return self.game.is_legal_move(state, action)
+    
+    def get_kid_from_move(self, player, state, move):
+        
+        return self.game.generate_kid_from_move(player, state, move)
+    
+    def get_kids(self, state, player):
+        
+        legal_moves = self.get_legal_moves(state)
+        states_arr = []
+        state = state.copy()
+        
+        for move in legal_moves:
+            states_arr.append((self.get_kid_from_move(player, state, move)[0], move))
+            
+        if player == 1:
+            player = 2
+        else:
+            player = 1
+            
+        return states_arr, player
+        

@@ -38,7 +38,7 @@ class RL_learner:
         replay_buffer = []
 
         # Save the initial net
-        self.actor.save_net(0)
+        # self.actor.save_net(0)
         
         for episode in range(self.num_actual_games):
 
@@ -121,5 +121,5 @@ class RL_learner:
             self.actor.update_epsilon()
 
             # Save the net according to the save interval
-            if (episode + 1) % self.save_interval == 0:
-                self.actor.save_net(episode + 1)
+            # if (episode + 1) % self.save_interval == 0:
+            #     self.actor.save_net(episode + 1)

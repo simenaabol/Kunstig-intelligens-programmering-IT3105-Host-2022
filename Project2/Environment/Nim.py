@@ -1,4 +1,5 @@
 from Parameters import nim_config
+import numpy as np
 
 class Nim:
     def __init__(self, num_stones, max_removal):
@@ -12,7 +13,7 @@ class Nim:
         self.playing_player = 1
 
         # The state in this game
-        self.remaining_stones = num_stones
+        self.remaining_stones = np.array([num_stones])
 
     def get_moves(self, state=None):
         
@@ -20,7 +21,6 @@ class Nim:
         
         if state == None:
             state = self.remaining_stones
-            
         
         moves = []
 
@@ -36,9 +36,12 @@ class Nim:
         self.max_removal = nim_config['max_removal']
         self.playing_player = playing_player
 
-        self.remaining_stones = self.num_stones
+        self.remaining_stones = np.array([self.num_stones])
 
-    def game_done(self):        
+    def game_done(self, state=None):
+        
+        if state == None:
+            state = self.remaining_stones
 
         if self.remaining_stones == 0:
             return True
@@ -56,10 +59,10 @@ class Nim:
             raise ValueError("No winner, game broken xD")
 
 
-    def get_state_tuple(self):
+    def get_current_state(self):
 
         """ TROR DENNE BARE SKAL RETURNERE REMAINING STONES """
-        return (self.remaining_stones,)
+        return self.remaining_stones
 
 
     def alter_state_from_move(self, move):
@@ -77,15 +80,33 @@ class Nim:
 
     def net_input_size(self):
 
-        return NotImplementedError
+        return self.max_removal
     
-    def is_legal_move(self, state, action):
+    def is_legal_move(self, state, move):
         
         moves = self.get_moves(state)
         
-        if action in moves:
+        if move in moves:
+            print(state, move, moves, "TRUE")
             return True
+        print(state, move, moves, "FALSE")
         return False
+    
+    def generate_kid_from_move(self, player, state, move):
+        
+        if not self.is_legal_move(state, move):
+            raise ValueError("Illegal move")
+        
+        new_kid = state.copy()
+        new_kid -= move
+        
+        if player == 1:
+            player = 2
+        else:
+            player = 1
+            
+        return new_kid, player
+        
 
 
 # vartest = Nim(6, 2)
