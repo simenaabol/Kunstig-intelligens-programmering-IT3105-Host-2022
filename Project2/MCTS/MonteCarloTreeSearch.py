@@ -1,11 +1,9 @@
-# import sys
-# sys.path.append("..") 
+import sys
+sys.path.append("..") 
  
-from Node import Node
+from MCTS.Node import Node
 import numpy as np
 
-# from StateManager import StateManager
-# from Parameters import 
 
 class MCTS:
     def ___init___(self, exploration_weight, actor, state_manager):

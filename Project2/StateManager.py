@@ -1,3 +1,6 @@
+import sys
+sys.path.append("..") 
+
 from Environment.Hex import Hex
 from Environment.Nim import Nim
 
