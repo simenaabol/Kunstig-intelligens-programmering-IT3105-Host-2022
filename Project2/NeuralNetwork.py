@@ -17,8 +17,10 @@ class NeuralNet:
         model = tf.keras.Sequential()
 
         input_size = state_manager.get_input_size()
+        
+        print(input_size)
 
-        model.add(kerlayers.Input(shape=input_size))
+        model.add(kerlayers.Input(shape=(input_size,)))
 
         for size in self.hidden_layer_size:
             model.add(kerlayers.Dense(units=size, activation=self.activation_function))
@@ -39,3 +41,4 @@ class NeuralNet:
         model.compile(optimizer=compiler_opt, loss=self.loss_function)
 
         return model
+    

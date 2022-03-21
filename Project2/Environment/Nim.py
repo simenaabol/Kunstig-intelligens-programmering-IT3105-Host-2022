@@ -22,13 +22,23 @@ class Nim:
         if state == None:
             state = self.remaining_stones
         
-        moves = []
+        legal_moves = []
 
         for i in range(1, self.max_removal + 1):
-            if i <= state:
-                moves.append(i)
+            if i <= state[0]:
+                print("i", i, "state", state)
+                legal_moves.append(i)
 
-        return moves
+        return legal_moves
+    
+    def get_all_moves(self):
+        
+        all_moves = []
+
+        for i in range(1, self.max_removal + 1):
+            all_moves.append(i)
+
+        return all_moves
 
 
     def reset(self, playing_player):
@@ -42,8 +52,10 @@ class Nim:
         
         if state == None:
             state = self.remaining_stones
+            
+        # print(self.remaining_stones[0])
 
-        if self.remaining_stones == 0:
+        if self.remaining_stones[0] == 0:
             return True
 
         return False
@@ -80,7 +92,7 @@ class Nim:
 
     def net_input_size(self):
 
-        return self.max_removal
+        return len(self.remaining_stones)
     
     def is_legal_move(self, state, move):
         
@@ -94,18 +106,21 @@ class Nim:
     
     def generate_kid_from_move(self, player, state, move):
         
-        if not self.is_legal_move(state, move):
-            raise ValueError("Illegal move")
+        if self.is_legal_move(state, move):
+            print("IS ILLEGAL", state, move)
         
-        new_kid = state.copy()
-        new_kid -= move
-        
-        if player == 1:
-            player = 2
-        else:
-            player = 1
+            new_kid = state.copy()
+            new_kid -= move
             
-        return new_kid, player
+            if player == 1:
+                player = 2
+            else:
+                player = 1
+                
+            return new_kid, player
+        
+        else:
+            return -1
         
 
 

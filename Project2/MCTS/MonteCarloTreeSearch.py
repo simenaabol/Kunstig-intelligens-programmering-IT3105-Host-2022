@@ -4,6 +4,8 @@ sys.path.append("..")
 from MCTS.Node import Node
 import numpy as np
 
+import random
+
 
 class MCTS:
     def __init__(self, exploration_weight, actor, state_manager):
@@ -80,6 +82,8 @@ class MCTS:
 
     # 1. Tree Search - Traversing the tree from the root to a leaf node by using the tree policy
         leaf = self.search() # returns current_node
+        
+        # print("LEAF", leaf)
 
         # Check if the leaf is at the end
         if self.state_manager.is_finished(leaf.get_state()):
@@ -104,6 +108,8 @@ class MCTS:
 
         # Leaf evaluation // a rollout
         leaf, rew = self.leaf_evaluation(kid)
+        
+        print("ETTER ROLLOUT")
 
 
 
@@ -226,9 +232,13 @@ class MCTS:
         parent = from_node 
 
         while done == False:
-            action = self.actor.get_action(leaf, player)
+            # Tomy
+            action = self.actor.get_action()
+            
+            
+            # action = self.pick_move_ann(self.state_manager.get_state(), legal_actions, all_actions)
             """ TROR NOE RART MED LINJA UNDER? """
-            leaf, player = self.state_manager(player, leaf, action)
+            leaf, player = self.state_manager.get_kid_from_move(player, leaf, action)
             next_leaf = parent.get_kid_with_action(action, rollout = True)
 
             if not next_leaf:
@@ -240,7 +250,9 @@ class MCTS:
         final_leaf = parent.get_state()  # Kan smelle disse sammen
         rew = self.state_manager.get_reward(final_leaf) # Kan smelle disse sammen
         # Disse to over bør egt ikke lagres som egne variabler, da de ikke brukes    
-        return parent , rew
+        return parent, rew
+
+    # def pick_move_ann(state,legal_actions,all_actions  ):
 
 
     def backpropagation(self, leaf, rew):

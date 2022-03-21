@@ -58,6 +58,10 @@ class StateManager:
     def get_legal_moves(self, state=None):
 
         return self.game.get_moves(state)
+    
+    def get_all_moves(self):
+
+        return self.game.get_all_moves()
 
     def get_playing_player(self):
         
@@ -81,6 +85,8 @@ class StateManager:
         states_arr = []
         state = state.copy()
         
+        print("LEGAL??", state, legal_moves)
+        
         for move in legal_moves:
             states_arr.append((self.get_kid_from_move(player, state, move)[0], move))
             
@@ -90,4 +96,8 @@ class StateManager:
             player = 1
             
         return states_arr, player
+    
+    def get_normalized_distribution(self):
+       
+       return self.game.get_normalized_distribution() 
         

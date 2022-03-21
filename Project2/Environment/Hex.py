@@ -33,6 +33,15 @@ class Hex:
                     legal_moves.append((i,j))
         return legal_moves
         # raise TypeError("Sorry, the player int is not compatible")
+        
+    def get_all_moves(self):
+        all_moves = []
+        for i in range(self.boardsize):
+            for j in range(self.boardsize):
+                    all_moves.append((i,j))
+        return all_moves
+        
+        
 
 
     def alter_state_from_move(self, action):

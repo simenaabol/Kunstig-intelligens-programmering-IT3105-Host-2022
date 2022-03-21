@@ -1,7 +1,8 @@
 config = {
     'game': 'nim',
     'num_actual_games': 100,
-    'num_search_games': 500
+    'num_search_games': 500,
+    'starting_player': 1
 }
 
 hex_config = {
