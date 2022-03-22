@@ -65,7 +65,7 @@ class Node:
     def get_state(self):
         """
 
-        Method - Fetch the node stat. 
+        Method - Fetch the node state 
 
         PARAMS: nothing
 

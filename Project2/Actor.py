@@ -43,8 +43,8 @@ class ANET:
         
         self.model.fit(x, y, epochs)
         
-    def get_action(self):
-        legal_actions = self.state_manager.get_legal_moves()
+    def get_action(self, leaf):
+        legal_actions = self.state_manager.get_legal_moves(leaf)
         all_actions = self.state_manager.get_all_moves()
         state = tuple(self.state_manager.get_state())
         
@@ -57,34 +57,46 @@ class ANET:
         
         # Sander  -> dis til nettet, ikke hex
         distribution = self.model(tf.convert_to_tensor([state])).numpy()  # type: ignore
-        distribution = distribution * np.array(legal_actions)
+        distribution = distribution * np.array(all_actions)
         distribution = distribution.flatten()
         distribution /= np.sum(distribution)  # normalize probability distribution
         
         # print(distribution)
         
         
-        
-        
-        
-        
-        
         # Sander
         
+        # print("FØR FOR LØKKE LEGAL ACTIONS:", legal_actions)
+        
         for i, move in enumerate(all_actions):
+            # print("MOVES SOM SJEKKES MOT LEGAL ACTIONS:", move)
             if move not in legal_actions:
+                # print("KOMMER VI NOEN GANGER HER???", distribution)
                 distribution[i] = 0
+                
+                distribution /= np.sum(distribution) # Renormalize
 
         if sum(distribution) <= 0:
+            # print("GET ACTION RANDOM FRA DISSE ACTIONSENE (SUM):", legal_actions)
             return random.choice(legal_actions)
 
         # distribution = [i/sum(distribution) for i in distribution]
            
         if random.uniform(0,1) < self.epsilon:
-            ind = distribution.tolist().index(random.choices(population=distribution, weights=distribution)[0])
-        else:
-            ind = distribution.tolist().index(np.argmax(distribution))
+            """ EVENTUELT GJØR OM TIL NP """
+            # ind = distribution.tolist().index(random.choices(population=distribution, weights=distribution)[0])
+            indices, = np.nonzero(distribution)
+            ind = np.random.choice(indices)
+            # print("GET ACTION RANDOM (VANLIG RANDOM):", ind)
             
+            """ KANSKJE ENDRE EPSILON HER """
+            
+        else:
+            ind = np.argmax(distribution)
+            # print("GET ACTION IKKE RANDOM:", ind)
+            
+        # print("SLUTT DISTRIBUTION", distribution)
+        # print("VALGTE ACTION FRA GET ACTION", all_actions[ind])
         return all_actions[ind]
         
         

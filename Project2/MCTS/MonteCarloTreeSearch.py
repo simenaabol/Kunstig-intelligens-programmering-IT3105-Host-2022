@@ -226,18 +226,24 @@ class MCTS:
 
         """
         
+        
         leaf = from_node.get_state()
         player = from_node.get_player()
         done = self.state_manager.is_finished(leaf) #Sjekk opp metodNavn
         parent = from_node 
 
+
+        # 
         while done == False:
             # Tomy
-            action = self.actor.get_action()
+            action = self.actor.get_action(leaf)
+            
+            # print("--------------")
+            # print("NOE GALT HER?", player, leaf, action)
+            # print("--------------")
             
             
             # action = self.pick_move_ann(self.state_manager.get_state(), legal_actions, all_actions)
-            """ TROR NOE RART MED LINJA UNDER? """
             leaf, player = self.state_manager.get_kid_from_move(player, leaf, action)
             next_leaf = parent.get_kid_with_action(action, rollout = True)
 
@@ -246,13 +252,13 @@ class MCTS:
                 parent.add_kid(next_leaf, action, rollout = True)
             parent = next_leaf
             done = self.state_manager.is_finished(leaf) #Sjekk opp metodNavn
+            # print("DONE", done)
         
-        final_leaf = parent.get_state()  # Kan smelle disse sammen
-        rew = self.state_manager.get_reward(final_leaf) # Kan smelle disse sammen
+        final_state = parent.get_state()  # Kan smelle disse sammen
+        from_player = from_node.get_player()
+        rew = self.state_manager.get_reward(final_state, from_player ) # Kan smelle disse sammen
         # Disse to over bør egt ikke lagres som egne variabler, da de ikke brukes    
         return parent, rew
-
-    # def pick_move_ann(state,legal_actions,all_actions  ):
 
 
     def backpropagation(self, leaf, rew):

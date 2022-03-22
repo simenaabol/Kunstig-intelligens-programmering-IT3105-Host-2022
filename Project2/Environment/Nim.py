@@ -8,7 +8,7 @@ class Nim:
         # Variables from config
         self.num_stones = num_stones
         self.max_removal = max_removal
-
+        
         # The current player
         self.playing_player = 1
 
@@ -26,7 +26,7 @@ class Nim:
 
         for i in range(1, self.max_removal + 1):
             if i <= state[0]:
-                print("i", i, "state", state)
+                # print("i", i, "state", state)
                 legal_moves.append(i)
 
         return legal_moves
@@ -48,14 +48,16 @@ class Nim:
 
         self.remaining_stones = np.array([self.num_stones])
 
-    def game_done(self, state=None):
+    def game_done(self, state):
         
         if state == None:
             state = self.remaining_stones
             
         # print(self.remaining_stones[0])
+        
+        # print("STATE IS FINISH??", state)
 
-        if self.remaining_stones[0] == 0:
+        if state == 0:
             return True
 
         return False
@@ -64,9 +66,9 @@ class Nim:
 
         if self.game_done():
             if self.playing_player == 1:
-                return 1
-            else:
                 return 2
+            else:
+                return 1
         else:
             raise ValueError("No winner, game broken xD")
 
@@ -99,26 +101,29 @@ class Nim:
         moves = self.get_moves(state)
         
         if move in moves:
-            print(state, move, moves, "TRUE")
+            # print(state, move, moves, "TRUE")
             return True
-        print(state, move, moves, "FALSE")
+        # print(state, move, moves, "FALSE")
         return False
     
     def generate_kid_from_move(self, player, state, move):
         
-        if self.is_legal_move(state, move):
-            print("IS ILLEGAL", state, move)
+        if not self.is_legal_move(state, move):
+            raise ValueError("IS ILLEGAL", state, move)
         
-            new_kid = state.copy()
-            new_kid -= move
+        new_kid = state.copy()
+        new_kid -= move
+        
+        if player == 1:
+            player = 2
+        else:
+            player = 1
             
-            if player == 1:
-                player = 2
-            else:
-                player = 1
-                
-            return new_kid, player
-        
+        return new_kid, player
+    
+    def get_reward(self):
+        if self.playing_player == self.player_has_won():
+            return 1
         else:
             return -1
         

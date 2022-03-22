@@ -85,10 +85,13 @@ class StateManager:
         states_arr = []
         state = state.copy()
         
-        print("LEGAL??", state, legal_moves)
+        # print("-----------")
+        # print("GET KIDS KJØRER GET KID FROM MOVE I EN LØKKE MED DISSE VAR:", state, legal_moves)
         
         for move in legal_moves:
             states_arr.append((self.get_kid_from_move(player, state, move)[0], move))
+        #     print("NOE GALT HER?", (self.get_kid_from_move(player, state, move)[0], move))
+        # print("-----------")
             
         if player == 1:
             player = 2
@@ -100,4 +103,9 @@ class StateManager:
     def get_normalized_distribution(self):
        
        return self.game.get_normalized_distribution() 
+   
+    def get_reward(self, state):
+        return self.game.get_reward(state)
+
+        # return self.game.get_reward(state)
         
