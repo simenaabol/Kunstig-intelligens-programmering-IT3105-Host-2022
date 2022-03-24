@@ -83,7 +83,7 @@ class MCTS:
     # 1. Tree Search - Traversing the tree from the root to a leaf node by using the tree policy
         leaf = self.search() # returns current_node
         
-        # print("LEAF", leaf)
+        # print("LEAF FEILMELDING", leaf)
 
         # Check if the leaf is at the end
         if self.state_manager.is_finished(leaf.get_state()):
@@ -109,7 +109,7 @@ class MCTS:
         # Leaf evaluation // a rollout
         leaf, rew = self.leaf_evaluation(kid)
         
-        print("ETTER ROLLOUT")
+        # print("ETTER ROLLOUT")
 
 
 
@@ -154,6 +154,14 @@ class MCTS:
 
 
         current_node = self.root
+        
+        print("ROOT", current_node)
+        print("KIDS TO ROOT", current_node.get_kids())
+        # kids = current_node.get_kids()
+        # # print(kids)
+        # for kid in kids.items:
+        #     print('PARENT', kid)
+        
 
         #  Er vell bare å bruke player her?
         player = current_node.get_player()   
@@ -165,20 +173,33 @@ class MCTS:
         else:
             raise TypeError("Sorry, the player int is not compatible")
 
-        max = -flag * float('inf')
-        current_best = None
-        kids = current_node.get_kids()
-
-        for action in kids:
-            # hvorfor a?
-            a = current_node.get_q_value(action) + flag * current_node.get_u_value(action, self.exp_weight)
+        
+        while current_node.get_kids_count() > 0:
             
-            if (a < max and flag == -1) or (a > max and flag == 1):
-                max = a
-                current_best = action
+        # print("CURRENT", kids)
+    
+            max = -flag * float('inf')
+            current_best = None
+            kids = current_node.get_kids()
+            
 
-            flag *= -1
+            for action in kids:
+                print('Kids: ' ,kids)
+                print('Action: ', action)
+                # print("HVOR OFTE KOMMER VI HER?", action)
+                # hvorfor a?
+                a = current_node.get_q_value(action) + flag * current_node.get_u_value(action, self.exp_weight)
+                
+                if (a < max and flag == -1) or (a > max and flag == 1):
+                    max = a
+                    current_best = action
+                    print("KOMMER VI INN I IF?", current_best)
+
+            # print("FØR CURRENT NODE", current_node)
+            print("CURRENT BEST", current_best)
+            # print("FØR GET KID WITH ACTION")
             current_node = current_node.get_kid_with_action(current_best)
+            flag *= -1
             
         return current_node
 
@@ -202,15 +223,21 @@ class MCTS:
         player = leaf.get_player()
 
         state_action_list, player = self.state_manager.get_kids(state, player)
+        print('state_action_list: ', state_action_list)
         kids = []
 
         for state, action in state_action_list:
             kid = leaf.get_kid_with_action(action, rollout = True)
+            # print('Henter kids fra leaf: ', leaf.get_roll_kids())
             leaf.remove_kid(action, rollout = True)
+            # print('Henter kids fra leaf etter sletting: ', leaf.get_roll_kids())
 
             if not kid: # Sjekk om man kan bruke noe annet her
                 kid = Node(state, leaf, player)
+                # print('New kid', kid)
+            # print("ADD KID NEW LEAVES", kid, action)
             leaf.add_kid(kid, action)
+            print('barn etter oppretting; ', leaf.get_kids())
             kids.append(kid)
         return kids
 
@@ -233,31 +260,25 @@ class MCTS:
         parent = from_node 
 
 
-        # 
         while done == False:
             # Tomy
             action = self.actor.get_action(leaf)
             
-            # print("--------------")
-            # print("NOE GALT HER?", player, leaf, action)
-            # print("--------------")
-            
-            
-            # action = self.pick_move_ann(self.state_manager.get_state(), legal_actions, all_actions)
             leaf, player = self.state_manager.get_kid_from_move(player, leaf, action)
             next_leaf = parent.get_kid_with_action(action, rollout = True)
 
             if not next_leaf:
                 next_leaf = Node(leaf, parent, player)
+                # print('Rollout kid;', next_leaf)
                 parent.add_kid(next_leaf, action, rollout = True)
+                # print('Rolloud kids: ', parent.get_roll_kids())
             parent = next_leaf
-            done = self.state_manager.is_finished(leaf) #Sjekk opp metodNavn
-            # print("DONE", done)
+            done = self.state_manager.is_finished(leaf)
+            
+            # print("HVOR MANGE", next_leaf, action)
         
-        final_state = parent.get_state()  # Kan smelle disse sammen
-        from_player = from_node.get_player()
-        rew = self.state_manager.get_reward(final_state, from_player ) # Kan smelle disse sammen
-        # Disse to over bør egt ikke lagres som egne variabler, da de ikke brukes    
+        rew = self.state_manager.get_reward(parent.get_player()) # Kan smelle disse sammen
+        
         return parent, rew
 
 

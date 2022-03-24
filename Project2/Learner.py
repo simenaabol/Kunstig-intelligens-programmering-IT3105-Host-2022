@@ -58,6 +58,8 @@ class RL_learner:
                 timeout_start_time = time.perf_counter()
 
                 for search_game in range(self.num_search_games):
+                    
+                    print("Search game nr.", search_game + 1)
 
                     """ Mekke en Node class elns inni her. Typ hvordan thom gjør det. Denne skal
                     vel gjøre rollouts og sånn. Og backpropagating osv. """

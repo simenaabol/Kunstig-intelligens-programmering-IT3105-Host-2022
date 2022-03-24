@@ -33,15 +33,34 @@ import random
 #     distr_for_rbuf.append(i) # LITT USIKKER PÅ DENNE
 
 # print(distr_for_rbuf)
-distribution = [0.7 , 0.0, 0.1]
+# distribution = [0.7 , 0.0, 0.1]
 
 
-# ind = distribution.index(0.7)
-start = True
-ind = -1
-while ind == -1 or distribution[ind] == 0:
-    ind = random.randint(0, len(distribution))
+# # ind = distribution.index(0.7)
+# start = True
+# ind = -1
+# while ind == -1 or distribution[ind] == 0:
+#     ind = random.randint(0, len(distribution))
     
-print('ind:', ind)
-ind = 0
+# print('ind:', ind)
+# ind = 0
+
+
+from collections import defaultdict
+
+kids = defaultdict(lambda: None) # main-kok
+kids[0] = 'kid en'
+kids[1] = 'kid to'
+
+print(kids)
+
+for kid in range(3):
+    print(kids[kid])
+# print(kids[3])
+    
+    
+    
+ 
+print(kids)
+
 

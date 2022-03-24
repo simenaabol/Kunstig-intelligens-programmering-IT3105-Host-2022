@@ -14,9 +14,11 @@ class Node:
         self.state = state
         self.player = player
         self.parent = parent
+        # self.kids = {} # main-kok 
         self.kids = defaultdict(lambda: None) # main-kok 
         # kids[action] = en kid-node
         self.kids_rollout = defaultdict(lambda: None) # main-kok
+        # self.kids_rollout = {} # main-kok
 
         self.evaluate = 0
         self.count = 0
@@ -86,6 +88,18 @@ class Node:
 
         """
         return self.kids
+    
+    def get_roll_kids(self):
+        """
+
+        Method - Fetch the kids for the node 
+
+        PARAMS: nothing
+
+        RETURNS: dict of kids 
+
+        """
+        return self.kids_rollout
 
     def add_kid(self, kid, action, rollout = False): #kok siste del
         """
@@ -97,6 +111,8 @@ class Node:
         RETURNS: nothing
 
         """
+        
+        print("ADD KID", kid, "ACTION", action)
         
         if rollout == True:
             self.kids_rollout[action] = kid
@@ -115,6 +131,9 @@ class Node:
         RETURNS: kid node
 
         """
+        
+        # print("KIDS ROLLOUT", self.kids_rollout)
+        print("VANLIGE KIDS", self.kids)
         
         if rollout == True:
             return self.kids_rollout[action]
@@ -135,7 +154,9 @@ class Node:
         if rollout == True:
             self.kids_rollout[action] = None
         else:
-            self.kids[action] = None
+            print('---------------------------------------------------------------')
+        #     self.kids[action] = None
+        
 
     
     def get_action_count(self, action):
@@ -194,10 +215,13 @@ class Node:
         RETURNS: int
 
         """
+        
+        # print("ACTION", action)
 
         if self.get_action_count(action) != 0:
             # kok, endre på oppsettet?
-            return ( self.get_kids(action).evaluate )  /  ( self.get_action_count(action) )
+            """ TIL SIMEN, get_kids() tar ingen argumenter """
+            return ( self.get_kid_with_action(action).evaluate )  /  ( self.get_action_count(action) )
         else: 
             return 0
 

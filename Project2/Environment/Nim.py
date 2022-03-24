@@ -121,11 +121,11 @@ class Nim:
             
         return new_kid, player
     
-    def get_reward(self):
-        if self.playing_player == self.player_has_won():
-            return 1
+    def get_reward(self, player):
+        if player == 1:
+            return 2
         else:
-            return -1
+            return 1
         
 
 
