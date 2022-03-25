@@ -158,15 +158,15 @@ class Hex:
         node_width = []
         
         for i in range(self.boardsize):
-            height = self.boardsize - i
-            width = np.ceil(self.boardsize / 2) - i
+            height = self.boardsize - i*0.5
+            width = np.ceil(self.boardsize / 2) -i
             for j in range(self.boardsize):
                 graph.add_node(j) # Add up a list with all the nodes
                 position.append((width, height)) # Add the position of the node
                 node_width.append(self.node_size)
                 node_color.append(self.colors[round(self.board[i, j])])  
 
-                height -= 1
+                height -= 0.5
                 width += 1
                 
                 # Add the edges to the graph
