@@ -15,7 +15,7 @@ from collections import deque
 
 
 
-class Hex:
+class Hex:   
     def __init__(self, boardsize):
         self.boardsize = boardsize
 
@@ -36,7 +36,7 @@ class Hex:
 
 
 
-    def get_moves(self):
+    def get_moves(self, _):
         legal_moves = []
         for i in range(self.boardsize):
             for j in range(self.boardsize):
@@ -57,10 +57,6 @@ class Hex:
 
     def alter_state_from_move(self, action):
 
-
- 
-
-
         self.board_history.append(copy.deepcopy(self.board))
 
         if self.board[action] != 0.0:
@@ -76,26 +72,52 @@ class Hex:
     
     def get_current_state(self):
         return self.board
+    
+    
+    def generate_kid_from_move(self, player, state, move):
+        
+        if not self.is_legal_move(state, move):
+            raise ValueError("IS ILLEGAL", state, move)
+        
+        new_kid = state.copy()
+        print('New kid1: ', new_kid)
+        new_kid[move] = player
+        print('New kid2: ', new_kid)
+        
+        if player == 1:
+            player = 2
+        else:
+            player = 1
+            
+            
+        return new_kid, player
 
-
-    def game_done(self):
-        pass
+    def is_legal_move(self, state, move):
+        
+        moves = self.get_moves(state)
+        
+        if move in moves:
+            # print(state, move, moves, "TRUE")
+            return True
+        # print(state, move, moves, "FALSE")
+        return False
 
 
     def player_has_won(self):
         pass
 
 
-    def game_done(self):
+    def game_done(self, _):
         # Check if player 1 has won
         player1 = self.check_winner(1)
+        player2 = self.check_winner(2)
 
-        # If player one has not won, check player 2
-        if player1[0] == False:
-            return  self.check_winner(2)
+        # Game done
+        if player1[0] or player2[0]:
+            return  True
         else:
-            #Return the victory of player 1
-            return player1
+            # Game not done
+            return False
 
 
     def check_winner(self, player):
@@ -104,8 +126,8 @@ class Hex:
          # Checks if there are enough pegs on the board for a potential win
         if self.enough_pegs == False:
             if np.count_nonzero(self.board == self.player) < self.boardsize:
-                print('Not enough pegs')
-                return 'Ingen vinner'
+                # print('Not enough pegs')
+                return False, 0
             else:
                 self.enough_pegs = True
                 
@@ -146,9 +168,13 @@ class Hex:
 
     def get_state_tuple(self):
         return tuple(self.board)
+    
+    def net_input_size(self):  
+        
+        return len(self.get_moves('_'))
 
     
-    def playing_player(self):
+    def get_playing_player(self):
         return self.player
         
 
@@ -194,11 +220,8 @@ class Hex:
                             and c != self.boardsize * (i + self.neighbours[x][0]) + (j + self.neighbours[x][1]):
                         graph.add_edge(c, self.boardsize * (i + self.neighbours[x][0]) + (j + self.neighbours[x][1]))
                 c += 1
-<<<<<<< HEAD
         # print(position)
         # graph.set_edgecolor('red') 
-=======
->>>>>>> hex2
 
 
         nx.draw(graph, position, node_color=node_color, node_size=node_width, with_labels=False,
@@ -208,10 +231,13 @@ class Hex:
        
 
 obj = Hex(4)
-moves = obj.get_moves()
+
+
+
+# moves = obj.get_moves('_')
 
 # Seier til 1 (red) 3*3
-# '''
+'''
 obj.alter_state_from_move((2,2))
 obj.alter_state_from_move((2,0))
 obj.alter_state_from_move((1,1))
@@ -221,14 +247,14 @@ obj.alter_state_from_move((1,2))
 obj.alter_state_from_move((1,0))
 obj.alter_state_from_move((0,1))
 obj.alter_state_from_move((2,1))
-# '''
+
 obj.alter_state_from_move((0,3))
 obj.alter_state_from_move((2,3))
 obj.alter_state_from_move((3,0))
 obj.alter_state_from_move((3,3))
+'''
 
 
-# 
 '''
 obj.alter_state_from_move((2,1))
 obj.alter_state_from_move((0,1))
@@ -255,17 +281,17 @@ obj.alter_state_from_move((2,1))
 obj.alter_state_from_move((2,2))
 '''
 
-print(obj.board)
+# print(obj.board)
 # print(obj.gameDone())
 # print(obj.gameDone())
 # obj.gameDone()
 # obj.gameDone()
-status = obj.game_done()
+# status = obj.game_done()
 # status = obj.check_winner(1)
-print('Status seier: ', status)
+# print('Status seier: ', status)
 
 
 
 
-obj.get_graphic()
+# obj.get_graphic()
 

@@ -92,7 +92,7 @@ class Nim:
             self.playing_player = 1
 
 
-    def net_input_size(self):
+    def net_input_size(self):   
 
         return len(self.remaining_stones)
     
@@ -111,7 +111,25 @@ class Nim:
         if not self.is_legal_move(state, move):
             raise ValueError("IS ILLEGAL", state, move)
         
+        
         new_kid = state.copy()
+        print('New kid: ', new_kid)
+        print('Move: ', move)
+        new_kid -= move
+        
+        if player == 1:
+            player = 2
+        else:
+            player = 1
+            
+        return new_kid, player
+        
+    def get_playing_player(self):
+        return self.playing_player        
+        
+        new_kid = state.copy()
+        print('New kid: ', new_kid)
+        print('Move: ', move)        
         new_kid -= move
         
         if player == 1:

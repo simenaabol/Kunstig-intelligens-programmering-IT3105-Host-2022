@@ -50,15 +50,15 @@ class MCTS:
         distribution = np.zeros(shape)
         
         for action in self.root.kids: #Itererer alle barna til roten? Ikke alle?
-            print("ACT INDEX", action)
+            # print("ACT INDEX", action)
             if action in self.root.kids:
-                print("COUNT", action, float(self.root.kids[action].count))
+                # print("COUNT", action, float(self.root.kids[action].count))
                 distribution[action - 1] = float(self.root.kids[action].count) / float(self.root.count)
             else:
                 distribution[action - 1] = 0.0
                 
         # print(tuple(distribution))
-        print("DIST", distribution)
+        # print("DIST", distribution)
         return distribution
 
         # Dette er fra main. Kan evt testes
@@ -179,7 +179,7 @@ class MCTS:
         elif player == 2:
             flag = -1
         else:
-            raise TypeError("Sorry, the player int is not compatible")
+            raise TypeError("Sorry, the player int is not compatible[2]")
 
         
         while current_node.get_kids_count() > 0:
