@@ -45,21 +45,23 @@ class RL_learner:
             # Alternating which players' turn it is
             playing_player = episode % 2 + 1 # MULIG ENDRE
 
-            print('Episode nr.', episode + 1)
+            if episode % 10 == 0:
+                print("Episode game nr.", episode)
 
             self.state_manager.reset_game(playing_player)
 
             monte_carlo = MCTS(self.exploration_weight, self.actor, self.state_manager)
 
-            finished = self.state_manager.is_finished()
+            # finished = self.state_manager.is_finished()
 
-            while not finished:
+            while not self.state_manager.is_finished():
 
                 timeout_start_time = time.perf_counter()
 
                 for search_game in range(self.num_search_games):
                     
-                    print("Search game nr.", search_game + 1)
+                    if search_game % 50 == 0:
+                        print("Search game nr.", search_game)
 
                     """ Mekke en Node class elns inni her. Typ hvordan thom gjør det. Denne skal
                     vel gjøre rollouts og sånn. Og backpropagating osv. """
@@ -71,20 +73,23 @@ class RL_learner:
                         break
 
                 # Used for training the ANET
+                """ SJEKK OM DENNE ER BRA ELLER IKKE. DEN SER LITT SNODIG UT """
                 distribution = monte_carlo.get_normalized_distribution()
 
                 player = self.state_manager.get_playing_player()
                 # Numpy array representing the state
                 state = np.array(self.state_manager.get_state()) # Litt usikker på denne
-                # state = state.flatten()
 
                 """ DANGER ZONE """
                 case_for_buffer = (np.concatenate(([player], state.flatten()), axis=None), distribution) # MENER DENNE ER GANSKE SMUD, MEN KANSKJE ENDRE LITT
                 replay_buffer.append(case_for_buffer)
+                print(case_for_buffer)
 
-                """ DANGER ZONE """
-                # Kok her
-                move_to_make = np.unravel_index(np.argmax(distribution), state.shape) # MÅ EVT ENDRE LITT PÅ DENNE OG
+                act_ind = np.array(np.argmax(distribution))
+
+                move_to_make = self.state_manager.get_all_moves()[act_ind]
+                
+                print("MOVE", move_to_make)
 
                 self.state_manager.do_move(move_to_make)
 
@@ -99,27 +104,41 @@ class RL_learner:
             for i in range(len(replay_buffer)):
                 probs_for_rbuf.append(i ** self.exploration_weight + 1e-10) # USIKKER HVOR INNHOLDET I APPENDEN KOMMER FRA
 
+            print("PROBS", probs_for_rbuf)
             probs_for_rbuf = probs_for_rbuf / np.sum(probs_for_rbuf)
+            
 
             """ DANGER ZONE """
             if self.minibatch_size > 0:
+                print("FØRSTE IF")
                 indices_for_minibatch = np.random.choice(len(replay_buffer), 
                                                         size=self.minibatch_size if self.minibatch_size <= len(replay_buffer) else len(replay_buffer), 
                                                         p=probs_for_rbuf, 
                                                         replace=False)
 
             else:
+                print("ANDRE IF")
                 indices_for_minibatch = np.random.choice(len(replay_buffer), 
                                                         size = int(len(replay_buffer)) * self.minibatch_size,
                                                         p = probs_for_rbuf,
                                                         replace = False)
+                
+            print("INDICES", indices_for_minibatch)
 
             """ DANGER ZONE """
-            minibatch = np.array(replay_buffer, dtype=tuple)[indices_for_minibatch.astype(int)]
+            print("REPLAY", replay_buffer)
+            minibatch = np.array(replay_buffer)[indices_for_minibatch.astype(int)]
+            
+            print("MINIB", minibatch)
 
             x_train, y_train = zip(*minibatch)
+            
+            # print("XTRAIN", x_train)
+            # print("YTRAIN", y_train)
+            
+            print(self.epochs)
 
-            ANET.fit_network(np.array(x_train), np.array(y_train), self.epochs)
+            self.actor.fit_network(np.array(x_train), np.array(y_train), self.epochs)
 
             self.actor.update_epsilon()
 

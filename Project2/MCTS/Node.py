@@ -112,7 +112,7 @@ class Node:
 
         """
         
-        print("ADD KID", kid, "ACTION", action)
+        # print("ADD KID", kid, "ACTION", action)
         
         if rollout == True:
             self.kids_rollout[action] = kid
@@ -133,7 +133,7 @@ class Node:
         """
         
         # print("KIDS ROLLOUT", self.kids_rollout)
-        print("VANLIGE KIDS", self.kids)
+        # print("VANLIGE KIDS", self.kids)
         
         if rollout == True:
             return self.kids_rollout[action]
@@ -155,7 +155,7 @@ class Node:
             self.kids_rollout[action] = None
         else:
             print('---------------------------------------------------------------')
-        #     self.kids[action] = None
+            self.kids[action] = None
         
 
     

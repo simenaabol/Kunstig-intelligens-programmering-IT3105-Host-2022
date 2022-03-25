@@ -30,7 +30,7 @@ hex_config = {
 
 nim_config = {
 
-    'num_stones': 10,
+    'num_stones': 12,
     'max_removal': 2,
     'starting_player': 1,
 

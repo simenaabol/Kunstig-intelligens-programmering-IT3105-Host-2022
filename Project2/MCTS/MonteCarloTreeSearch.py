@@ -46,19 +46,36 @@ class MCTS:
         :return: The normalized distribution
         """
         # Mix med niclas
-        board_shape = self.state_manager.get_state().shape
-        distribution = np.zeros(board_shape)
-        for action in self.root.kid: #Itererer alle barna til roten? Ikke alle?
-                distribution.append(float(self.root.kid[action].count) / float(self.root.count))
-        return distribution.flatten()
+        shape = len(self.state_manager.get_all_moves())
+        distribution = np.zeros(shape)
+        
+        for action in self.root.kids: #Itererer alle barna til roten? Ikke alle?
+            print("ACT INDEX", action)
+            if action in self.root.kids:
+                print("COUNT", action, float(self.root.kids[action].count))
+                distribution[action - 1] = float(self.root.kids[action].count) / float(self.root.count)
+            else:
+                distribution[action - 1] = 0.0
+                
+        # print(tuple(distribution))
+        print("DIST", distribution)
+        return distribution
 
         # Dette er fra main. Kan evt testes
         # board_shape = self.simworld.get_grid().shape
-        # distribution = np.zeros(board_shape)
-        # for action in self.root.kid: #Itererer alle barna til roten? Ikke alle?
-        #     kid = self.root.kid[action]
-        #     distribution[action] = kid.count
+        # shape = len(self.state_manager.get_all_moves())
+        # distribution = np.zeros(shape)
+        # print(distribution)
+        # for action in range(len(self.root.kids)): #Itererer alle barna til roten? Ikke alle?
+        #     # kid = self.root.kids[action]
+        #     if action in self.root.kids:
+        #         print(action, self.root.kids[action])
+        #         # print(distribution[action])
+        #         distribution[action] = float(self.root.kids[action].count)
+        #         print("COUNTS", float(self.root.kids[action].count))
         # distribution = distribution.flatten()
+        # print(distribution)
+        # print(distribution / np.sum(distribution))
         # return distribution / np.sum(distribution)    
 
         
@@ -132,7 +149,7 @@ class MCTS:
         RETURNS: nothing
 
         """
-        _temp_root = self.root.get_kid(action)
+        _temp_root = self.root.get_kid_with_action(action)
         if not _temp_root: # kok - usikker hva som skjer her
             self.root = Node(
                 state = self.state_manager.get_state(),
@@ -152,17 +169,8 @@ class MCTS:
 
         """
 
-
         current_node = self.root
         
-        print("ROOT", current_node)
-        print("KIDS TO ROOT", current_node.get_kids())
-        # kids = current_node.get_kids()
-        # # print(kids)
-        # for kid in kids.items:
-        #     print('PARENT', kid)
-        
-
         #  Er vell bare å bruke player her?
         player = current_node.get_player()   
         flag = 0   
@@ -175,8 +183,6 @@ class MCTS:
 
         
         while current_node.get_kids_count() > 0:
-            
-        # print("CURRENT", kids)
     
             max = -flag * float('inf')
             current_best = None
@@ -184,20 +190,13 @@ class MCTS:
             
 
             for action in kids:
-                print('Kids: ' ,kids)
-                print('Action: ', action)
-                # print("HVOR OFTE KOMMER VI HER?", action)
-                # hvorfor a?
+
                 a = current_node.get_q_value(action) + flag * current_node.get_u_value(action, self.exp_weight)
                 
                 if (a < max and flag == -1) or (a > max and flag == 1):
                     max = a
                     current_best = action
-                    print("KOMMER VI INN I IF?", current_best)
 
-            # print("FØR CURRENT NODE", current_node)
-            print("CURRENT BEST", current_best)
-            # print("FØR GET KID WITH ACTION")
             current_node = current_node.get_kid_with_action(current_best)
             flag *= -1
             
@@ -223,7 +222,7 @@ class MCTS:
         player = leaf.get_player()
 
         state_action_list, player = self.state_manager.get_kids(state, player)
-        print('state_action_list: ', state_action_list)
+        # print('state_action_list: ', state_action_list)
         kids = []
 
         for state, action in state_action_list:
@@ -237,7 +236,7 @@ class MCTS:
                 # print('New kid', kid)
             # print("ADD KID NEW LEAVES", kid, action)
             leaf.add_kid(kid, action)
-            print('barn etter oppretting; ', leaf.get_kids())
+            # print('barn etter oppretting; ', leaf.get_kids())
             kids.append(kid)
         return kids
 

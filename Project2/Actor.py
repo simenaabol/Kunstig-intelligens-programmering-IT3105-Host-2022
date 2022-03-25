@@ -41,7 +41,13 @@ class ANET:
 
     def fit_network(self, x, y, epochs):
         
-        self.model.fit(x, y, epochs)
+        print("X", x)
+        print("Y", y)
+        print("EPO", epochs)
+        
+        print(self.state_manager.get_input_size())
+        
+        self.model.fit(x=x, y=y, epochs=epochs)
         
     def get_action(self, leaf):
         legal_actions = self.state_manager.get_legal_moves(leaf)

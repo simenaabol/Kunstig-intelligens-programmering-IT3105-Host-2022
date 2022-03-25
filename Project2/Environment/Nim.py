@@ -48,7 +48,7 @@ class Nim:
 
         self.remaining_stones = np.array([self.num_stones])
 
-    def game_done(self, state):
+    def game_done(self, state=None):
         
         if state == None:
             state = self.remaining_stones
