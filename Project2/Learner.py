@@ -83,13 +83,13 @@ class RL_learner:
                 """ DANGER ZONE """
                 case_for_buffer = (np.concatenate(([player], state.flatten()), axis=None), distribution) # MENER DENNE ER GANSKE SMUD, MEN KANSKJE ENDRE LITT
                 replay_buffer.append(case_for_buffer)
-                print(case_for_buffer)
+                # print(case_for_buffer)
 
                 act_ind = np.array(np.argmax(distribution))
 
                 move_to_make = self.state_manager.get_all_moves()[act_ind]
                 
-                print("MOVE", move_to_make)
+                # print("MOVE", move_to_make)
 
                 self.state_manager.do_move(move_to_make)
 

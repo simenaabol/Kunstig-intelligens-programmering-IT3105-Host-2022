@@ -62,7 +62,7 @@ class ANET:
         # print("TENSOR", tf.convert_to_tensor([state]))
         
         # Sander  -> dis til nettet, ikke hex
-        distribution = self.model(tf.convert_to_tensor([state])).numpy()  # type: ignore
+        distribution = self.model(tf.convert_to_tensor([state])).numpy()  # type: ignore - > error: raise e.with_traceback(filtered_tb) from None: ValueError: Input 0 of layer "sequential" is incompatible with the layer: expected shape=(None, 25), found shape=(1, 5, 5)
         distribution = distribution * np.array(all_actions)
         distribution = distribution.flatten()
         distribution /= np.sum(distribution)  # normalize probability distribution
