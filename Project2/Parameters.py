@@ -1,16 +1,16 @@
 config = {
-    'game': 'nim',
+    'game': 'hex',
     'num_actual_games': 100,
     'num_search_games': 500,
     'starting_player': 1
 }
 
 hex_config = {
-    'board_size': 7,
+    'board_size': 5,
 
     'actor_config': {
         'learning_rate': 0.01, 
-        'hidden_layers': (4, 5, 3),
+        'hidden_layer_size': (4, 5, 3),
         'activation_function': 'relu',
         'output_act': 'softmax',
         'optimizer': 'adam',

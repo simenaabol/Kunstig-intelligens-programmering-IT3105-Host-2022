@@ -54,6 +54,8 @@ class MCTS:
             if action in self.root.kids:
                 # print("COUNT", action, float(self.root.kids[action].count))
                 distribution[action - 1] = float(self.root.kids[action].count)
+
+                # distribution[action - 1] = float(self.root.kids[action].count) / float(self.root.count)
             else:
                 distribution[action - 1] = 0.0
                 
@@ -179,7 +181,7 @@ class MCTS:
         elif player == 2:
             flag = -1
         else:
-            raise TypeError("Sorry, the player int is not compatible")
+            raise TypeError("Sorry, the player int is not compatible[2]")
 
         
         while current_node.get_kids_count() > 0:

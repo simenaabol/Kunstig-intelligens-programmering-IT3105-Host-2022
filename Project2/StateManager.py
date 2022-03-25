@@ -12,10 +12,8 @@ class StateManager:
         
         """ INSERT CONFIG PARAMS HERE """
         if config['game'] == 'hex':
-
-            self.game = Hex(
-                
-            )
+            self.game = Hex(hex_config['board_size'])
+            
 
         elif config['game'] == 'nim':
 
@@ -65,7 +63,8 @@ class StateManager:
 
     def get_playing_player(self):
         
-        return self.game.playing_player
+        # return self.game.playing_player
+        return self.game.get_playing_player()
 
     def get_input_size(self):
 
@@ -76,7 +75,6 @@ class StateManager:
         return self.game.is_legal_move(state, action)
     
     def get_kid_from_move(self, player, state, move):
-        
         return self.game.generate_kid_from_move(player, state, move)
     
     def get_kids(self, state, player):
