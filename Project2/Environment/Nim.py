@@ -94,7 +94,7 @@ class Nim:
 
     def net_input_size(self):
 
-        return len(self.remaining_stones)
+        return len(self.remaining_stones) + 1
     
     def is_legal_move(self, state, move):
         

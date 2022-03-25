@@ -41,18 +41,23 @@ class ANET:
 
     def fit_network(self, x, y, epochs):
         
-        print("X", x)
-        print("Y", y)
-        print("EPO", epochs)
+        # print("X", x)
+        # print("Y", y)
+        # print("EPO", epochs)
         
-        print(self.state_manager.get_input_size())
+        # print(self.state_manager.get_input_size())
         
         self.model.fit(x=x, y=y, epochs=epochs)
         
-    def get_action(self, leaf):
+    def get_action(self, leaf, player):
         legal_actions = self.state_manager.get_legal_moves(leaf)
         all_actions = self.state_manager.get_all_moves()
-        state = tuple(self.state_manager.get_state())
+        
+        state = np.array(self.state_manager.get_state()) # Litt usikker på denne
+        # state = tuple(self.state_manager.get_state())
+        
+        state_for_model = np.concatenate(([player], state.flatten()), axis=None)
+        # print("SFM", state_for_model)
         
         # print("STATE", state)
         
@@ -62,7 +67,7 @@ class ANET:
         # print("TENSOR", tf.convert_to_tensor([state]))
         
         # Sander  -> dis til nettet, ikke hex
-        distribution = self.model(tf.convert_to_tensor([state])).numpy()  # type: ignore
+        distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()  # type: ignore
         distribution = distribution * np.array(all_actions)
         distribution = distribution.flatten()
         distribution /= np.sum(distribution)  # normalize probability distribution

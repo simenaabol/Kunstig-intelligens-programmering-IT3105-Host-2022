@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow as tf
 import keras.layers as kerlayers
+import keras.losses as klosses
 
 class NeuralNet:
     def __init__(self, learning_rate, hidden_layer_size, activation_function, output_act, optimizer, loss_function):
@@ -18,7 +19,7 @@ class NeuralNet:
 
         input_size = state_manager.get_input_size()
         
-        print(input_size)
+        # print(input_size)
 
         model.add(kerlayers.Input(shape=(input_size,)))
 
@@ -37,8 +38,18 @@ class NeuralNet:
             compiler_opt = tf.keras.optimizers.SGD(learning_rate=self.learning_rate)
         else:
             compiler_opt = tf.keras.optimizers.Adagrad(learning_rate=self.learning_rate)
+            
+        # if self.loss_function == ""
 
-        model.compile(optimizer=compiler_opt, loss=self.loss_function)
+        model.compile(optimizer=compiler_opt, loss=self.cross_entropy_loss)
 
         return model
     
+    
+    """ BLÅKOK """
+    """ BÅDE SANDER OG THOMAS HAR KLISS LIK """
+    def cross_entropy_loss(self, targets, outs):
+        return tf.reduce_mean(tf.reduce_sum(-1 * targets * self.safelog(outs), axis=[1]))
+ 
+    def safelog(self, tensor, base=0.0001):
+        return tf.math.log(tf.math.maximum(tensor, base))

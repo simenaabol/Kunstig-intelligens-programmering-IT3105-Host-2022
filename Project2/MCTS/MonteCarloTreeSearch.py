@@ -50,16 +50,16 @@ class MCTS:
         distribution = np.zeros(shape)
         
         for action in self.root.kids: #Itererer alle barna til roten? Ikke alle?
-            print("ACT INDEX", action)
+            # print("ACT INDEX", action)
             if action in self.root.kids:
-                print("COUNT", action, float(self.root.kids[action].count))
-                distribution[action - 1] = float(self.root.kids[action].count) / float(self.root.count)
+                # print("COUNT", action, float(self.root.kids[action].count))
+                distribution[action - 1] = float(self.root.kids[action].count)
             else:
                 distribution[action - 1] = 0.0
                 
         # print(tuple(distribution))
-        print("DIST", distribution)
-        return distribution
+        # print("DIST", distribution)
+        return distribution / np.sum(distribution) 
 
         # Dette er fra main. Kan evt testes
         # board_shape = self.simworld.get_grid().shape
@@ -261,7 +261,7 @@ class MCTS:
 
         while done == False:
             # Tomy
-            action = self.actor.get_action(leaf)
+            action = self.actor.get_action(leaf, player)
             
             leaf, player = self.state_manager.get_kid_from_move(player, leaf, action)
             next_leaf = parent.get_kid_with_action(action, rollout = True)
