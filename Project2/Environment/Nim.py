@@ -96,6 +96,9 @@ class Nim:
 
         return len(self.remaining_stones) + 1
     
+    def net_output_size(self):
+        return len(self.get_all_moves())
+    
     def is_legal_move(self, state, move):
         
         moves = self.get_moves(state)
@@ -127,17 +130,6 @@ class Nim:
     def get_playing_player(self):
         return self.playing_player        
         
-        new_kid = state.copy()
-        print('New kid: ', new_kid)
-        print('Move: ', move)        
-        new_kid -= move
-        
-        if player == 1:
-            player = 2
-        else:
-            player = 1
-            
-        return new_kid, player
     
     def get_reward(self, player):
         if player == 1:

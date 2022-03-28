@@ -99,7 +99,7 @@ class ANET:
         
         print('state: ', leaf)
         print('legal_actions: ', legal_actions)
-        print('_temp_distribution: ', _temp_distribution)
+        # print('_temp_distribution: ', _temp_distribution)
         
         
         # print('lengde av dis etter flatten: ', len(distribution))
