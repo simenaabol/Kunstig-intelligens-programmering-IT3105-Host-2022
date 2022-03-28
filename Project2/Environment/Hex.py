@@ -58,6 +58,7 @@ class Hex:
     def alter_state_from_move(self, action):
 
         self.board_history.append(copy.deepcopy(self.board))
+        print('action:', action)
 
         if self.board[action] != 0.0:
             raise TypeError("Sorry, this is a illegal action")
@@ -80,9 +81,9 @@ class Hex:
             raise ValueError("IS ILLEGAL", state, move)
         
         new_kid = state.copy()
-        print('New kid1: ', new_kid)
+        # print('New kid1: ', new_kid)
         new_kid[move] = player
-        print('New kid2: ', new_kid)
+        # print('New kid2: ', new_kid)
         
         if player == 1:
             player = 2
@@ -171,7 +172,7 @@ class Hex:
     
     def net_input_size(self):  
         
-        return len(self.get_moves('_'))
+        return len(self.get_moves('_'))+1
 
     
     def get_playing_player(self):

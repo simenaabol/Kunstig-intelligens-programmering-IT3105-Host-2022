@@ -46,21 +46,34 @@ import random
 # ind = 0
 
 
-from collections import defaultdict
+# from collections import defaultdict
 
-kids = defaultdict(lambda: None) # main-kok
-kids[0] = 'kid en'
-kids[1] = 'kid to'
+# kids = defaultdict(lambda: None) # main-kok
+# kids[0] = 'kid en'
+# kids[1] = 'kid to'
 
-print(kids)
+# print(kids)
 
-for kid in range(3):
-    print(kids[kid])
-# print(kids[3])
+# for kid in range(3):
+#     print(kids[kid])
+# # print(kids[3])
     
     
     
  
-print(kids)
+# print(kids)
 
 
+# array= [ [0.0  , 0.0  ] , [0. ,  0.  ], [0.,  0.01], [0.01 ,0.  ], [0.  , 0.02], [0.02 ,0.  ], [0.  , 0.03], [0.03 ,0.  ], [0.   ,0.04], [0.04 ,0.01], [0.01 ,0.  ], [0.   ,0.01], [0.01 ,0.01], [0.01, 0.01], [0.01 ,0.02], [0.02 ,0.01], [0.01, 0.03], [0.03 ,0.01], [0.01 ,0.04], [0.04, 0.02], [0.02 ,0.  ], [0.  ,0.02], [0.02 ,0.01], [0.01 ,0.02], [0.02 ,0.02] ]
+# ar = np.array(array)
+# # indices, = np.nonzero(ar)
+# indices, = np.transpose(np.nonzero(ar))
+
+# print(indices)
+
+
+x = np.array([ [0.0  , 0.0  ] , [0. ,  0.  ], [0.,  0.01], [0.01 ,0.  ], [0.  , 0.02], [0.02 ,0.  ], [0.  , 0.03], [0.03 ,0.  ], [0.   ,0.04], [0.04 ,0.01], [0.01 ,0.  ], [0.   ,0.01], [0.01 ,0.01], [0.01, 0.01], [0.01 ,0.02], [0.02 ,0.01], [0.01, 0.03], [0.03 ,0.01], [0.01 ,0.04], [0.04, 0.02], [0.02 ,0.  ], [0.  ,0.02], [0.02 ,0.01], [0.01 ,0.02], [0.02 ,0.02] ])
+
+i = np.transpose(np.nonzero(x)[0])
+
+print(i)

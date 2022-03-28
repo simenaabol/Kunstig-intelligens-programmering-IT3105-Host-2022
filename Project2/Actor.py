@@ -56,7 +56,12 @@ class ANET:
         state = np.array(self.state_manager.get_state()) # Litt usikker på denne
         # state = tuple(self.state_manager.get_state())
         
+        # variant for NIM under
         state_for_model = np.concatenate(([player], state.flatten()), axis=None)
+        # print('st', state_for_model)
+        
+        # Variant for HEX under -> Retter opp feilmelidng som ligger i linje 75
+        # state_for_model = np.concatenate((state.flatten()), axis=None)
         # print("SFM", state_for_model)
         
         # print("STATE", state)
@@ -67,11 +72,25 @@ class ANET:
         # print("TENSOR", tf.convert_to_tensor([state]))
         
         # Sander  -> dis til nettet, ikke hex
-        distribution = self.model(tf.convert_to_tensor([state])).numpy()  # type: ignore - > error: raise e.with_traceback(filtered_tb) from None: ValueError: Input 0 of layer "sequential" is incompatible with the layer: expected shape=(None, 25), found shape=(1, 5, 5)
+        distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()  # type: ignore - > error: raise e.with_traceback(filtered_tb) from None: ValueError: Input 0 of layer "sequential" is incompatible with the layer: expected shape=(None, 25), found shape=(1, 5, 5)
         distribution = distribution * np.array(all_actions)
-        distribution = distribution.flatten()
+        # print('lengde av dis før flatten: ', len(distribution.tolist()))
+        # print('dis før flatten: ', distribution)
+        distribution = distribution.flatten() # denne ødelegger kordinat-strukturen
         distribution /= np.sum(distribution)  # normalize probability distribution
         
+        import math
+        _temp_distribution = []
+        for i in range(math.floor(len(distribution)/2)):
+            _temp_distribution.append([distribution[i], distribution[i+1]])
+            i+=1
+        distribution = _temp_distribution
+        
+        # print('_temp_distribution: ', _temp_distribution)
+        
+        
+        # print('lengde av dis etter flatten: ', len(distribution))
+        # print('dis etter flatten: ', distribution)
         # print(distribution)
         
         
@@ -86,29 +105,43 @@ class ANET:
                 distribution[i] = 0
                 
                 distribution /= np.sum(distribution) # Renormalize
-
-        if sum(distribution) <= 0:
+                
+                
+        distribution= np.array(distribution)
+        if sum(distribution.flatten()) <= 0:
             # print("GET ACTION RANDOM FRA DISSE ACTIONSENE (SUM):", legal_actions)
             return random.choice(legal_actions)
 
         # distribution = [i/sum(distribution) for i in distribution]
            
         if random.uniform(0,1) < self.epsilon:
+            # print('Radom')
             """ EVENTUELT GJØR OM TIL NP """
             # ind = distribution.tolist().index(random.choices(population=distribution, weights=distribution)[0])
-            indices, = np.nonzero(distribution)
-            ind = np.random.choice(indices)
+            # print('distribution.tolist(): ', distribution.tolist())
+            # print('distribution: ', distribution)
+            # print('All actions: ', all_actions)
+            # indices, = np.nonzero(distribution.flatten()) # Fungerer til nim
+            indices = np.transpose(np.nonzero(distribution)[0])
+            # print('indices: ', indices)
+            ind2 = np.random.choice(indices)
+            # print('ind2: ', ind2)
             # print("GET ACTION RANDOM (VANLIG RANDOM):", ind)
             
             """ KANSKJE ENDRE EPSILON HER """
             
         else:
-            ind = np.argmax(distribution)
-            # print("GET ACTION IKKE RANDOM:", ind)
+            print('Velg med dis')
+            ind2 = np.argmax(distribution)
+            print("GET ACTION IKKE RANDOM:", ind2)
             
         # print("SLUTT DISTRIBUTION", distribution)
         # print("VALGTE ACTION FRA GET ACTION", all_actions[ind])
-        return all_actions[ind]
+        # print('IND1: ', ind) #kan gi 38, men det er kun 24/25 moves
+        # print('All_actions : ', all_actions)
+        # print('Actions som velger i actor : ', all_actions[ind2])
+        
+        return all_actions[ind2]
         
         
         
