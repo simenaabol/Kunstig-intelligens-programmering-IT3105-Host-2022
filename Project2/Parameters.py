@@ -1,12 +1,12 @@
 config = {
     'game': 'hex',
-    'num_actual_games': 100,
-    'num_search_games': 500,
+    'num_actual_games': 10,
+    'num_search_games': 10,
     'starting_player': 1
 }
 
 hex_config = {
-    'board_size': 5,
+    'board_size': 3,
 
     'actor_config': {
         'learning_rate': 0.01, 
@@ -23,7 +23,7 @@ hex_config = {
     'mcts_config': {
         'minibatch_size': 5,
         'exploration_weight': 0,
-        'epochs': 100,
+        'epochs': 2,
         'timout_max_time': 2
     }
 }

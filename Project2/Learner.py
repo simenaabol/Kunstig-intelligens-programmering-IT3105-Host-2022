@@ -55,19 +55,20 @@ class RL_learner:
             # finished = self.state_manager.is_finished()
 
             while not self.state_manager.is_finished():
-
+    
                 timeout_start_time = time.perf_counter()
 
                 for search_game in range(self.num_search_games):
                     
                     # if search_game % 100 == 0:
-                    #     print("Search game nr.", search_game)
+                    print("Search game nr.", search_game)
 
                     """ Mekke en Node class elns inni her. Typ hvordan thom gjør det. Denne skal
                     vel gjøre rollouts og sånn. Og backpropagating osv. """
 
                     monte_carlo.mcts() # KANSKJE GJØR OM NAVNET TIL DENNE, SIDEN DENNE DELEN ER LITT LIK NÅ
 
+                    print('HALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLO')
                     if time.perf_counter() - timeout_start_time > self.timout_max_time:
                         print("Game", search_game, "timeouted.")
                         break
@@ -81,6 +82,7 @@ class RL_learner:
                 state = np.array(self.state_manager.get_state()) # Litt usikker på denne
 
                 """ DANGER ZONE """
+                '''Skal vell ikke ha med player her?? - hmm, Ser thommy har det'''
                 case_for_buffer = (np.concatenate(([player], state.flatten()), axis=None), distribution) # MENER DENNE ER GANSKE SMUD, MEN KANSKJE ENDRE LITT
                 replay_buffer.append(case_for_buffer)
                 # print(case_for_buffer)
@@ -99,7 +101,6 @@ class RL_learner:
             # print("Game finished! Player", winner, "won.")
 
             probs_for_rbuf = []
-
             """ LOWKEY DANGER ZONE """
             """ SE OVER DENNE HER """
             for i in range(len(replay_buffer)):
