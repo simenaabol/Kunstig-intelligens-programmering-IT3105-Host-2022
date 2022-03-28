@@ -19,7 +19,7 @@ class Hex:
     def __init__(self, boardsize):
         self.boardsize = boardsize
 
-        self.board = np.zeros((boardsize, boardsize))
+        self.board = np.zeros((boardsize, boardsize), int)
         self.player = 1
         self.board_history = []
         self.neighbours = ((-1, 0), (-1, 1), (0, 1), (1, 0), (1, -1), (0, -1))
@@ -36,12 +36,22 @@ class Hex:
 
 
 
-    def get_moves(self, _):
+    def get_moves(self, state=None):
+        
+        print('state', state)
+        
+        if state.any() == None:
+            state = self.board
+            
         legal_moves = []
         for i in range(self.boardsize):
             for j in range(self.boardsize):
-                if self.board[i, j] == 0.0:
+                # print('state_getmo', state)
+                if state[i, j] == 0:
+                    # print('state_getmo - inni', state)
                     legal_moves.append((i,j))
+                    
+        # print('legal',legal_moves )
         return legal_moves
         # raise TypeError("Sorry, the player int is not compatible")
         
@@ -58,9 +68,9 @@ class Hex:
     def alter_state_from_move(self, action):
 
         self.board_history.append(copy.deepcopy(self.board))
-        print('action:', action)
+        print('action i hex:', action)
 
-        if self.board[action] != 0.0:
+        if self.board[action] != 0:
             raise TypeError("Sorry, this is a illegal action")
         else:
             self.board[action] = self.player
@@ -96,6 +106,7 @@ class Hex:
     def is_legal_move(self, state, move):
         
         moves = self.get_moves(state)
+        
         
         if move in moves:
             # print(state, move, moves, "TRUE")
@@ -170,10 +181,13 @@ class Hex:
     def get_state_tuple(self):
         return tuple(self.board)
     
-    def net_input_size(self):  
-        
-        return len(self.get_moves('_'))+1
 
+    def net_input_size(self):  
+        print('input', self.boardsize*self.boardsize+1)
+        return self.boardsize*self.boardsize+1
+    
+    def net_output_size(self):  
+        return self.boardsize*self.boardsize
     
     def get_playing_player(self):
         return self.player

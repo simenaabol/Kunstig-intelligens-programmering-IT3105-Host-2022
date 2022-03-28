@@ -57,7 +57,9 @@ class ANET:
         # state = tuple(self.state_manager.get_state())
         
         # variant for NIM under
-        state_for_model = np.concatenate(([player], state.flatten()), axis=None)
+        
+        state_for_model = np.concatenate(([player], state), axis=None)
+        # state_for_model = state_for_model.reshape((1, ) + state_for_model.shape)
         # print('st', state_for_model)
         
         # Variant for HEX under -> Retter opp feilmelidng som ligger i linje 75
@@ -72,8 +74,14 @@ class ANET:
         # print("TENSOR", tf.convert_to_tensor([state]))
         
         # Sander  -> dis til nettet, ikke hex
-        distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()  # type: ignore - > error: raise e.with_traceback(filtered_tb) from None: ValueError: Input 0 of layer "sequential" is incompatible with the layer: expected shape=(None, 25), found shape=(1, 5, 5)
+        state_for_model = tuple(state_for_model.tolist())
+        print('før dis', state_for_model)
+        distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()  
+        print('etter distribution: ', distribution)
+        
+        # distribution = distribution * np.array(all_actions)
         distribution = distribution * np.array(all_actions)
+        print('etter ganget inn distribution: ', distribution)
         # print('lengde av dis før flatten: ', len(distribution.tolist()))
         # print('dis før flatten: ', distribution)
         distribution = distribution.flatten() # denne ødelegger kordinat-strukturen
@@ -86,7 +94,11 @@ class ANET:
             i+=1
         distribution = _temp_distribution
         
-        # print('_temp_distribution: ', _temp_distribution)
+        
+        
+        print('state: ', leaf)
+        print('legal_actions: ', legal_actions)
+        print('_temp_distribution: ', _temp_distribution)
         
         
         # print('lengde av dis etter flatten: ', len(distribution))
