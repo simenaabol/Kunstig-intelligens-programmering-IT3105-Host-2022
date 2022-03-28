@@ -18,6 +18,7 @@ class NeuralNet:
         model = tf.keras.Sequential()
 
         input_size = state_manager.get_input_size()
+        output_size = state_manager.get_output_size()
         
         # print(input_size)
 
@@ -26,8 +27,10 @@ class NeuralNet:
         for size in self.hidden_layer_size:
             model.add(kerlayers.Dense(size, activation=self.activation_function))
 
-        """ FINN UT HVOR MANGE UNITS DENNE SKAL HA """
-        model.add(kerlayers.Dense(units=1, activation=self.output_act))
+        """ FINN UT HVOR MANGE UNITS(=output) DENNE SKAL HA """
+        
+        model.add(kerlayers.Dense(units=output_size, activation=self.output_act))
+        print('etter add: ', model)
 
         # Check for optimizer
         if self.optimizer == "adam":

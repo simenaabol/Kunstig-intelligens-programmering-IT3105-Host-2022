@@ -70,6 +70,9 @@ class StateManager:
 
         return self.game.net_input_size()
     
+    def get_output_size(self):
+        return self.game.net_output_size()
+    
     def check_if_legal_action(self, state, action):
         
         return self.game.is_legal_move(state, action)

@@ -140,10 +140,16 @@ class Node:
         # print("KIDS ROLLOUT", self.kids_rollout)
         # print("VANLIGE KIDS", self.kids)
         
+        
+        # print('get_kid', action)
+        # print('get_kid', self.kids_rollout)
         if rollout == True:
             return self.kids_rollout[action]
         else:
             return self.kids[action]
+        
+        
+          
 
 
     def remove_kid(self, action, rollout = False): # kok siste del

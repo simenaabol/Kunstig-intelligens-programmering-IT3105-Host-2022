@@ -264,13 +264,26 @@ class MCTS:
         while done == False:
             # Tomy
             action = self.actor.get_action(leaf, player)
-            print(action)
+            # action = [float(action[0]), float(action[1])]
+            # print('Action i mc', action)
+            
+            _temp_action = []
+            
+            for cor in action:
+                _temp_action.append(cor)
+            
+            action = tuple(_temp_action)
+                
             
             leaf, player = self.state_manager.get_kid_from_move(player, leaf, action)
             next_leaf = parent.get_kid_with_action(action, rollout = True)
-            # print("leaf", next_leaf, player)
+            # print('next_leaf', next_leaf)
 
             if not next_leaf:
+                # print('Hællæ')
+                # print('leaf', leaf)
+                # print('parent', parent)
+                # print('player', player)
                 next_leaf = Node(leaf, parent, player)
                 # print('Rollout kid;', next_leaf)
                 parent.add_kid(next_leaf, action, rollout = True)
@@ -278,6 +291,7 @@ class MCTS:
             parent = next_leaf
             done = self.state_manager.is_finished(leaf)
             
+            print('next', next_leaf)
             # print("HVOR MANGE", next_leaf, action)
         
         rew = self.state_manager.get_reward(parent.get_player()) # Kan smelle disse sammen
