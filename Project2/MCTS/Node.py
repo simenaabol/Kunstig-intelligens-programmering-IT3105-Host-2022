@@ -112,14 +112,14 @@ class Node:
 
         """
         
-        print("ADD KID", kid, "ACTION", action)
+        # print("ADD KID", kid, "ACTION", action)
         
-        print("FØR", self.kids_rollout)
-        print("FØR KIDS", self.kids)
+        # print("FØR", self.kids_rollout)
+        # print("FØR KIDS", self.kids)
         
         if rollout == True:
             self.kids_rollout[action] = kid
-            print("ETTER", self.kids_rollout)
+            # print("ETTER", self.kids_rollout)
 
         else:
             self.kids[action] = kid

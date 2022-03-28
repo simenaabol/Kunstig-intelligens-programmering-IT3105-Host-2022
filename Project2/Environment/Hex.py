@@ -118,26 +118,43 @@ class Hex:
     def player_has_won(self):
         pass
 
-
-    def game_done(self, _):
-        # Check if player 1 has won
-        player1 = self.check_winner(1)
-        player2 = self.check_winner(2)
-
-        # Game done
-        if player1[0] or player2[0]:
-            return  True
+    def get_reward(self, player, state):
+        
+        if self.check_winner(player, state)[1]  == 1 or self.check_winner(player, state)[1]  == 2:
+            return 1
         else:
-            # Game not done
-            return False
+            return 0 # Mulig endre denne til -1
+        
+        
+
+    def game_done(self, state=None):
+        
+        try:
+            if state == None:
+                state = self.board
+        except:
+                
+                
+            # Check if player 1 has won
+            player1 = self.check_winner(1, state)
+            player2 = self.check_winner(2,  state)
+            print(player1)
+            print(player1)
+
+            # Game done
+            if player1[0] or player2[0]:
+                return  True
+            else:
+                # Game not done
+                return False
 
 
-    def check_winner(self, player):
+    def check_winner(self, player, state):
 
 
          # Checks if there are enough pegs on the board for a potential win
         if self.enough_pegs == False:
-            if np.count_nonzero(self.board == self.player) < self.boardsize:
+            if np.count_nonzero(state == self.player) < self.boardsize:
                 # print('Not enough pegs')
                 return False, 0
             else:
@@ -149,14 +166,14 @@ class Hex:
 
             edge = []
             visited = []     
-            for i in range(len(self.board)):
+            for i in range(len(state)):
                 if player == 1: # 
                     # Find start state(s) for player 1
-                    if self.board[0, i] == 1:
+                    if state[0, i] == 1:
                         edge.append((0, i))
                 elif player == 2:
                     # Find start state(s) for player 2
-                    if self.board[i, 0] == 2:
+                    if state[i, 0] == 2:
                         edge.append((i, 0))
             
             while len(edge) > 0:
@@ -165,9 +182,9 @@ class Hex:
 
                 
                 if player == 1 and node[0] == self.boardsize - 1:
-                    return True, 1
+                    return [True, 1]
                 elif player == 2 and node[1] == self.boardsize -1:
-                    return True, 2
+                    return [True, 2]
                 
                 for i in range(len(self.neighbours)):
                     # x er 1, y er 0
@@ -175,11 +192,14 @@ class Hex:
                         and (node[0] + self.neighbours[i][0], node[1] + self.neighbours[i][1]) not in (visited + edge) \
                         and self.board[(node[0] + self.neighbours[i][0], node[1] + self.neighbours[i][1])] == player:
                             edge.append((node[0] + self.neighbours[i][0], node[1] + self.neighbours[i][1]))
-            return False, 0
+            return [False, 0]
 
 
     def get_state_tuple(self):
         return tuple(self.board)
+    
+    
+
     
 
     def net_input_size(self):  
