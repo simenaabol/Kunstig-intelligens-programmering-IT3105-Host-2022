@@ -264,9 +264,11 @@ class MCTS:
         while done == False:
             # Tomy
             action = self.actor.get_action(leaf, player)
+            print(action)
             
             leaf, player = self.state_manager.get_kid_from_move(player, leaf, action)
             next_leaf = parent.get_kid_with_action(action, rollout = True)
+            # print("leaf", next_leaf, player)
 
             if not next_leaf:
                 next_leaf = Node(leaf, parent, player)
