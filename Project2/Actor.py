@@ -58,10 +58,10 @@ class ANET:
         
         # variant for NIM under
         state_for_model = np.concatenate(([player], leaf), axis=None)
-        print('st', state_for_model)
+        # print('st', state_for_model)
         
-        state_for_model = state_for_model.reshape((1,) + state_for_model.shape)
-        print("ETTER noe dritt", state_for_model)
+        # state_for_model = state_for_model.reshape((1,) + state_for_model.shape)
+        # print("ETTER noe dritt", state_for_model)
         
         # Variant for HEX under -> Retter opp feilmelidng som ligger i linje 75
         # state_for_model = np.concatenate((state.flatten()), axis=None)
@@ -76,13 +76,13 @@ class ANET:
         
         # Sander  -> dis til nettet, ikke hex
         state_for_model = tuple(state_for_model.tolist())
-        print('før dis', state_for_model)
+        # print('før dis', state_for_model)
         distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()  
-        print('etter distribution: ', distribution)
+        print('Distribution 1: ', distribution)
         
         # distribution = distribution * np.array(all_actions)
-        distribution = distribution * np.array(all_actions)
-        print('etter ganget inn distribution: ', distribution)
+        # distribution = distribution * np.array(all_actions)
+        # print('etter ganget inn distribution: ', distribution)
         # print('lengde av dis før flatten: ', len(distribution.tolist()))
         # print('dis før flatten: ', distribution)
         # distribution = distribution.flatten() # denne ødelegger kordinat-strukturen
@@ -97,8 +97,8 @@ class ANET:
         
         
         
-        print('state: ', leaf)
-        print('legal_actions: ', legal_actions)
+        # print('state: ', leaf)
+        # print('legal_actions: ', legal_actions)
         # print('_temp_distribution: ', _temp_distribution)
         
         
@@ -111,6 +111,9 @@ class ANET:
         
         # print("FØR FOR LØKKE LEGAL ACTIONS:", legal_actions)
         
+        distribution = distribution.reshape(distribution.shape[-1])
+        print('all actions: ', all_actions)
+        print('legal actions: ', legal_actions)
         for i, move in enumerate(all_actions):
             # print("MOVES SOM SJEKKES MOT LEGAL ACTIONS:", move)
             if move not in legal_actions:
@@ -119,6 +122,7 @@ class ANET:
                 
                 distribution /= np.sum(distribution) # Renormalize
                 
+        print('Distribution 2: ', distribution)
                 
         distribution= np.array(distribution)
         if sum(distribution.flatten()) <= 0:

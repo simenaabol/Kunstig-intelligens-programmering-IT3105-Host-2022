@@ -290,8 +290,10 @@ class MCTS:
                 # print('Rolloud kids: ', parent.get_roll_kids())
             parent = next_leaf
             done = self.state_manager.is_finished(leaf)
+            if done:
+                print('Spill ferdig')
             
-            print('next', next_leaf)
+            # print('next', next_leaf)
             # print("HVOR MANGE", next_leaf, action)
         
         rew = self.state_manager.get_reward(parent.get_player()) # Kan smelle disse sammen

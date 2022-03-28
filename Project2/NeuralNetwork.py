@@ -30,7 +30,7 @@ class NeuralNet:
         """ FINN UT HVOR MANGE UNITS(=output) DENNE SKAL HA """
         
         model.add(kerlayers.Dense(units=output_size, activation=self.output_act))
-        print('etter add: ', model)
+        # print('etter add: ', model)
 
         # Check for optimizer
         if self.optimizer == "adam":
