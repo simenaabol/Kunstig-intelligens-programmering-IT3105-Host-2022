@@ -77,8 +77,10 @@ class ANET:
         # Sander  -> dis til nettet, ikke hex
         state_for_model = tuple(state_for_model.tolist())
         # print('før dis', state_for_model)
-        distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()  
-        print('Distribution 1: ', distribution)
+        distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()
+        # print("RANDOM DISTRO", distribution)  
+        # print("NET INP", state_for_model)
+        # print('Distribution 1: ', distribution)
         
         # distribution = distribution * np.array(all_actions)
         # distribution = distribution * np.array(all_actions)
@@ -112,8 +114,8 @@ class ANET:
         # print("FØR FOR LØKKE LEGAL ACTIONS:", legal_actions)
         
         distribution = distribution.reshape(distribution.shape[-1])
-        print('all actions: ', all_actions)
-        print('legal actions: ', legal_actions)
+        # print('all actions: ', all_actions)
+        # print('legal actions: ', legal_actions)
         for i, move in enumerate(all_actions):
             # print("MOVES SOM SJEKKES MOT LEGAL ACTIONS:", move)
             if move not in legal_actions:
@@ -122,7 +124,7 @@ class ANET:
                 
                 distribution /= np.sum(distribution) # Renormalize
                 
-        print('Distribution 2: ', distribution)
+        print('Distribution:', distribution)
                 
         distribution= np.array(distribution)
         if sum(distribution.flatten()) <= 0:
@@ -157,6 +159,8 @@ class ANET:
         # print('IND1: ', ind) #kan gi 38, men det er kun 24/25 moves
         # print('All_actions : ', all_actions)
         # print('Actions som velger i actor : ', all_actions[ind2])
+        
+        # print("ACTION", all_actions[ind])
         
         return all_actions[ind]
         

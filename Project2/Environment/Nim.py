@@ -55,7 +55,7 @@ class Nim:
             
         # print(self.remaining_stones[0])
         
-        # print("STATE IS FINISH??", state)
+        print("STATE IS FINISH??", state, state == 0)
 
         if state == 0:
             return True
@@ -116,8 +116,8 @@ class Nim:
         
         
         new_kid = state.copy()
-        print('New kid: ', new_kid)
-        print('Move: ', move)
+        # print('New kid: ', new_kid)
+        # print('Move: ', move)
         new_kid -= move
         
         if player == 1:

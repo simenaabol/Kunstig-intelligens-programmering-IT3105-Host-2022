@@ -267,12 +267,12 @@ class MCTS:
             # action = [float(action[0]), float(action[1])]
             # print('Action i mc', action)
             
-            _temp_action = []
+            # _temp_action = []
             
-            for cor in action:
-                _temp_action.append(cor)
+            # for cor in action:
+            #     _temp_action.append(cor)
             
-            action = tuple(_temp_action)
+            # action = tuple(_temp_action)
                 
             
             leaf, player = self.state_manager.get_kid_from_move(player, leaf, action)
@@ -290,8 +290,8 @@ class MCTS:
                 # print('Rolloud kids: ', parent.get_roll_kids())
             parent = next_leaf
             done = self.state_manager.is_finished(leaf)
-            if done:
-                print('Spill ferdig')
+            # if done:
+            #     print('Spill ferdig')
             
             # print('next', next_leaf)
             # print("HVOR MANGE", next_leaf, action)
