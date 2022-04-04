@@ -5,7 +5,8 @@ import random
 import tensorflow as tf
 
 class ANET:
-    def __init__(self, 
+    def __init__(self,
+                 model, 
                  learning_rate, 
                  hidden_layer_size, 
                  activation_function, 
@@ -14,20 +15,24 @@ class ANET:
                  epsilon_decay, 
                  state_manager):
         
-        self.net = NeuralNet(learning_rate, 
-                             hidden_layer_size, 
-                             activation_function,
-                             output_act, 
-                             optimizer,
-                             loss_function)
+        if model:
+            print("IF?")
+            self.model = model
+            
+        else:
+            self.net = NeuralNet(learning_rate, 
+                                hidden_layer_size, 
+                                activation_function,
+                                output_act, 
+                                optimizer,
+                                loss_function)
 
-        self.model = self.net.init_model(state_manager)
+            self.model = self.net.init_model(state_manager)
 
         self.state_manager = state_manager
         self.epsilon = epsilon
         self.epsilon_decay = epsilon_decay
         
-
     def save_net(self, name):        
         
         self.model.save("./NeuralNets/{name}".format(name=name))
@@ -76,6 +81,8 @@ class ANET:
         
         # Sander  -> dis til nettet, ikke hex
         state_for_model = tuple(state_for_model.tolist())
+        
+        print("state", state_for_model)
         # print('før dis', state_for_model)
         distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()
         # print("RANDOM DISTRO", distribution)  

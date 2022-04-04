@@ -94,6 +94,7 @@ class MCTS:
         """
 
         if self.state_manager.is_finished(self.root.get_state()): #Sjekk opp metodNavn til done
+            print("MONTE CARLO KJØRER IKKE")
             return # Kunne returnert noe her for å skille seg fra kok. 
         
         # Bør legge inn en raise her hvis det ikke eksisterer en node
@@ -108,6 +109,7 @@ class MCTS:
         if self.state_manager.is_finished(leaf.get_state()):
             rew = self.state_manager.get_reward(leaf.get_state())
             self.backpropagation(leaf, rew)
+            # print("MONTE CARLO KJØRER IKKE")
             return
 
         

@@ -1,7 +1,7 @@
 config = {
     'game': 'nim',
     'num_actual_games': 10,
-    'num_search_games': 40,
+    'num_search_games': 15,
     'starting_player': 1
 }
 
@@ -52,4 +52,12 @@ nim_config = {
         'epochs': 100,
         'timout_max_time': 2
     }
+    
+
+}
+
+topp_config = {
+    'game': 'nim',
+    'number_of_games': 50
+    
 }

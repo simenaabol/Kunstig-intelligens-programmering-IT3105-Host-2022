@@ -55,7 +55,7 @@ class Nim:
             
         # print(self.remaining_stones[0])
         
-        print("STATE IS FINISH??", state, state == 0)
+        # print("STATE IS FINISH??", state, state == 0)
 
         if state == 0:
             return True

@@ -13,7 +13,8 @@ class RL_learner:
 
         self.parameters = self.state_manager.get_parameters()
 
-        self.actor = ANET(self.parameters['actor_config']['learning_rate'], 
+        self.actor = ANET(None,
+                          self.parameters['actor_config']['learning_rate'], 
                           self.parameters['actor_config']['hidden_layer_size'], 
                           self.parameters['actor_config']['activation_function'],
                           self.parameters['actor_config']['output_act'], 
@@ -52,11 +53,11 @@ class RL_learner:
 
             monte_carlo = MCTS(self.exploration_weight, self.actor, self.state_manager)
 
-            # finished = self.state_manager.is_finished()
+            finished = self.state_manager.is_finished()
 
-            while not self.state_manager.is_finished():
+            while not finished:
                 
-                print("DONE?", self.state_manager.is_finished())
+                # print("DONE?", self.state_manager.is_finished())
     
                 timeout_start_time = time.perf_counter()
 
@@ -100,6 +101,12 @@ class RL_learner:
                 self.state_manager.do_move(move_to_make)
 
                 monte_carlo.update_root(move_to_make)
+                
+                finished = self.state_manager.is_finished()
+                
+                print("State", state)
+                print("Move", move_to_make)
+                print("Finish", finished)
 
             winner = self.state_manager.get_winner()
             # print("Game finished! Player", winner, "won.")
