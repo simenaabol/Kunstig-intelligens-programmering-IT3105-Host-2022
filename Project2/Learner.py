@@ -38,7 +38,7 @@ class RL_learner:
         replay_buffer = []
 
         # Save the initial net
-        self.actor.save_net(0)
+        # self.actor.save_net(0)
         
         for episode in range(self.num_actual_games):
 
@@ -46,7 +46,7 @@ class RL_learner:
             playing_player = episode % 2 + 1 # MULIG ENDRE
 
             # if episode % 10 == 0:
-            print("Episode game nr.", episode)
+            print("Episode game nr.", episode+1)
 
             self.state_manager.reset_game(playing_player)
 
@@ -55,6 +55,8 @@ class RL_learner:
             # finished = self.state_manager.is_finished()
 
             while not self.state_manager.is_finished():
+                
+                print("DONE?", self.state_manager.is_finished())
     
                 timeout_start_time = time.perf_counter()
 
@@ -147,5 +149,5 @@ class RL_learner:
             self.actor.update_epsilon()
 
             # Save the net according to the save interval
-            if (episode + 1) % self.save_interval == 0:
-                self.actor.save_net(episode + 1)
+            # if (episode + 1) % self.save_interval == 0:
+            #     self.actor.save_net(episode + 1)

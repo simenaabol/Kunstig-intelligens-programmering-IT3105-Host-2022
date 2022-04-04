@@ -158,6 +158,8 @@ class ANET:
         # print('All_actions : ', all_actions)
         # print('Actions som velger i actor : ', all_actions[ind2])
         
+        # print("ACTION", all_actions[ind])
+        
         return all_actions[ind]
         
         
