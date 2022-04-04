@@ -46,22 +46,46 @@ class MCTS:
         :return: The normalized distribution
         """
         # Mix med niclas
-        shape = len(self.state_manager.get_all_moves())
-        distribution = np.zeros(shape)
+        all_act = len(self.state_manager.get_all_moves())
+        # print('shape', all_act)
+        # distribution = np.zeros(all_act)
+        distribution = []
         
-        for action in self.root.kids: #Itererer alle barna til roten? Ikke alle?
-            # print("ACT INDEX", action)
-            if action in self.root.kids:
-                # print("COUNT", action, float(self.root.kids[action].count))
-                distribution[action - 1] = float(self.root.kids[action].count)
-
-                # distribution[action - 1] = float(self.root.kids[action].count) / float(self.root.count)
-            else:
-                distribution[action - 1] = 0.0
+        # for action in range(all_act): #Itererer alle barna til roten? Ikke alle?
+        # for i in range(all_act):
+        for action in self.state_manager.get_all_moves():
+            
+            
+            if action in self.root.kids: #Itererer alle barna til roten? Ikke alle?
+                # print("ACT INDEX", action)
+                kids = self.root.get_kids()
+                # print('kids', kids)
+                kid = self.root.get_kid_with_action(action)
+                # print('----------------------------------------------------------------------------------------', float(kid.count))
+                # print('----------------------------------------------------------------------------------------', float(self.root.count))
+                distribution.append(float(kid.count) / float(self.root.count))
                 
-        # print(tuple(distribution))
+            else:
+                distribution.append(0.0)
+            
+            
+        # distribution = distribution.flatten()
         # print("DIST", distribution)
-        return distribution / np.sum(distribution) 
+        return distribution / np.sum(distribution)
+        #     if action in self.root.kids:
+        #         print('kids action', action)
+        #         # print("COUNT", action, float(self.root.kids[action].count))
+        #         distribution[action] = float(self.root.kids[action].count) / float(self.root.count)
+
+        #         # distribution[action - 1] = float(self.root.kids[action].count) / float(self.root.count)
+        #     else:
+        #         distribution[action] = 0.0
+          
+        # distribution = distribution.flatten()      
+        # # print(tuple(distribution))
+        # print("DIST", distribution)
+        # return distribution
+    # / np.sum(distribution) 
 
         # Dette er fra main. Kan evt testes
         # board_shape = self.simworld.get_grid().shape
@@ -107,7 +131,7 @@ class MCTS:
 
         # Check if the leaf is at the end
         if self.state_manager.is_finished(leaf.get_state()):
-            rew = self.state_manager.get_reward(leaf.get_state())
+            rew = self.state_manager.get_reward(leaf.get_state(),leaf.get_player() )
             self.backpropagation(leaf, rew)
             # print("MONTE CARLO KJØRER IKKE")
             return
@@ -259,6 +283,7 @@ class MCTS:
         
         leaf = from_node.get_state()
         player = from_node.get_player()
+        rew_player = from_node.get_player()
         done = self.state_manager.is_finished(leaf) #Sjekk opp metodNavn
         parent = from_node 
 
@@ -298,8 +323,8 @@ class MCTS:
             # print('next', next_leaf)
             # print("HVOR MANGE", next_leaf, action)
         
-        rew = self.state_manager.get_reward(parent.get_player()) # Kan smelle disse sammen
-        
+        rew = self.state_manager.get_reward(parent.get_state(), rew_player) # Kan smelle disse sammen
+        # print('---------------------------------------------', rew)
         return parent, rew
 
 

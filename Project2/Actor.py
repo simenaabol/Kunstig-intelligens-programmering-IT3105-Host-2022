@@ -79,14 +79,12 @@ class ANET:
         # distribution = self.ANET.predict_val(state).tolist()
         # print("TENSOR", tf.convert_to_tensor([state]))
         
-        # Sander  -> dis til nettet, ikke hex
+        # dis til nettet, ikke hex
         state_for_model = tuple(state_for_model.tolist())
         
         print("state", state_for_model)
         # print('før dis', state_for_model)
-        distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()
-        # print("RANDOM DISTRO", distribution)  
-        # print("NET INP", state_for_model)
+        distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()  
         # print('Distribution 1: ', distribution)
         
         # distribution = distribution * np.array(all_actions)
@@ -131,7 +129,7 @@ class ANET:
                 
                 distribution /= np.sum(distribution) # Renormalize
                 
-        print('Distribution:', distribution)
+        # print('MC Action: ', distribution)
                 
         distribution= np.array(distribution)
         if sum(distribution.flatten()) <= 0:

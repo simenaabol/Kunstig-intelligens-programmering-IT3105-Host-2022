@@ -52,6 +52,9 @@ class NeuralNet:
     """ BLÅKOK """
     """ BÅDE SANDER OG THOMAS HAR KLISS LIK """
     def cross_entropy_loss(self, targets, outs):
+        # print('targets', targets)
+        # print('outs', outs)
+        
         return tf.reduce_mean(tf.reduce_sum(-1 * targets * self.safelog(outs), axis=[1]))
  
     def safelog(self, tensor, base=0.0001):

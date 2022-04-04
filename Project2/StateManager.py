@@ -36,9 +36,10 @@ class StateManager:
     def reset_game(self, playing_player):
 
         self.game.reset(playing_player)
+        
 
     def is_finished(self, state=None):
-
+        # print('State stateManager: ' ,  state)
         return self.game.game_done(state)
 
     def get_winner(self):
@@ -105,8 +106,9 @@ class StateManager:
        
        return self.game.get_normalized_distribution() 
    
-    def get_reward(self, state):
-        return self.game.get_reward(state)
+    def get_reward(self, state, player):
+        # print('11111111111111111111111111111111111111')
+        return self.game.get_reward(state, player)
 
         # return self.game.get_reward(state)
         

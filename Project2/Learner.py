@@ -47,7 +47,7 @@ class RL_learner:
             playing_player = episode % 2 + 1 # MULIG ENDRE
 
             # if episode % 10 == 0:
-            print("Episode nr.", episode + 1)
+            print("Episode game nr.", episode+1)
 
             self.state_manager.reset_game(playing_player)
 
@@ -64,7 +64,7 @@ class RL_learner:
                 for search_game in range(self.num_search_games):
                     
                     # if search_game % 100 == 0:
-                    print("Search game nr.", search_game + 1)
+                    # print("Search game nr.", search_game)
 
                     """ Mekke en Node class elns inni her. Typ hvordan thom gjør det. Denne skal
                     vel gjøre rollouts og sånn. Og backpropagating osv. """
@@ -79,8 +79,7 @@ class RL_learner:
                 # Used for training the ANET
                 """ SJEKK OM DENNE ER BRA ELLER IKKE. DEN SER LITT SNODIG UT """
                 distribution = monte_carlo.get_normalized_distribution()
-                
-                print("NORMALIZED DISTR", distribution)
+                print('DIS til spillet - visited count',distribution)
 
                 player = self.state_manager.get_playing_player()
                 # Numpy array representing the state
