@@ -39,7 +39,7 @@ class RL_learner:
         replay_buffer = []
 
         # Save the initial net
-        # self.actor.save_net(0)
+        self.actor.save_net(0)
         
         for episode in range(self.num_actual_games):
 
@@ -49,7 +49,7 @@ class RL_learner:
             # if episode % 10 == 0:
             print("Episode game nr.", episode+1)
 
-            self.state_manager.reset_game(playing_player)
+            self.state_manager.reset_game()
 
             monte_carlo = MCTS(self.exploration_weight, self.actor, self.state_manager)
 
@@ -79,9 +79,10 @@ class RL_learner:
                 # Used for training the ANET
                 """ SJEKK OM DENNE ER BRA ELLER IKKE. DEN SER LITT SNODIG UT """
                 distribution = monte_carlo.get_normalized_distribution()
-                print('DIS til spillet - visited count',distribution)
+                # print('DIS til spillet - visited count',distribution)
 
                 player = self.state_manager.get_playing_player()
+                # print("PLAYER", player)
                 # Numpy array representing the state
                 state = np.array(self.state_manager.get_state()) # Litt usikker på denne
 
@@ -103,11 +104,11 @@ class RL_learner:
                 
                 finished = self.state_manager.is_finished()
                 
-                print("State", state)
-                print("Move", move_to_make)
-                print("Finish", finished)
+                # print("State", state)
+                # print("Move", move_to_make)
+                # print("Finish", finished)
 
-            winner = self.state_manager.get_winner()
+            # winner = self.state_manager.get_winner()
             # print("Game finished! Player", winner, "won.")
 
             probs_for_rbuf = []
@@ -156,5 +157,5 @@ class RL_learner:
             self.actor.update_epsilon()
 
             # Save the net according to the save interval
-            # if (episode + 1) % self.save_interval == 0:
-            #     self.actor.save_net(episode + 1)
+            if (episode + 1) % self.save_interval == 0:
+                self.actor.save_net(episode + 1)

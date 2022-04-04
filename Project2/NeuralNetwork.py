@@ -44,18 +44,19 @@ class NeuralNet:
             
         # if self.loss_function == ""
 
-        model.compile(optimizer=compiler_opt, loss=self.cross_entropy_loss)
+        model.compile(optimizer=compiler_opt, loss=cross_entropy_loss)
 
         return model
     
     
     """ BLÅKOK """
     """ BÅDE SANDER OG THOMAS HAR KLISS LIK """
-    def cross_entropy_loss(self, targets, outs):
-        # print('targets', targets)
-        # print('outs', outs)
-        
-        return tf.reduce_mean(tf.reduce_sum(-1 * targets * self.safelog(outs), axis=[1]))
- 
-    def safelog(self, tensor, base=0.0001):
-        return tf.math.log(tf.math.maximum(tensor, base))
+def cross_entropy_loss(targets, outs):
+    # print('targets', targets)
+    # print('outs', outs)
+    
+    return tf.reduce_mean(tf.reduce_sum(-1 * targets * safelog(outs), axis=[1]))
+
+def safelog(tensor, base=0.0001):
+    return tf.math.log(tf.math.maximum(tensor, base))
+    

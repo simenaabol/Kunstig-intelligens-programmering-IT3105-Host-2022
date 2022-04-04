@@ -33,18 +33,18 @@ class StateManager:
         elif isinstance(self.game, Nim):
             return nim_config
 
-    def reset_game(self, playing_player):
+    def reset_game(self):
 
-        self.game.reset(playing_player)
-        
+        self.game.reset()
+           
 
     def is_finished(self, state=None):
         # print('State stateManager: ' ,  state)
         return self.game.game_done(state)
 
-    def get_winner(self):
+    def get_winner(self, state):
 
-        return self.game.player_has_won()
+        return self.game.player_has_won(state)
 
     def get_state(self):
 

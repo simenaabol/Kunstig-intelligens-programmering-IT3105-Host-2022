@@ -31,7 +31,7 @@ class Hex:
         self.enough_pegs = False
 
 
-    def reset(self, player):
+    def reset(self):
         self.board = np.zeros((self.boardsize, self.boardsize))
         self.player = 1
 
@@ -116,8 +116,18 @@ class Hex:
         return False
 
 
-    def player_has_won(self):
-        pass
+    def player_has_won(self, state):
+        
+        player1 = self.check_winner(1, state)
+        # player2 = self.check_winner(2,  state)
+        if player1[0]:
+            return 1
+        else:
+            return 2
+            
+        
+        
+        
 
     def get_reward(self, state, player):
         
@@ -175,7 +185,7 @@ class Hex:
             else:
                 # Game not done
                 return False
-
+   
 
     def check_winner(self, player, state):
 

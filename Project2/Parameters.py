@@ -1,23 +1,23 @@
 config = {
     'game': 'hex',
-    'num_actual_games': 40,
-    'num_search_games': 100,
+    'num_actual_games': 300,
+    'num_search_games': 50,
     'starting_player': 1
 }
 
 hex_config = {
-    'board_size': 3,
+    'board_size': 2,
 
     'actor_config': {
         'learning_rate': 0.01, 
-        'hidden_layer_size': (4, 5, 3),
+        'hidden_layer_size': (256, 128, 64),
         'activation_function': 'relu',
         'output_act': 'softmax',
         'optimizer': 'adam',
         'loss_function': 'cross_entropy',
 
         'epsilon': 1, 
-        'epsilon_decay': 0.99
+        'epsilon_decay': 0.9
     },
 
     'mcts_config': {

@@ -7,9 +7,8 @@ def main():
 
     rl = RL_learner(config)
     rl.training()
-    
-    topp = Topp(None)
-    # topp.run_tournament()
+    topp = Topp()
+    topp.play_round_robin()
     
 
 if __name__ == '__main__':
