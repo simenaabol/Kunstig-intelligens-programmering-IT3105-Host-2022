@@ -19,6 +19,7 @@ class Hex:
     def __init__(self, boardsize):
         self.boardsize = boardsize
 
+        # self.board = state
         self.board = np.zeros((boardsize, boardsize), int)
         self.player = 1
         self.board_history = []
@@ -38,7 +39,7 @@ class Hex:
 
     def get_moves(self, state=None):
         
-        print('state', state)
+        # print('state', state)
         
         if state.any() == None:
             state = self.board
@@ -68,7 +69,7 @@ class Hex:
     def alter_state_from_move(self, action):
 
         self.board_history.append(copy.deepcopy(self.board))
-        print('action i hex:', action)
+        # print('action i hex:', action)
 
         if self.board[action] != 0:
             raise TypeError("Sorry, this is a illegal action")
@@ -118,9 +119,9 @@ class Hex:
     def player_has_won(self):
         pass
 
-    def get_reward(self, player, state):
+    def get_reward(self, state, player):
         
-        if self.check_winner(player, state)[1]  == 1 or self.check_winner(player, state)[1]  == 2:
+        if self.check_winner(player, state)[0]  == True:
             return 1
         else:
             return 0 # Mulig endre denne til -1
@@ -128,18 +129,45 @@ class Hex:
         
 
     def game_done(self, state=None):
+
+    
+        
+        
+
+        
+        # print('før:', state)
+        
+        
+        
+        
         
         try:
             if state == None:
                 state = self.board
-        except:
-                
+                return self.game_done(state)
+        except:   
+            
+            new_state = []
+            for arrayCount, element in enumerate(state):
+                new_state.append([])
+                for number in element:
+                    new_state[arrayCount].append(int(number))
+                # new_state.append(np.array(element.astype(int)))
+            
+            
+            state = np.array(new_state)
+                        
+            # print('new state---------------------------------------------------', state)
+            
+            
+            
                 
             # Check if player 1 has won
+            # print('etter:', state)
             player1 = self.check_winner(1, state)
             player2 = self.check_winner(2,  state)
-            print(player1)
-            print(player1)
+            # print('Seier player 1: ', player1)
+            # print('Seier player 2: ', player2)
 
             # Game done
             if player1[0] or player2[0]:
@@ -162,25 +190,32 @@ class Hex:
                 
 
         if self.enough_pegs == True:
-            print('Enough pegs to winn, start DFS')
+            # print('Enough pegs to winn, start DFS')
 
             edge = []
-            visited = []     
+            visited = [] 
+            # print('player', player)  
+            # print('state', state) 
+             
             for i in range(len(state)):
                 if player == 1: # 
+                    
                     # Find start state(s) for player 1
-                    if state[0, i] == 1:
-                        edge.append((0, i))
+                    if round(state[0, i], 0) == 1:
+                        edge.append((0, round(i)))
+                        
                 elif player == 2:
                     # Find start state(s) for player 2
-                    if state[i, 0] == 2:
-                        edge.append((i, 0))
-            
+                    if round(state[i, 0]) == 2:
+                        edge.append((round(i), 0))
+  
             while len(edge) > 0:
                 node = edge.pop()
-                visited.append(node)
-
+    
                 
+                visited.append(node)
+    
+              
                 if player == 1 and node[0] == self.boardsize - 1:
                     return [True, 1]
                 elif player == 2 and node[1] == self.boardsize -1:
@@ -188,9 +223,10 @@ class Hex:
                 
                 for i in range(len(self.neighbours)):
                     # x er 1, y er 0
+                
                     if 0 <= node[0] + self.neighbours[i][0] < self.boardsize and 0 <= node[1] + self.neighbours[i][1] < self.boardsize \
                         and (node[0] + self.neighbours[i][0], node[1] + self.neighbours[i][1]) not in (visited + edge) \
-                        and self.board[(node[0] + self.neighbours[i][0], node[1] + self.neighbours[i][1])] == player:
+                        and state[(node[0] + self.neighbours[i][0], node[1] + self.neighbours[i][1])] == player:
                             edge.append((node[0] + self.neighbours[i][0], node[1] + self.neighbours[i][1]))
             return [False, 0]
 
@@ -226,6 +262,9 @@ class Hex:
         position = []
         node_color = []
         node_width = []
+        
+        # print('board: ', self.board)
+        self.board = np.array(self.board)
         
         for i in range(self.boardsize):
             height = self.boardsize - i*0.5
@@ -265,7 +304,22 @@ class Hex:
         plt.pause(0)
        
 
-obj = Hex(4)
+
+# state = np.array([[2, 1, 2,],
+#  [1, 2, 2],
+#  [1, 1, 1]])
+# state = np.array([[2., 1., 2.,],
+#  [1., 2., 2.],
+#  [1., 1., 1.]])
+# obj = Hex(3)
+
+
+
+# print('heer', obj.game_done(state))
+
+
+
+
 
 
 
@@ -273,22 +327,25 @@ obj = Hex(4)
 
 # Seier til 1 (red) 3*3
 '''
-obj.alter_state_from_move((2,2))
-obj.alter_state_from_move((2,0))
-obj.alter_state_from_move((1,1))
-obj.alter_state_from_move((0,2))
-obj.alter_state_from_move((0,0))
-obj.alter_state_from_move((1,2))
-obj.alter_state_from_move((1,0))
-obj.alter_state_from_move((0,1))
-obj.alter_state_from_move((2,1))
+# obj.alter_state_from_move((2,2))
+# obj.alter_state_from_move((2,0))
+# obj.alter_state_from_move((1,1))
+# obj.alter_state_from_move((0,2))
+# obj.alter_state_from_move((0,0))
+# obj.alter_state_from_move((1,2))
+# obj.alter_state_from_move((1,0))
+# obj.alter_state_from_move((0,1))
+# obj.alter_state_from_move((2,1))
 
-obj.alter_state_from_move((0,3))
-obj.alter_state_from_move((2,3))
-obj.alter_state_from_move((3,0))
-obj.alter_state_from_move((3,3))
+# obj.alter_state_from_move((0,3))
+# obj.alter_state_from_move((2,3))
+# obj.alter_state_from_move((3,0))
+# obj.alter_state_from_move((3,3))
 '''
 
+# obj.get_graphic()
+# print('heer', obj.game_done())
+# print('heer', obj.game_done(state))
 
 '''
 obj.alter_state_from_move((2,1))

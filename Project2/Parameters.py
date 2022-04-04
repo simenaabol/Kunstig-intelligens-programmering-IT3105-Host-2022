@@ -1,7 +1,7 @@
 config = {
     'game': 'hex',
-    'num_actual_games': 10,
-    'num_search_games': 10,
+    'num_actual_games': 40,
+    'num_search_games': 100,
     'starting_player': 1
 }
 
@@ -22,8 +22,8 @@ hex_config = {
 
     'mcts_config': {
         'minibatch_size': 5,
-        'exploration_weight': 0,
-        'epochs': 2,
+        'exploration_weight': 1,
+        'epochs': 100,
         'timout_max_time': 2
     }
 }
