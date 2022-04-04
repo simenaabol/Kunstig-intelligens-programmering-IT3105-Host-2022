@@ -249,7 +249,7 @@ class Hex:
     
 
     def net_input_size(self):  
-        print('input', self.boardsize*self.boardsize+1)
+        # print('input', self.boardsize*self.boardsize+1)
         return self.boardsize*self.boardsize+1
     
     def net_output_size(self):  

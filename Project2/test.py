@@ -83,5 +83,5 @@ test =  np.zeros((5, 5), int)
 test[2][4] = +1
 # rad , kolonne
 
-print(test)
+# print(test)
                 

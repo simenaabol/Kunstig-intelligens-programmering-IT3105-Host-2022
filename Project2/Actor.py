@@ -3,6 +3,9 @@ from NeuralNetwork import NeuralNet
 import numpy as np
 import random
 import tensorflow as tf
+from Parameters import config
+
+from LiteModel import LiteModel
 
 class ANET:
     def __init__(self,
@@ -32,9 +35,9 @@ class ANET:
         self.epsilon = epsilon
         self.epsilon_decay = epsilon_decay
         
-    def save_net(self, name):        
+    def save_net(self, name):
         
-        self.model.save("./NeuralNets/{name}".format(name=name))
+        self.model.save("./NeuralNets/{folder}/{name}".format(name=name, folder=config['network_folder_name']))
 
     def update_epsilon(self, just_policy=False):
         
@@ -66,6 +69,14 @@ class ANET:
         # distribution = self.ANET.predict_val(state).tolist()
 
         state_for_model = tuple(state_for_model.tolist())
+        # state_for_model = state_for_model.tolist()
+        # print(state_for_model)
+        
+        # new_model = LiteModel.from_keras_model(self.model)
+        
+        # distribution = new_model.predict_single(state_for_model)
+        
+        # print(distribution)
         
         distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()  
         
@@ -102,17 +113,9 @@ class ANET:
             indices, = np.nonzero(distribution.flatten()) # Fungerer til nim
             # indices = np.transpose(np.nonzero(distribution)[0])
             ind = np.random.choice(indices)
-
-            
-            """ KANSKJE ENDRE EPSILON HER """
             
         else:
 
             ind = np.argmax(distribution)
         
         return all_actions[ind]
-        
-        
-        
-
-    

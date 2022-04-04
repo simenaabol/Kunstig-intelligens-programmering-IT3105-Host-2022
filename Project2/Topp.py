@@ -3,17 +3,16 @@ from Actor import ANET
 import os
 from StateManager import StateManager
 from NeuralNetwork import cross_entropy_loss
-# from collections import OrderedDict
 from Parameters import config, topp_config
-import random
 import numpy as np
 import math
+import matplotlib as plt
 
 class Topp:
     def __init__(self):
         self.state_manager = StateManager(config)
         
-        path_list = [anet_path for anet_path in os.scandir("./NeuralNets")]
+        path_list = [anet_path for anet_path in os.scandir("./NeuralNets/{folder}".format(folder=config['network_folder_name']))]
         
         self.anets = self.get_anets(path_list)
         self.number_of_anets = len(self.anets)
@@ -105,7 +104,6 @@ class Topp:
     
     
     
-toppytop = Topp()
-# # toppytop.get_anets()
-toppytop.play_round_robin()
+# toppytop = Topp()
+# toppytop.play_round_robin()
 # toppytop.visualize()

@@ -10,7 +10,6 @@ class StateManager:
 
     def __init__(self, config):
         
-        """ INSERT CONFIG PARAMS HERE """
         if config['game'] == 'hex':
             self.game = Hex(hex_config['board_size'])
             
@@ -39,7 +38,7 @@ class StateManager:
            
 
     def is_finished(self, state=None):
-        # print('State stateManager: ' ,  state)
+        
         return self.game.game_done(state)
 
     def get_winner(self, state):
@@ -64,7 +63,6 @@ class StateManager:
 
     def get_playing_player(self):
         
-        # return self.game.playing_player
         return self.game.get_playing_player()
 
     def get_input_size(self):
@@ -87,13 +85,8 @@ class StateManager:
         states_arr = []
         state = state.copy()
         
-        # print("-----------")
-        # print("GET KIDS KJØRER GET KID FROM MOVE I EN LØKKE MED DISSE VAR:", state, legal_moves)
-        
         for move in legal_moves:
             states_arr.append((self.get_kid_from_move(player, state, move)[0], move))
-        #     print("NOE GALT HER?", (self.get_kid_from_move(player, state, move)[0], move))
-        # print("-----------")
             
         if player == 1:
             player = 2
@@ -107,8 +100,5 @@ class StateManager:
        return self.game.get_normalized_distribution() 
    
     def get_reward(self, state, player):
-        # print('11111111111111111111111111111111111111')
-        return self.game.get_reward(state, player)
-
-        # return self.game.get_reward(state)
         
+        return self.game.get_reward(state, player)
