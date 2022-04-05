@@ -1,10 +1,12 @@
 config = {
     'game': 'hex',
-    'num_actual_games': 10000,
-    'num_search_games': 1000,
+    'num_actual_games': 4000,
+    'num_search_games': 500,
     'starting_player': 1,
     
-    'network_folder_name': 'natt_test' # Folder name for saving and loading the networks for TOPP
+    'mode': 'learn', # learn, learn_topp, topp
+    
+    'network_folder_name': 'test_batch_size' # Folder name for saving and loading the networks for TOPP
 }
 
 hex_config = {
@@ -24,9 +26,9 @@ hex_config = {
     },
 
     'mcts_config': {
-        'minibatch_size': 10,
+        'minibatch_size': 36,
         'exploration_weight': 0.75,
-        'epochs': 100,
+        'epochs': 10,
         'timout_max_time': 50
     }
 }

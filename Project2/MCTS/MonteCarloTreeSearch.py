@@ -106,7 +106,7 @@ class MCTS:
 
         
 
-    def mcts(self):
+    def mcts(self, lite_model):
         """
 
         Method for running the mcts algorithm.
@@ -152,7 +152,7 @@ class MCTS:
         kid = np.random.choice(kids)
 
         # Leaf evaluation // a rollout
-        leaf, rew = self.leaf_evaluation(kid)
+        leaf, rew = self.leaf_evaluation(kid, lite_model)
         
         # print("ETTER ROLLOUT")
 
@@ -269,7 +269,7 @@ class MCTS:
         return kids
 
 
-    def leaf_evaluation(self, from_node):  # rollout
+    def leaf_evaluation(self, from_node, lite_model):  # rollout
         """
 
         Method for traversing the tree from the root to a leaf node by using the actor.
@@ -290,7 +290,7 @@ class MCTS:
 
         while done == False:
             # Tomy
-            action = self.actor.get_action(leaf, player)
+            action = self.actor.get_action(lite_model, leaf, player)
             # action = [float(action[0]), float(action[1])]
             # print('Action i mc', action)
             

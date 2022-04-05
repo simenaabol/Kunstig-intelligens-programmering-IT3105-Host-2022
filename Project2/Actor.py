@@ -38,6 +38,9 @@ class ANET:
     def save_net(self, name):
         
         self.model.save("./NeuralNets/{folder}/{name}".format(name=name, folder=config['network_folder_name']))
+        
+    def get_model(self):
+        return self.model
 
     def update_epsilon(self, just_policy=False):
         
@@ -50,7 +53,7 @@ class ANET:
         
         self.model.fit(x=x, y=y, epochs=epochs, verbose=0)
         
-    def get_action(self, state, player, do_random_move=True):
+    def get_action(self, lite_model, state, player, do_random_move=True):
         legal_actions = self.state_manager.get_legal_moves(state)
         all_actions = self.state_manager.get_all_moves()
         
@@ -76,9 +79,10 @@ class ANET:
         
         # distribution = new_model.predict_single(state_for_model)
         
-        # print(distribution)
         
-        distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()  
+        distribution = lite_model.predict_single(state_for_model)
+        # print(distribution)
+        # distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()  
         
         # distribution = distribution * np.array(all_actions)
         # distribution = distribution * np.array(all_actions)

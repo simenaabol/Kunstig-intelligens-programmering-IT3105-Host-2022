@@ -1,6 +1,7 @@
 from StateManager import StateManager
 from Actor import ANET
 from MCTS.MonteCarloTreeSearch import MCTS
+from LiteModel import LiteModel
 
 import numpy as np
 import time
@@ -60,6 +61,9 @@ class RL_learner:
             self.state_manager.reset_game()
 
             monte_carlo = MCTS(self.exploration_weight, self.actor, self.state_manager)
+            
+            if episode % 5 == 0:
+                lite_model = LiteModel.from_keras_model(self.actor.get_model())
 
             finished = self.state_manager.is_finished()
 
@@ -72,7 +76,7 @@ class RL_learner:
                     # if search_game % 100 == 0:
                     #     print("Search game nr.", search_game)
 
-                    monte_carlo.mcts() # KANSKJE GJØR OM NAVNET TIL DENNE, SIDEN DENNE DELEN ER LITT LIK NÅ
+                    monte_carlo.mcts(lite_model) # KANSKJE GJØR OM NAVNET TIL DENNE, SIDEN DENNE DELEN ER LITT LIK NÅ
 
                     if time.perf_counter() - timeout_start_time > self.timout_max_time:
                         print("Search game", search_game, "timeouted.")
