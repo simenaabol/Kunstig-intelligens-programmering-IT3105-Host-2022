@@ -138,7 +138,7 @@ class RL_learner:
             # print("REPLAY", replay_buffer)
             minibatch = np.array(replay_buffer)[indices_for_minibatch.astype(int)]
             
-            print("MINIB", minibatch)
+            # print("MINIB", minibatch)
 
             x_train, y_train = zip(*minibatch)
             

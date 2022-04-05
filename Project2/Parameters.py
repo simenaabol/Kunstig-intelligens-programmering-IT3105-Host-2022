@@ -1,15 +1,15 @@
 config = {
     'game': 'hex',
-    'num_actual_games': 4000,
-    'num_search_games': 500,
+    'num_actual_games': 10,
+    'num_search_games': 50,
     'starting_player': 1,
     
-    'saving_interval': 50,
-    'save_nets': False,
+    'saving_interval': 4,
+    'save_nets': True,
     
-    'mode': 'learn', # learn, learn_topp, topp
+    'mode': 'topp', # learn, learn_topp, topp
     
-    'network_folder_name': 'test_niklas' # Folder name for saving and loading the networks for TOPP
+    'network_folder_name': 'simen2' # Folder name for saving and loading the networks for TOPP
 }
 # natt_test
 hex_config = {
