@@ -198,19 +198,46 @@ class MCTS:
         """
         
         current_node = self.root
+        # print('hællæ', current_node.kids)
+        # if current_node.kids.items == None:
+            
+        
         
         while current_node.get_kids_count() > 0:
+        # if current_node.kids[0][1] != None:
+            # print('inne i while')
             
             player = current_node.player
+            # print('player', player)
             policy_function = max if player == 1 else min
             kids = current_node.get_kids()
             
-            print(kids[(0, 1)])
+    
+            # print('funk', policy_function)
+            # if player == 2:
+                # print('kids',current_node.kids )
+            action = policy_function(current_node.kids.keys(), key=lambda key: current_node.kids[key].UCT(player, self.exp_weight))
+            # print('returned action', action)
+            current_node = current_node.kids[action]
+            # if player 
+            # current_node.player = 
+            # current_node.kids.pop(action)    
+
+            # print('current_node med barn', current_node.kids)
             
-            action = policy_function(kids.keys(), key=lambda key: kids[key].UCT(key, self.exp_weight))
             
-            current_node = current_node.get_kid_with_action(action)
             
+            
+            
+        testnode = current_node
+        counter = 0
+        while testnode.parent:
+            counter += 1
+            testnode = testnode.parent
+            
+        print('dybde', counter)
+        
+        # return current_node
         return current_node
 
             

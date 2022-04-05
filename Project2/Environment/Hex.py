@@ -132,10 +132,22 @@ class Hex:
 
     def get_reward(self, state, player):
         
-        if self.check_winner(player, state)[0]  == True:
-            return 10
-        else:
-            return 0 # Mulig endre denne til -1
+        if player == 1:
+            if self.check_winner(player, state)[0]  == True:
+                return 1
+            else:
+                return 0
+        
+        if player == 2:
+            if self.check_winner(player, state)[0]  == True:
+                return -1
+            else:
+                return 0
+        
+        # if self.check_winner(player, state)[0]  == True:
+        #     return 1
+        # else:
+        #     return -1 # Mulig endre denne til -1
         
         
 
