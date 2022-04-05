@@ -132,7 +132,7 @@ class Hex:
     def get_reward(self, state, player):
         
         if self.check_winner(player, state)[0]  == True:
-            return 1
+            return 10
         else:
             return 0 # Mulig endre denne til -1
         

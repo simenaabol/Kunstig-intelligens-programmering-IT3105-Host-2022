@@ -196,39 +196,110 @@ class MCTS:
         RETURNS: a leaf node
 
         """
-
+        
         current_node = self.root
         
-        #  Er vell bare å bruke player her?
-        player = current_node.get_player()   
-        flag = 0   
-        if player == 1:
-            flag = 1
-        elif player == 2:
-            flag = -1
-        else:
-            raise TypeError("Sorry, the player int is not compatible[2]")
-
-        
         while current_node.get_kids_count() > 0:
-    
-            max = -flag * float('inf')
-            current_best = None
+            
+            player = current_node.player
+            policy_function = max if player == 1 else min
             kids = current_node.get_kids()
             
-
-            for action in kids:
-
-                a = current_node.get_q_value(action) + flag * current_node.get_u_value(action, self.exp_weight)
-                
-                if (a < max and flag == -1) or (a > max and flag == 1):
-                    max = a
-                    current_best = action
-
-            current_node = current_node.get_kid_with_action(current_best)
-            flag *= -1
+            print(kids[(0, 1)])
+            
+            action = policy_function(kids.keys(), key=lambda key: kids[key].UCT(key, self.exp_weight))
+            
+            current_node = current_node.get_kid_with_action(action)
             
         return current_node
+
+            
+            
+            
+
+
+        # sign = 1 if player == 1 else -1
+
+        # while current_node.get_kids_count() > 0:
+
+        #     best = -sign * float('inf')
+        #     best_action = None
+        #     for action in current_node.kids:
+                
+        #         a = current_node.get_q_value(action) + sign * current_node.get_u_value(action, self.exp_weight)
+        #         if a > best and sign == 1:
+        #             best = a
+        #             best_action = action
+                    
+        #         elif a < best and sign == -1:
+        #             best = a
+        #             best_action = action
+
+        #     current_node = current_node.get_kid_with_action(best_action)
+        #     sign *= -1
+
+        # testnode = current_node
+        # counter = 0
+        # while testnode.parent:
+        #     counter += 1
+        #     testnode = testnode.parent
+            
+        # print(counter)
+
+        # return current_node
+
+        # current_node = self.root
+        
+        # #  Er vell bare å bruke player her?
+        # player = current_node.get_player()
+        # flag = 0   
+        # if player == 1:
+        #     flag = 1
+        # elif player == 2:
+        #     flag = -1
+        # else:
+        #     raise TypeError("Sorry, the player int is not compatible[2]")
+
+        
+        # while current_node.get_kids_count() > 0:
+    
+        #     max = -flag * float('inf')
+        #     current_best = None
+        #     kids = current_node.get_kids()
+            
+
+        #     for action in kids:
+                
+                
+        #         if  current_node.get_action_count(action) == 0:
+        #             a = -max
+        #         else:
+        #             if flag == 1:
+        #                 a = current_node.get_q_value(action) + current_node.get_u_value(action, self.exp_weight)
+        #                 # print(a)
+        #             else:
+        #                 a = current_node.get_q_value(action) - current_node.get_u_value(action, self.exp_weight)
+        #                 # print(a)
+                    
+                
+        #         if (a < max and flag == -1) or (a > max and flag == 1):
+        #             max = a
+        #             current_best = action
+
+        #     current_node = current_node.get_kid_with_action(current_best)
+            
+        #     flag *= -1
+        
+        # testnode = current_node
+        # counter = 0
+        # while testnode.parent:
+        #     counter += 1
+        #     testnode = testnode.parent
+            
+            
+        # print(counter)
+            
+        # return current_node
 
 
     

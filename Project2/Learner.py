@@ -135,7 +135,7 @@ class RL_learner:
                 
 
             """ DANGER ZONE """
-            minibatch = np.array(replay_buffer)[indices_for_minibatch.astype(int)]
+            minibatch = np.array(replay_buffer, dtype=object)[indices_for_minibatch.astype(int)]
 
             # Get states and distributions 
             x_train, y_train = zip(*minibatch)

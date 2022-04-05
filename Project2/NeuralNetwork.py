@@ -39,7 +39,7 @@ class NeuralNet:
         else:
             raise ValueError("Choose a different optimizer!")
 
-        model.compile(optimizer=compiler_opt, loss=cross_entropy_loss)
+        model.compile(optimizer=compiler_opt, loss=klosses.CategoricalCrossentropy())
 
         return model
     
