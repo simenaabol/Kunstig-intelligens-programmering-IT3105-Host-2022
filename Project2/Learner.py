@@ -37,7 +37,7 @@ class RL_learner:
         self.epochs = self.parameters['mcts_config']['epochs']
         self.timout_max_time = self.parameters['mcts_config']['timout_max_time']
 
-        self.save_interval = self.num_actual_games / 4 # Hvor ofte man lagrer nettverket
+        self.save_interval = self.num_actual_games / 100 # Hvor ofte man lagrer nettverket
 
     def training(self):
         """Method for training the ANET
