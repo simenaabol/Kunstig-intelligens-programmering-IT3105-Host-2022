@@ -38,7 +38,9 @@ class RL_learner:
         self.epochs = self.parameters['mcts_config']['epochs']
         self.timout_max_time = self.parameters['mcts_config']['timout_max_time']
 
-        self.save_interval = self.num_actual_games / 100 # Hvor ofte man lagrer nettverket
+        self.save_interval = self.num_actual_games / config['saving_interval'] # Hvor ofte man lagrer nettverket
+        
+        self.save_nets = config['save_nets']
 
     def training(self):
         """Method for training the ANET
@@ -47,22 +49,23 @@ class RL_learner:
         replay_buffer = []
 
         # Save the initial net
-        self.actor.save_net(0)
+        if self.save_nets:
+            self.actor.save_net(0)
         
-        for episode in range(self.num_actual_games):
+        for actual_game in range(self.num_actual_games):
 
             # Alternating which players' turn it is
             """ TIDLIGERE BRUKT I RESET GAME """
-            playing_player = episode % 2 + 1
+            playing_player = actual_game % 2 + 1
 
             # if episode % 10 == 0:
-            print("Actual game nr.", episode + 1)
+            print("Actual game nr.", actual_game + 1)
 
             self.state_manager.reset_game()
 
             monte_carlo = MCTS(self.exploration_weight, self.actor, self.state_manager)
             
-            if episode % 5 == 0:
+            if actual_game % 5 == 0:
                 lite_model = LiteModel.from_keras_model(self.actor.get_model())
 
             finished = self.state_manager.is_finished()
@@ -135,7 +138,7 @@ class RL_learner:
             # print("REPLAY", replay_buffer)
             minibatch = np.array(replay_buffer)[indices_for_minibatch.astype(int)]
             
-            # print("MINIB", minibatch)
+            print("MINIB", minibatch)
 
             x_train, y_train = zip(*minibatch)
             
@@ -147,5 +150,5 @@ class RL_learner:
             self.actor.update_epsilon()
 
             # Save the net according to the save interval
-            if (episode + 1) % self.save_interval == 0:
-                self.actor.save_net(episode + 1)
+            if (actual_game + 1) % self.save_interval == 0 and self.save_nets:
+                self.actor.save_net(actual_game + 1)

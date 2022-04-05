@@ -1,12 +1,15 @@
 config = {
-    'game': 'hex',
+    'game': 'nim',
     'num_actual_games': 4000,
     'num_search_games': 500,
     'starting_player': 1,
     
+    'saving_interval': 50,
+    'save_nets': False,
+    
     'mode': 'learn', # learn, learn_topp, topp
     
-    'network_folder_name': 'test_batch_size' # Folder name for saving and loading the networks for TOPP
+    'network_folder_name': 'test_niklas' # Folder name for saving and loading the networks for TOPP
 }
 
 hex_config = {
@@ -20,13 +23,15 @@ hex_config = {
         'output_act': 'softmax',
         'optimizer': 'adam', # adam, rmsprop, sgd, adagrad
         'loss_function': 'cross_entropy',
+        
+        'anet_batch_size': 64,
 
         'epsilon': 1, 
         'epsilon_decay': 0.95
     },
 
     'mcts_config': {
-        'minibatch_size': 36,
+        'minibatch_size': 10,
         'exploration_weight': 0.75,
         'epochs': 10,
         'timout_max_time': 50
@@ -41,21 +46,23 @@ nim_config = {
 
     'actor_config': {
         'learning_rate': 0.01, 
-        'hidden_layer_size': (4, 5, 3),
+        'hidden_layer_size': (256, 128, 64),
         'activation_function': 'relu', # relu, linear, sigmoid, tanh
         'output_act': 'softmax',
         'optimizer': 'adam', # adam, rmsprop, sgd, adagrad
         'loss_function': 'cross_entropy',
+        
+        'anet_batch_size': 64,
 
         'epsilon': 1, 
-        'epsilon_decay': 0.99
+        'epsilon_decay': 0.95
     },
 
     'mcts_config': {
-        'minibatch_size': 5,
-        'exploration_weight': 0,
-        'epochs': 100,
-        'timout_max_time': 2
+        'minibatch_size': 10,
+        'exploration_weight': 0.75,
+        'epochs': 10,
+        'timout_max_time': 50
     }
     
 
@@ -63,5 +70,4 @@ nim_config = {
 
 topp_config = {
     'number_of_games': 50
-    
 }

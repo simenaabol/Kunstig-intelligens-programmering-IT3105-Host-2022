@@ -35,6 +35,8 @@ class ANET:
         self.epsilon = epsilon
         self.epsilon_decay = epsilon_decay
         
+        self.gameconfig = state_manager.get_parameters()
+        
     def save_net(self, name):
         
         self.model.save("./NeuralNets/{folder}/{name}".format(name=name, folder=config['network_folder_name']))
@@ -51,7 +53,7 @@ class ANET:
 
     def fit_network(self, x, y, epochs):
         
-        self.model.fit(x=x, y=y, epochs=epochs, verbose=0)
+        self.model.fit(x=x, y=y, epochs=epochs, verbose=0, batch_size=self.gameconfig['actor_config']['anet_batch_size'])
         
     def get_action(self, lite_model, state, player, do_random_move=True):
         legal_actions = self.state_manager.get_legal_moves(state)
