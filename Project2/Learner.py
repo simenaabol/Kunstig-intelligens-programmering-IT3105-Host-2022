@@ -75,6 +75,8 @@ class RL_learner:
             while not finished:
     
                 timeout_start_time = time.perf_counter()
+                
+                count = 0
 
                 for search_game in range(self.num_search_games):
                     
@@ -82,10 +84,14 @@ class RL_learner:
                     #     print("Search game nr.", search_game)
 
                     monte_carlo.mcts(lite_model) # KANSKJE GJØR OM NAVNET TIL DENNE, SIDEN DENNE DELEN ER LITT LIK NÅ
+                    
+                    count += 1
 
                     if time.perf_counter() - timeout_start_time > self.timout_max_time:
                         print("Search game", search_game, "timeouted.")
                         break
+                    
+                print(count)
 
                 # Used for cases in the replay buffer -> training the ANET
                 distribution = monte_carlo.get_normalized_distribution()

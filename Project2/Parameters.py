@@ -7,7 +7,7 @@ config = {
     'lite_model_interval': 5,
     
     'saving_interval': 5,
-    'save_nets': True,
+    'save_nets': False,
     
     'mode': 'learn_topp', # learn, learn_topp, topp
     
