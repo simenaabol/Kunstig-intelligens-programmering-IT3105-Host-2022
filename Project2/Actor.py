@@ -39,7 +39,7 @@ class ANET:
         
     def save_net(self, name):
         
-        self.model.save("./NeuralNets/{folder}/{name}".format(name=name, folder=config['network_folder_name']))
+        self.model.save("./TrainedNets/{folder}/{name}".format(name=name, folder=config['network_folder_name']))
         
     def get_model(self):
         return self.model

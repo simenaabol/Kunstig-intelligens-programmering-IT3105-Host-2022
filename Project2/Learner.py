@@ -29,6 +29,8 @@ class RL_learner:
                           self.parameters['actor_config']['epsilon'], 
                           self.parameters['actor_config']['epsilon_decay'],
                           self.state_manager)
+        
+        self.config = config
 
         self.num_actual_games = config['num_actual_games']
         self.num_search_games = config['num_search_games']
@@ -65,7 +67,7 @@ class RL_learner:
 
             monte_carlo = MCTS(self.exploration_weight, self.actor, self.state_manager)
             
-            if actual_game % 5 == 0:
+            if actual_game % self.config['lite_model_interval'] == 0:
                 lite_model = LiteModel.from_keras_model(self.actor.get_model())
 
             finished = self.state_manager.is_finished()
@@ -115,9 +117,7 @@ class RL_learner:
             for i in range(len(replay_buffer)):
                 probs_for_rbuf.append(i ** self.exploration_weight + 1e-10) # USIKKER HVOR INNHOLDET I APPENDEN KOMMER FRA
 
-            # print("PROBS", probs_for_rbuf)
             probs_for_rbuf = probs_for_rbuf / np.sum(probs_for_rbuf)
-            
 
             """ DANGER ZONE """
             """ SE OVER DENNE OG """
@@ -135,18 +135,15 @@ class RL_learner:
                 
 
             """ DANGER ZONE """
-            # print("REPLAY", replay_buffer)
             minibatch = np.array(replay_buffer)[indices_for_minibatch.astype(int)]
-            
-            # print("MINIB", minibatch)
 
+            # Get states and distributions 
             x_train, y_train = zip(*minibatch)
-            
-            # print("XTRAIN", x_train)
-            # print("YTRAIN", y_train)
 
+            # Train the network with the cases from the minibatch
             self.actor.fit_network(np.array(x_train), np.array(y_train), self.epochs)
 
+            # Update epsilon at the end of an episode
             self.actor.update_epsilon()
 
             # Save the net according to the save interval

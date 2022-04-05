@@ -12,7 +12,7 @@ class Topp:
     def __init__(self):
         self.state_manager = StateManager(config)
         
-        path_list = [anet_path for anet_path in os.scandir("Project2/NeuralNets/{folder}".format(folder=config['network_folder_name']))]
+        path_list = [anet_path for anet_path in os.scandir("./TrainedNets/{folder}".format(folder=config['network_folder_name']))]
         
         self.anets = self.get_anets(path_list)
         self.number_of_anets = len(self.anets)
