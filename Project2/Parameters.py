@@ -11,7 +11,7 @@ config = {
     
     'mode': 'learn_topp', # learn, learn_topp, topp
     
-    'network_folder_name': 'simen2' # Folder name for saving and loading the networks for TOPP
+    'network_folder_name': 'simen1' # Folder name for saving and loading the networks for TOPP
 }
 
 hex_config = {

@@ -226,6 +226,13 @@ class Node:
         RETURNS: int
 
         """
+        
+        # print("ACTION", action)
+
+        # if self.get_action_count(action) != 0:
+        #     # kok, endre på oppsettet?
+        #     return ( self.get_kid_with_action(action).evaluate )  /  ( self.get_action_count(action) )
+        # else: 
         if self.get_action_count(action) == 0:
             return 0
         return self.get_kid_with_action(action).evaluate / (self.get_action_count(action))
@@ -247,18 +254,36 @@ class Node:
         # return exploration_weight * np.sqrt(np.log(self.count) / (self.get_action_count(action)))
         
         
-    def UCT(self, action, exploration_weight):
+    def UCT(self, player, exploration_weight):
         
-        print(action)
-        
-        if self.get_action_count(action) == 0:
+        # print('action UCT:', action)
+        if player == 2:
+                exploration_weight = exploration_weight*-1
+                
+                
+        if self.count == 0:
             return exploration_weight * float("inf")
+            # print(exploration_weight * float("inf"))
+            # exploitation = 0
+        else:
+            exploitation = self.evaluate  / (self.count)
+            
         
-        exploitation = self.get_kid_with_action(action).evaluate  / (self.get_action_count(action))
+        # exploitation = self.evaluate  / (self.count)
         
-        exploration = exploration * np.sqrt(2 * np.log(self.count) / (self.get_action_count(action)))
         
-        return exploitation + exploration
+        exploration = exploration_weight * np.sqrt(2 * np.log(self.parent.count) / (self.count))
+        
+        
+        # print('UTC', exploitation + exploration)
+        # print('UTC', exploitation + exploration)
+        if player == 1:
+            return exploitation + exploration
+        else:
+            return exploitation + exploration
+
+        
+        # return exploitation + exploration
 
         
         
