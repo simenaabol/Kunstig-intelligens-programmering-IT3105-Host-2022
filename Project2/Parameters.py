@@ -1,20 +1,20 @@
 config = {
-    'game': 'nim',
+    'game': 'hex',
     'num_actual_games': 4000,
     'num_search_games': 500,
     'starting_player': 1,
     
-    'saving_interval': 50,
-    'save_nets': False,
+    'saving_interval': 100,
+    'save_nets': True,
     
-    'mode': 'learn', # learn, learn_topp, topp
+    'mode': 'topp', # learn, learn_topp, topp
     
     'network_folder_name': 'test_niklas' # Folder name for saving and loading the networks for TOPP
 }
 
 hex_config = {
     
-    'board_size': 5,
+    'board_size': 3,
 
     'actor_config': {
         'learning_rate': 0.01, 
@@ -31,8 +31,8 @@ hex_config = {
     },
 
     'mcts_config': {
-        'minibatch_size': 10,
-        'exploration_weight': 0.75,
+        'minibatch_size': 512,
+        'exploration_weight': 1,
         'epochs': 10,
         'timout_max_time': 50
     }

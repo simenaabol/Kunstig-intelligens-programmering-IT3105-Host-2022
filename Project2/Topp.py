@@ -53,7 +53,7 @@ class Topp:
         
         while not self.state_manager.is_finished(gamestate):
             # print("yes", gamestate)
-            action = agents[current_player].get_action(gamestate, current_player, False)
+            action = agents[current_player].get_action(False, gamestate, current_player, False)
             
             self.state_manager.do_move(action)
             
