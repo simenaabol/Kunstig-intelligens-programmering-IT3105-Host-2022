@@ -38,6 +38,7 @@ class ANET:
         self.gameconfig = state_manager.get_parameters()
         
     def save_net(self, name):
+        """ MULIG DU MÅ ENDRE DENNE SIMEN """
         
         self.model.save("./TrainedNets/{folder}/{name}".format(name=name, folder=config['network_folder_name']))
         

@@ -12,6 +12,7 @@ class Topp:
     def __init__(self):
         self.state_manager = StateManager(config)
         
+        """ MULIG DU MÅ ENDRE DENNE SIMEN """
         path_list = [anet_path for anet_path in os.scandir("./TrainedNets/{folder}".format(folder=config['network_folder_name']))]
         
         self.anets = self.get_anets(path_list)
