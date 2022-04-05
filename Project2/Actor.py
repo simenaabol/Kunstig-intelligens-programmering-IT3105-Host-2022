@@ -81,10 +81,12 @@ class ANET:
         
         # distribution = new_model.predict_single(state_for_model)
         
-        
-        distribution = lite_model.predict_single(state_for_model)
+        if lite_model:
+            distribution = lite_model.predict_single(state_for_model)
+        else:
+            distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()  
+            
         # print(distribution)
-        # distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()  
         
         # distribution = distribution * np.array(all_actions)
         # distribution = distribution * np.array(all_actions)

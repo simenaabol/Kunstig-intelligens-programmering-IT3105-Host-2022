@@ -31,8 +31,8 @@ hex_config = {
     },
 
     'mcts_config': {
-        'minibatch_size': 36,
-        'exploration_weight': 0.75,
+        'minibatch_size': 512,
+        'exploration_weight': 1,
         'epochs': 10,
         'timout_max_time': 50
     }
