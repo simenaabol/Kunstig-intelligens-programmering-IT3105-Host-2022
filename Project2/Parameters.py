@@ -1,20 +1,22 @@
 config = {
     'game': 'hex',
-    'num_actual_games': 500,
-    'num_search_games': 500,
+    'num_actual_games': 4000,
+    'num_search_games': 100,
     'starting_player': 1,
     
-    'saving_interval': 10,
+    'lite_model_interval': 5,
+    
+    'saving_interval': 5,
     'save_nets': True,
     
     'mode': 'learn_topp', # learn, learn_topp, topp
     
     'network_folder_name': 'simen1' # Folder name for saving and loading the networks for TOPP
 }
-# natt_test
+
 hex_config = {
     
-    'board_size': 3,
+    'board_size': 6,
 
     'actor_config': {
         'learning_rate': 0.01, 

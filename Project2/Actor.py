@@ -38,8 +38,9 @@ class ANET:
         self.gameconfig = state_manager.get_parameters()
         
     def save_net(self, name):
+        """ MULIG DU MÅ ENDRE DENNE SIMEN """
         
-        self.model.save("Project2/NeuralNets/{folder}/{name}".format(name=name, folder=config['network_folder_name']))
+        self.model.save("./TrainedNets/{folder}/{name}".format(name=name, folder=config['network_folder_name']))
         
     def get_model(self):
         return self.model
@@ -53,9 +54,10 @@ class ANET:
 
     def fit_network(self, x, y, epochs):
         
-        self.model.fit(x=x, y=y, epochs=epochs, verbose=0, batch_size=self.gameconfig['actor_config']['anet_batch_size'])
+        self.model.fit(x=x, y=y, epochs=epochs, batch_size=self.gameconfig['actor_config']['anet_batch_size'])
         
     def get_action(self, lite_model, state, player, do_random_move=True):
+        
         legal_actions = self.state_manager.get_legal_moves(state)
         all_actions = self.state_manager.get_all_moves()
         
@@ -109,7 +111,7 @@ class ANET:
                 
                 distribution /= np.sum(distribution) # Renormalize
                 
-        distribution= np.array(distribution)
+        distribution = np.array(distribution)
         
         if sum(distribution.flatten()) <= 0:
             return random.choice(legal_actions)
