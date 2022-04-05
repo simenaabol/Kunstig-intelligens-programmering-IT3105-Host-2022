@@ -12,7 +12,7 @@ class Topp:
     def __init__(self):
         self.state_manager = StateManager(config)
         
-        path_list = [anet_path for anet_path in os.scandir("./NeuralNets/{folder}".format(folder=config['network_folder_name']))]
+        path_list = [anet_path for anet_path in os.scandir("Project2/NeuralNets/{folder}".format(folder=config['network_folder_name']))]
         
         self.anets = self.get_anets(path_list)
         self.number_of_anets = len(self.anets)
@@ -73,6 +73,15 @@ class Topp:
                 # print(f'Player {agent2} won')
         
         return winner
+    
+    def bestVSbest(self):
+        for game in range(self.number_of_games):
+            self.play_one_game(2, 2)
+        print('spiller 1:', self.winner1)
+        print('spiller 2:', self.winner2)
+                       
+        
+         
         
     def play_round_robin(self):
         

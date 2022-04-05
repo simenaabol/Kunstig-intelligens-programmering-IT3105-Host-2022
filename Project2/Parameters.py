@@ -11,7 +11,7 @@ config = {
     
     'network_folder_name': 'test_niklas' # Folder name for saving and loading the networks for TOPP
 }
-
+# natt_test
 hex_config = {
     
     'board_size': 3,
