@@ -106,7 +106,7 @@ class MCTS:
 
         
 
-    def mcts(self):
+    def mcts(self, lite_model):
         """
 
         Method for running the mcts algorithm.
@@ -152,7 +152,7 @@ class MCTS:
         kid = np.random.choice(kids)
 
         # Leaf evaluation // a rollout
-        leaf, rew = self.leaf_evaluation(kid)
+        leaf, rew = self.leaf_evaluation(kid, lite_model)
         
         # print("ETTER ROLLOUT")
 
@@ -196,39 +196,137 @@ class MCTS:
         RETURNS: a leaf node
 
         """
-
-        current_node = self.root
         
-        #  Er vell bare å bruke player her?
-        player = current_node.get_player()   
-        flag = 0   
-        if player == 1:
-            flag = 1
-        elif player == 2:
-            flag = -1
-        else:
-            raise TypeError("Sorry, the player int is not compatible[2]")
-
+        current_node = self.root
+        # print('hællæ', current_node.kids)
+        # if current_node.kids.items == None:
+            
+        
         
         while current_node.get_kids_count() > 0:
-    
-            max = -flag * float('inf')
-            current_best = None
+        # if current_node.kids[0][1] != None:
+            # print('inne i while')
+            
+            player = current_node.player
+            # print('player', player)
+            policy_function = max if player == 1 else min
             kids = current_node.get_kids()
             
+    
+            # print('funk', policy_function)
+            # if player == 2:
+                # print('kids',current_node.kids )
+            action = policy_function(current_node.kids.keys(), key=lambda key: current_node.kids[key].UCT(player, self.exp_weight))
+            # print('returned action', action)
+            current_node = current_node.kids[action]
+            # if player 
+            # current_node.player = 
+            # current_node.kids.pop(action)    
 
-            for action in kids:
-
-                a = current_node.get_q_value(action) + flag * current_node.get_u_value(action, self.exp_weight)
-                
-                if (a < max and flag == -1) or (a > max and flag == 1):
-                    max = a
-                    current_best = action
-
-            current_node = current_node.get_kid_with_action(current_best)
-            flag *= -1
+            # print('current_node med barn', current_node.kids)
             
+            
+            
+            
+            
+        testnode = current_node
+        counter = 0
+        while testnode.parent:
+            counter += 1
+            testnode = testnode.parent
+            
+        print('dybde', counter)
+        
+        # return current_node
         return current_node
+
+            
+            
+            
+
+
+        # sign = 1 if player == 1 else -1
+
+        # while current_node.get_kids_count() > 0:
+
+        #     best = -sign * float('inf')
+        #     best_action = None
+        #     for action in current_node.kids:
+                
+        #         a = current_node.get_q_value(action) + sign * current_node.get_u_value(action, self.exp_weight)
+        #         if a > best and sign == 1:
+        #             best = a
+        #             best_action = action
+                    
+        #         elif a < best and sign == -1:
+        #             best = a
+        #             best_action = action
+
+        #     current_node = current_node.get_kid_with_action(best_action)
+        #     sign *= -1
+
+        # testnode = current_node
+        # counter = 0
+        # while testnode.parent:
+        #     counter += 1
+        #     testnode = testnode.parent
+            
+        # print(counter)
+
+        # return current_node
+
+        # current_node = self.root
+        
+        # #  Er vell bare å bruke player her?
+        # player = current_node.get_player()
+        # flag = 0   
+        # if player == 1:
+        #     flag = 1
+        # elif player == 2:
+        #     flag = -1
+        # else:
+        #     raise TypeError("Sorry, the player int is not compatible[2]")
+
+        
+        # while current_node.get_kids_count() > 0:
+    
+        #     max = -flag * float('inf')
+        #     current_best = None
+        #     kids = current_node.get_kids()
+            
+
+        #     for action in kids:
+                
+                
+        #         if  current_node.get_action_count(action) == 0:
+        #             a = -max
+        #         else:
+        #             if flag == 1:
+        #                 a = current_node.get_q_value(action) + current_node.get_u_value(action, self.exp_weight)
+        #                 # print(a)
+        #             else:
+        #                 a = current_node.get_q_value(action) - current_node.get_u_value(action, self.exp_weight)
+        #                 # print(a)
+                    
+                
+        #         if (a < max and flag == -1) or (a > max and flag == 1):
+        #             max = a
+        #             current_best = action
+
+        #     current_node = current_node.get_kid_with_action(current_best)
+            
+        #     flag *= -1
+        
+        # testnode = current_node
+        # counter = 0
+        # while testnode.parent:
+        #     counter += 1
+        #     testnode = testnode.parent
+            
+            
+        # print(counter)
+            
+        # return current_node
 
 
     
@@ -269,7 +367,7 @@ class MCTS:
         return kids
 
 
-    def leaf_evaluation(self, from_node):  # rollout
+    def leaf_evaluation(self, from_node, lite_model):  # rollout
         """
 
         Method for traversing the tree from the root to a leaf node by using the actor.
@@ -290,7 +388,7 @@ class MCTS:
 
         while done == False:
             # Tomy
-            action = self.actor.get_action(leaf, player)
+            action = self.actor.get_action(lite_model, leaf, player)
             # action = [float(action[0]), float(action[1])]
             # print('Action i mc', action)
             
@@ -382,4 +480,3 @@ class MCTS:
 
                 
             
-

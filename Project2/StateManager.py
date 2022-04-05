@@ -12,12 +12,13 @@ class StateManager:
         
         if config['game'] == 'hex':
             self.game = Hex(hex_config['board_size'])
-            
+            self.gameconfig = hex_config
 
         elif config['game'] == 'nim':
 
             self.game = Nim(nim_config['num_stones'], 
                             nim_config['max_removal'])
+            self.gameconfig = nim_config
 
         else:
             raise Exception('Game must be hex or nim.')

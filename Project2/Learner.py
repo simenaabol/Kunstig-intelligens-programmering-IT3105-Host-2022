@@ -1,6 +1,7 @@
 from StateManager import StateManager
 from Actor import ANET
 from MCTS.MonteCarloTreeSearch import MCTS
+from LiteModel import LiteModel
 
 import numpy as np
 import time
@@ -28,6 +29,8 @@ class RL_learner:
                           self.parameters['actor_config']['epsilon'], 
                           self.parameters['actor_config']['epsilon_decay'],
                           self.state_manager)
+        
+        self.config = config
 
         self.num_actual_games = config['num_actual_games']
         self.num_search_games = config['num_search_games']
@@ -37,7 +40,9 @@ class RL_learner:
         self.epochs = self.parameters['mcts_config']['epochs']
         self.timout_max_time = self.parameters['mcts_config']['timout_max_time']
 
-        self.save_interval = self.num_actual_games / 100 # Hvor ofte man lagrer nettverket
+        self.save_interval = self.num_actual_games / config['saving_interval'] # Hvor ofte man lagrer nettverket
+        
+        self.save_nets = config['save_nets']
 
     def training(self):
         """Method for training the ANET
@@ -46,37 +51,47 @@ class RL_learner:
         replay_buffer = []
 
         # Save the initial net
-        self.actor.save_net(0)
+        if self.save_nets:
+            self.actor.save_net(0)
         
-        for episode in range(self.num_actual_games):
+        for actual_game in range(self.num_actual_games):
 
             # Alternating which players' turn it is
             """ TIDLIGERE BRUKT I RESET GAME """
-            playing_player = episode % 2 + 1
+            playing_player = actual_game % 2 + 1
 
             # if episode % 10 == 0:
-            print("Actual game nr.", episode + 1)
+            print("Actual game nr.", actual_game + 1)
 
             self.state_manager.reset_game()
 
             monte_carlo = MCTS(self.exploration_weight, self.actor, self.state_manager)
+            
+            if actual_game % self.config['lite_model_interval'] == 0:
+                lite_model = LiteModel.from_keras_model(self.actor.get_model())
 
             finished = self.state_manager.is_finished()
 
             while not finished:
     
                 timeout_start_time = time.perf_counter()
+                
+                count = 0
 
                 for search_game in range(self.num_search_games):
                     
                     # if search_game % 100 == 0:
                     #     print("Search game nr.", search_game)
 
-                    monte_carlo.mcts() # KANSKJE GJØR OM NAVNET TIL DENNE, SIDEN DENNE DELEN ER LITT LIK NÅ
+                    monte_carlo.mcts(lite_model) # KANSKJE GJØR OM NAVNET TIL DENNE, SIDEN DENNE DELEN ER LITT LIK NÅ
+                    
+                    count += 1
 
                     if time.perf_counter() - timeout_start_time > self.timout_max_time:
                         print("Search game", search_game, "timeouted.")
                         break
+                    
+                print(count)
 
                 # Used for cases in the replay buffer -> training the ANET
                 distribution = monte_carlo.get_normalized_distribution()
@@ -108,9 +123,7 @@ class RL_learner:
             for i in range(len(replay_buffer)):
                 probs_for_rbuf.append(i ** self.exploration_weight + 1e-10) # USIKKER HVOR INNHOLDET I APPENDEN KOMMER FRA
 
-            # print("PROBS", probs_for_rbuf)
             probs_for_rbuf = probs_for_rbuf / np.sum(probs_for_rbuf)
-            
 
             """ DANGER ZONE """
             """ SE OVER DENNE OG """
@@ -128,20 +141,17 @@ class RL_learner:
                 
 
             """ DANGER ZONE """
-            # print("REPLAY", replay_buffer)
-            minibatch = np.array(replay_buffer)[indices_for_minibatch.astype(int)]
-            
-            # print("MINIB", minibatch)
+            minibatch = np.array(replay_buffer, dtype=object)[indices_for_minibatch.astype(int)]
 
+            # Get states and distributions 
             x_train, y_train = zip(*minibatch)
-            
-            # print("XTRAIN", x_train)
-            # print("YTRAIN", y_train)
 
+            # Train the network with the cases from the minibatch
             self.actor.fit_network(np.array(x_train), np.array(y_train), self.epochs)
 
+            # Update epsilon at the end of an episode
             self.actor.update_epsilon()
 
             # Save the net according to the save interval
-            if (episode + 1) % self.save_interval == 0:
-                self.actor.save_net(episode + 1)
+            if (actual_game + 1) % self.save_interval == 0 and self.save_nets:
+                self.actor.save_net(actual_game + 1)

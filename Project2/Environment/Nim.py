@@ -41,10 +41,14 @@ class Nim:
         return all_moves
 
 
-    def reset(self, playing_player):
+    def reset(self):
         self.num_stones = nim_config['num_stones']
         self.max_removal = nim_config['max_removal']
-        self.playing_player = playing_player
+        
+        if self.playing_player == 1:
+            self.playing_player = 2
+        else:
+            self.playing_player = 1
 
         self.remaining_stones = np.array([self.num_stones])
 
@@ -52,10 +56,6 @@ class Nim:
         
         if state == None:
             state = self.remaining_stones
-            
-        # print(self.remaining_stones[0])
-        
-        # print("STATE IS FINISH??", state, state == 0)
 
         if state == 0:
             return True
@@ -131,7 +131,7 @@ class Nim:
         return self.playing_player        
         
     
-    def get_reward(self, player):
+    def get_reward(self, player, _):
         if player == 1:
             return 2
         else:
