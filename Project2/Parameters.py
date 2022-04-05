@@ -1,15 +1,15 @@
 config = {
     'game': 'hex',
-    'num_actual_games': 10,
-    'num_search_games': 50,
+    'num_actual_games': 500,
+    'num_search_games': 500,
     'starting_player': 1,
     
-    'saving_interval': 4,
+    'saving_interval': 10,
     'save_nets': True,
     
-    'mode': 'topp', # learn, learn_topp, topp
+    'mode': 'learn_topp', # learn, learn_topp, topp
     
-    'network_folder_name': 'simen2' # Folder name for saving and loading the networks for TOPP
+    'network_folder_name': 'simen1' # Folder name for saving and loading the networks for TOPP
 }
 # natt_test
 hex_config = {
@@ -18,7 +18,7 @@ hex_config = {
 
     'actor_config': {
         'learning_rate': 0.01, 
-        'hidden_layer_size': (256, 128, 64),
+        'hidden_layer_size': (512, 256, 128, 64),
         'activation_function': 'relu', # relu, linear, sigmoid, tanh
         'output_act': 'softmax',
         'optimizer': 'adam', # adam, rmsprop, sgd, adagrad

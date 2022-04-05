@@ -40,6 +40,7 @@ class Hex:
     def get_moves(self, state=None):
         
         # print('state', state)
+
         
         if state.any() == None:
             state = self.board
@@ -275,6 +276,9 @@ class Hex:
         
         # print('board: ', self.board)
         self.board = np.array(self.board)
+    #     self.board = np.array([[1., 1., 2.],
+    #    [2., 1., 0.],
+    #    [2., 2., 1.]])
         
         for i in range(self.boardsize):
             height = self.boardsize - i*0.5
@@ -354,6 +358,9 @@ class Hex:
 '''
 
 # obj.get_graphic()
+# print(obj.get_moves(np.array([[1., 1., 2.],
+#        [2., 1., 0.],
+#        [2., 2., 1.]]))   )
 # print('heer', obj.game_done())
 # print('heer', obj.game_done(state))
 

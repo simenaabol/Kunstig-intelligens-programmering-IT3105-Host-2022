@@ -59,7 +59,7 @@ class ANET:
         legal_actions = self.state_manager.get_legal_moves(state)
         all_actions = self.state_manager.get_all_moves()
         
-        state = np.array(self.state_manager.get_state()) # Litt usikker på denne
+        # state = np.array(self.state_manager.get_state()) # Litt usikker på denne
         # state = tuple(self.state_manager.get_state())
         
         state_for_model = np.concatenate(([player], state), axis=None)

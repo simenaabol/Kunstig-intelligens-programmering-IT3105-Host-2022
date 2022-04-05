@@ -231,7 +231,6 @@ class Node:
 
         if self.get_action_count(action) != 0:
             # kok, endre på oppsettet?
-            """ TIL SIMEN, get_kids() tar ingen argumenter """
             return ( self.get_kid_with_action(action).evaluate )  /  ( self.get_action_count(action) )
         else: 
             return 0
