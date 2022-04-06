@@ -6,7 +6,7 @@
 # -> Dette til si at vi må rotere matrisen 45 grader med klokken
 
 import numpy as np
-import networkx as nx
+# import networkx as nx
 import matplotlib.pyplot as plt
 import copy
 
