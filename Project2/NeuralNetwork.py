@@ -4,14 +4,13 @@ import keras.layers as kerlayers
 import keras.losses as klosses
 
 class NeuralNet:
-    def __init__(self, learning_rate, hidden_layer_size, activation_function, output_act, optimizer, loss_function):
+    def __init__(self, learning_rate, hidden_layer_size, activation_function, output_act, optimizer):
         
         self.learning_rate = learning_rate
         self.hidden_layer_size = hidden_layer_size
         self.activation_function = activation_function
         self.optimizer = optimizer
         self.output_act = output_act
-        self.loss_function = loss_function
 
     def init_model(self, state_manager):
         
@@ -39,13 +38,11 @@ class NeuralNet:
         else:
             raise ValueError("Choose a different optimizer!")
 
-        model.compile(optimizer=compiler_opt, loss=klosses.CategoricalCrossentropy())
+        model.compile(optimizer=compiler_opt, loss=cross_entropy_loss)
 
         return model
     
-    
-    """ BLÅKOK """
-    """ BÅDE SANDER OG THOMAS HAR KLISS LIK """
+""" EVENTUELT KJØRE EN STANDARD LOSS FUNCTION FOR Å UNNGÅ DETTE """
 def cross_entropy_loss(targets, outs):
     return tf.reduce_mean(tf.reduce_sum(-1 * targets * safelog(outs), axis=[1]))
 

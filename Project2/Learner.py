@@ -24,8 +24,7 @@ class RL_learner:
                           self.parameters['actor_config']['hidden_layer_size'], 
                           self.parameters['actor_config']['activation_function'],
                           self.parameters['actor_config']['output_act'], 
-                          self.parameters['actor_config']['optimizer'], 
-                          self.parameters['actor_config']['loss_function'], 
+                          self.parameters['actor_config']['optimizer'],
                           self.parameters['actor_config']['epsilon'], 
                           self.parameters['actor_config']['epsilon_decay'],
                           self.state_manager)
@@ -56,10 +55,6 @@ class RL_learner:
         
         for actual_game in range(self.num_actual_games):
 
-            # Alternating which players' turn it is
-            """ TIDLIGERE BRUKT I RESET GAME """
-            playing_player = actual_game % 2 + 1
-
             # if episode % 10 == 0:
             print("Actual game nr.", actual_game + 1)
 
@@ -75,32 +70,25 @@ class RL_learner:
             while not finished:
     
                 timeout_start_time = time.perf_counter()
-                
-                count = 0
 
                 for search_game in range(self.num_search_games):
                     
                     # if search_game % 100 == 0:
                     #     print("Search game nr.", search_game)
 
-                    monte_carlo.mcts(lite_model) # KANSKJE GJØR OM NAVNET TIL DENNE, SIDEN DENNE DELEN ER LITT LIK NÅ
-                    
-                    count += 1
+                    monte_carlo.mcts(lite_model)
 
                     if time.perf_counter() - timeout_start_time > self.timout_max_time:
                         print("Search game", search_game, "timeouted.")
                         break
-                    
-                print(count)
 
                 # Used for cases in the replay buffer -> training the ANET
                 distribution = monte_carlo.get_normalized_distribution()
                 player = self.state_manager.get_playing_player()
-                state = np.array(self.state_manager.get_state())
+                state = np.array(self.state_manager.get_state()).flatten()
 
-                """ DANGER ZONE """
                 # Creating a case for the replay buffer with PID, state, and the distribution 
-                case_for_buffer = (np.concatenate(([player], state.flatten()), axis=None), distribution) # MENER DENNE ER GANSKE SMUD, MEN KANSKJE ENDRE LITT
+                case_for_buffer = (np.concatenate(([player], state), axis=None), distribution)
                 replay_buffer.append(case_for_buffer)
 
                 # Get the index for the largest value in the distribution and do the move.
@@ -118,15 +106,12 @@ class RL_learner:
             # print("Game finished! Player", winner, "won.")
 
             probs_for_rbuf = []
-            """ LOWKEY DANGER ZONE """
-            """ SE OVER DENNE HER """
+            
             for i in range(len(replay_buffer)):
                 probs_for_rbuf.append(i ** self.exploration_weight + 1e-10) # USIKKER HVOR INNHOLDET I APPENDEN KOMMER FRA
 
             probs_for_rbuf = probs_for_rbuf / np.sum(probs_for_rbuf)
 
-            """ DANGER ZONE """
-            """ SE OVER DENNE OG """
             if self.minibatch_size > 0:
                 indices_for_minibatch = np.random.choice(len(replay_buffer), 
                                                         size=self.minibatch_size if self.minibatch_size <= len(replay_buffer) else len(replay_buffer), 
@@ -139,8 +124,7 @@ class RL_learner:
                                                         p = probs_for_rbuf,
                                                         replace = False)
                 
-
-            """ DANGER ZONE """
+            # Minibatch of cases from the replay buffer with the random indices
             minibatch = np.array(replay_buffer, dtype=object)[indices_for_minibatch.astype(int)]
 
             # Get states and distributions 

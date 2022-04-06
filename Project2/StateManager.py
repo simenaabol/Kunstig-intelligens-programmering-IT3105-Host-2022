@@ -24,6 +24,7 @@ class StateManager:
             raise Exception('Game must be hex or nim.')
 
         self.config = config
+        
 
     def get_parameters(self):
         
@@ -32,6 +33,7 @@ class StateManager:
 
         elif isinstance(self.game, Nim):
             return nim_config
+        
 
     def reset_game(self):
 
@@ -42,43 +44,56 @@ class StateManager:
         
         return self.game.game_done(state)
 
+
     def get_winner(self, state):
 
         return self.game.player_has_won(state)
+
 
     def get_state(self):
 
         return self.game.get_current_state()
 
+
     def do_move(self, move):
 
         self.game.alter_state_from_move(move)
+
 
     def get_legal_moves(self, state=None):
 
         return self.game.get_moves(state)
     
+    
     def get_all_moves(self):
 
         return self.game.get_all_moves()
+
 
     def get_playing_player(self):
         
         return self.game.get_playing_player()
 
+
     def get_input_size(self):
 
         return self.game.net_input_size()
     
+    
     def get_output_size(self):
+        
         return self.game.net_output_size()
+    
     
     def check_if_legal_action(self, state, action):
         
         return self.game.is_legal_move(state, action)
     
+    
     def get_kid_from_move(self, player, state, move):
+        
         return self.game.generate_kid_from_move(player, state, move)
+    
     
     def get_kids(self, state, player):
         
@@ -96,9 +111,11 @@ class StateManager:
             
         return states_arr, player
     
+    
     def get_normalized_distribution(self):
        
        return self.game.get_normalized_distribution() 
+   
    
     def get_reward(self, state, player):
         

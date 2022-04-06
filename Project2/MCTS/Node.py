@@ -14,16 +14,11 @@ class Node:
         self.state = state
         self.player = player
         self.parent = parent
-        # self.kids = {} # main-kok 
-        self.kids = defaultdict(lambda: None) # main-kok 
-        # kids[action] = en kid-node
-        self.kids_rollout = defaultdict(lambda: None) # main-kok
-        # self.kids_rollout = {} # main-kok
-
+        self.kids = defaultdict(lambda: None)
+        self.kids_rollout = defaultdict(lambda: None)
         self.evaluate = 0
         self.count = 0
-
-
+        
 
     def update_count(self):
         """
@@ -36,7 +31,7 @@ class Node:
 
         """
         self.count +=1
-
+        
 
     def update_evaluate(self, eval):
         """
@@ -101,7 +96,7 @@ class Node:
         """
         return self.kids_rollout
 
-    def add_kid(self, kid, action, rollout = False): #kok siste del
+    def add_kid(self, kid, action, rollout = False):
         """
 
         Method - Add a kid to to node 
@@ -112,21 +107,15 @@ class Node:
 
         """
         
-        # print("ADD KID", kid, "ACTION", action)
-        
-        # print("FØR", self.kids_rollout)
-        # print("FØR KIDS", self.kids)
-        
         if rollout == True:
             self.kids_rollout[action] = kid
-            # print("ETTER", self.kids_rollout)
 
         else:
             self.kids[action] = kid
             
 
 
-    def get_kid_with_action(self, action, rollout = False): # kok siste del
+    def get_kid_with_action(self, action, rollout = False):
         """
 
         Method - Fetch a kid with a action 
@@ -137,22 +126,13 @@ class Node:
 
         """
         
-        # print("KIDS ROLLOUT", self.kids_rollout)
-        # print("VANLIGE KIDS", self.kids)
-        
-        
-        # print('get_kid', action)
-        # print('get_kid', self.kids_rollout)
         if rollout == True:
             return self.kids_rollout[action]
         else:
             return self.kids[action]
-        
-        
-          
 
 
-    def remove_kid(self, action, rollout = False): # kok siste del
+    def remove_kid(self, action, rollout = False):
         """
 
         Method - Remove the kid with the action from the input
@@ -165,7 +145,6 @@ class Node:
         if rollout == True:
             self.kids_rollout[action] = None
         else:
-            print('---------------------------------------------------------------')
             self.kids[action] = None
         
 
@@ -185,7 +164,6 @@ class Node:
             return self.kids[action].count
         else:
             return 0
-            # Denne burde egt endres til None
 
     
     def get_kids_count(self):
@@ -226,18 +204,10 @@ class Node:
         RETURNS: int
 
         """
-        
-        # print("ACTION", action)
-
-        # if self.get_action_count(action) != 0:
-        #     # kok, endre på oppsettet?
-        #     return ( self.get_kid_with_action(action).evaluate )  /  ( self.get_action_count(action) )
-        # else: 
+    
         if self.get_action_count(action) == 0:
             return 0
         return self.get_kid_with_action(action).evaluate / (self.get_action_count(action))
-
-        # return self.get_kid_with_action(action).evaluate / self.get_action_count(action)
 
     
     def get_u_value(self, action, exploration_weight):
@@ -251,45 +221,24 @@ class Node:
 
         """
         return exploration_weight * np.sqrt(np.log(self.count) / (1 + self.get_action_count(action)))
-        # return exploration_weight * np.sqrt(np.log(self.count) / (self.get_action_count(action)))
         
+        
+    """ FÅR SE OM VI SKAL BEHOLDE DENNE UNDER """
         
     def UCT(self, player, exploration_weight):
         
-        # print('action UCT:', action)
         if player == 2:
                 exploration_weight = exploration_weight*-1
                 
                 
         if self.count == 0:
             return exploration_weight * float("inf")
-            # print(exploration_weight * float("inf"))
-            # exploitation = 0
         else:
             exploitation = self.evaluate  / (self.count)
-            
-        
-        # exploitation = self.evaluate  / (self.count)
-        
         
         exploration = exploration_weight * np.sqrt(2 * np.log(self.parent.count) / (self.count))
         
-        
-        # print('UTC', exploitation + exploration)
-        # print('UTC', exploitation + exploration)
         if player == 1:
             return exploitation + exploration
         else:
             return exploitation + exploration
-
-        
-        # return exploitation + exploration
-
-        
-        
-
-
-    
-
-        
-        
