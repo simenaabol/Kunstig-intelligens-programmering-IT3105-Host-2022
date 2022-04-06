@@ -235,7 +235,7 @@ class MCTS:
             counter += 1
             testnode = testnode.parent
             
-        print('dybde', counter)
+        # print('dybde', counter)
         
         # return current_node
         return current_node
