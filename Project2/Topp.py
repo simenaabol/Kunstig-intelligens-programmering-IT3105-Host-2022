@@ -45,9 +45,11 @@ class Topp:
         self.state_manager.reset_game()
         current_player = 0
         
+        # print("GAMESTATE FROM TOPP", gamestate)
+        
         while not self.state_manager.is_finished(gamestate):
             
-            action = agents[current_player].get_action(False, gamestate, current_player, False)
+            action = agents[current_player].get_action(False, gamestate, current_player + 1, False)
             self.state_manager.do_move(action)
             gamestate = self.state_manager.get_state()
             
@@ -91,15 +93,15 @@ class Topp:
                     outcome = self.play_one_game(agent1, agent2)
 
                     if outcome == 1:
-                        print("Player", agent1, "won against player", agent2,)
-                        print("Matrix before win", champions)
+                        # print("Player", agent1, "won against player", agent2,)
+                        # print("Matrix before win", champions)
                         champions[agent1][agent2] += 1
-                        print("Matrix after win", champions)
+                        # print("Matrix after win", champions)
                     elif outcome == 2:
-                        print("Player", agent2, "won against player", agent1,)
-                        print("Matrix before win", champions)
+                        # print("Player", agent2, "won against player", agent1,)
+                        # print("Matrix before win", champions)
                         champions[agent2][agent1] += 1
-                        print("Matrix after win", champions)
+                        # print("Matrix after win", champions)
 
         self.champions = champions        
         print(self.champions)

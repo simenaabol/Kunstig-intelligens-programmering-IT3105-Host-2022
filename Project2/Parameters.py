@@ -69,5 +69,5 @@ nim_config = {
 }
 
 topp_config = {
-    'number_of_games': 50
+    'number_of_games': 16
 }

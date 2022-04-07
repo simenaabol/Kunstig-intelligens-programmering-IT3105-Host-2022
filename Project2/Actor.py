@@ -59,14 +59,19 @@ class ANET:
         legal_actions = self.state_manager.get_legal_moves(state)
         all_actions = self.state_manager.get_all_moves()
         
+        # print(state, player)
+        
         state_for_model = np.concatenate(([player], state), axis=None)
         
-        state_for_model = tuple(state_for_model.tolist())
+        # state_for_model = tuple(state_for_model.tolist())
         
         if lite_model:
             distribution = lite_model.predict_single(state_for_model)
         else:
-            distribution = self.model(tf.convert_to_tensor([state_for_model])).numpy()
+            # state_for_model = state_for_model.reshape((1,) + state_for_model.shape)
+            state_for_model = tf.cast(tf.convert_to_tensor([state_for_model]), dtype=tf.float32)
+            # print(state_for_model)
+            distribution = self.model(state_for_model).numpy()
         
         distribution = distribution.reshape(distribution.shape[-1])
         

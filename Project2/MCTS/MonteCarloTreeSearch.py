@@ -280,6 +280,8 @@ class MCTS:
 
         while done == False:
             
+            print(player)
+            
             action = self.actor.get_action(lite_model, leaf, player)
             
             leaf, player = self.state_manager.get_kid_from_move(player, leaf, action)
