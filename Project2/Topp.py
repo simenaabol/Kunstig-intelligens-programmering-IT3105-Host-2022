@@ -110,6 +110,9 @@ class Topp:
             
             
             self.state_manager.do_move(action)
+            if self.state_manager.is_finished(gamestate):
+                    self.vis_game_states.append(copy.deepcopy(gamestate))
+                
             gamestate = self.state_manager.get_state()
             
             if current_player == 0:
