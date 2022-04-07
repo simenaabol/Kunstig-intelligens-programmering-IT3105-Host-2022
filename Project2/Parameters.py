@@ -11,7 +11,7 @@ config = {
     
     'mode': 'learn', # learn, learn_topp, topp
     
-    'network_folder_name': 'natt_test2' # Folder name for saving and loading the networks for TOPP
+    'network_folder_name': '4_hex_500' # Folder name for saving and loading the networks for TOPP
 }
 
 hex_config = {
