@@ -11,7 +11,7 @@ def main():
     elif config['mode'] == 'learn_topp':
         rl = RL_learner(config)
         rl.training()
-        topp = Topp()
+        topp = Topp(config, topp_config)
         topp.play_round_robin()
         
     elif config['mode'] == 'topp':

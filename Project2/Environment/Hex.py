@@ -6,12 +6,17 @@
 # -> Dette til si at vi må rotere matrisen 45 grader med klokken
 
 import numpy as np
-# import networkx as nx
+import networkx as nx
 import matplotlib.pyplot as plt
 import copy
 
 class Hex:   
     def __init__(self, boardsize):
+        """Class for the Hex game
+
+        Args:
+            boardsize (int): How large one side of the board should be
+        """        
         
         self.boardsize = boardsize
         self.board = np.zeros((boardsize, boardsize), int)

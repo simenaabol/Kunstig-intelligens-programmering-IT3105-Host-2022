@@ -30,17 +30,13 @@ class RL_learner:
                           self.state_manager)
         
         self.config = config
-
         self.num_actual_games = config['num_actual_games']
         self.num_search_games = config['num_search_games']
-
         self.minibatch_size = self.parameters['mcts_config']['minibatch_size']
         self.exploration_weight = self.parameters['mcts_config']['exploration_weight']
         self.epochs = self.parameters['mcts_config']['epochs']
         self.timout_max_time = self.parameters['mcts_config']['timout_max_time']
-
-        self.save_interval = self.num_actual_games / config['saving_interval'] # Hvor ofte man lagrer nettverket
-        
+        self.save_interval = self.num_actual_games / config['saving_interval']
         self.save_nets = config['save_nets']
 
     def training(self):
@@ -58,26 +54,28 @@ class RL_learner:
             # if episode % 10 == 0:
             print("Actual game nr.", actual_game + 1)
 
+            # Reset the actual game
             self.state_manager.reset_game()
 
+            # Initialize the MonteCarlo tree
             monte_carlo = MCTS(self.exploration_weight, self.actor, self.state_manager)
             
+            # Using the lite_model that were supplied on BB to make predictions run faster
             if actual_game % self.config['lite_model_interval'] == 0:
                 lite_model = LiteModel.from_keras_model(self.actor.get_model())
 
-            finished = self.state_manager.is_finished()
-
-            while not finished:
+            while not self.state_manager.is_finished():
     
+                # Create a start time for the timeout counter
                 timeout_start_time = time.perf_counter()
 
+                # Perform the search games
                 for search_game in range(self.num_search_games):
-                    
-                    # if search_game % 100 == 0:
-                    #     print("Search game nr.", search_game)
 
+                    # Run one simulation
                     monte_carlo.mcts(lite_model)
 
+                    # Break if timeout
                     if time.perf_counter() - timeout_start_time > self.timout_max_time:
                         print("Search game", search_game, "timeouted.")
                         break
@@ -98,30 +96,19 @@ class RL_learner:
                 
                 # Updates the root after doing the actual move
                 monte_carlo.update_root(move_to_make)
-                
-                # Check if the game is in a final state
-                finished = self.state_manager.is_finished()
 
             # winner = self.state_manager.get_winner()
             # print("Game finished! Player", winner, "won.")
 
-            probs_for_rbuf = []
-            
-            for i in range(len(replay_buffer)):
-                probs_for_rbuf.append(i ** self.exploration_weight + 1e-10) # USIKKER HVOR INNHOLDET I APPENDEN KOMMER FRA
-
-            probs_for_rbuf = probs_for_rbuf / np.sum(probs_for_rbuf)
-
+            # Retrieve random indices to gather cases from the replay buffer.
             if self.minibatch_size > 0:
                 indices_for_minibatch = np.random.choice(len(replay_buffer), 
                                                         size=self.minibatch_size if self.minibatch_size <= len(replay_buffer) else len(replay_buffer), 
-                                                        p=probs_for_rbuf, 
                                                         replace=False)
 
             else:
                 indices_for_minibatch = np.random.choice(len(replay_buffer), 
                                                         size = int(len(replay_buffer)) * self.minibatch_size,
-                                                        p = probs_for_rbuf,
                                                         replace = False)
                 
             # Minibatch of cases from the replay buffer with the random indices

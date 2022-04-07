@@ -1,7 +1,7 @@
 config = {
     'game': 'hex',
-    'num_actual_games': 5000,
-    'num_search_games': 500,
+    'num_actual_games': 10,
+    'num_search_games': 50,
     'starting_player': 1,
     
     'lite_model_interval': 5,
@@ -9,9 +9,9 @@ config = {
     'saving_interval': 5,
     'save_nets': True,
     
-    'mode': 'topp', # learn, learn_topp, topp
+    'mode': 'learn', # learn, learn_topp, topp
     
-    'network_folder_name': '4_hex_500' # Folder name for saving and loading the networks for TOPP
+    'network_folder_name': 'test_topp' # Folder name for saving and loading the networks for TOPP
 }
 
 hex_config = {
@@ -24,8 +24,6 @@ hex_config = {
         'activation_function': 'relu', # relu, linear, sigmoid, tanh
         'output_act': 'softmax',
         'optimizer': 'adam', # adam, rmsprop, sgd, adagrad
-        # 'loss_function': 'cross_entropy', BRUKES IKKE
-        
         'anet_batch_size': 64,
 
         'epsilon': 1, 
@@ -52,8 +50,6 @@ nim_config = {
         'activation_function': 'relu', # relu, linear, sigmoid, tanh
         'output_act': 'softmax',
         'optimizer': 'adam', # adam, rmsprop, sgd, adagrad
-        # 'loss_function': 'cross_entropy', BRUKES IKKE
-        
         'anet_batch_size': 64,
 
         'epsilon': 1, 
@@ -69,5 +65,6 @@ nim_config = {
 }
 
 topp_config = {
-    'number_of_games': 16
+    'number_of_games': 16,
+    'topp_eps': 0
 }

@@ -63,7 +63,7 @@ class MCTS:
         if self.state_manager.is_finished(self.root.get_state()):
             return
 
-        # 1. Tree Search - Traversing the tree from the root to a leaf node by using the tree policy
+    # 1. Tree Search - Traversing the tree from the root to a leaf node by using the tree policy
     
         leaf = self.search()
 
@@ -73,23 +73,23 @@ class MCTS:
             self.backpropagation(leaf, rew)
             return
         
-        # 2. Node Expansion - Generating some or all child states of a parent state, 
-        # and then connecting the tree node housing the parent state (a.k.a. parent node) 
-        # to the nodes housing the child states (a.k.a. child nodes).
-        
+    # 2. Node Expansion - Generating some or all child states of a parent state, 
+    # and then connecting the tree node housing the parent state (a.k.a. parent node) 
+    # to the nodes housing the child states (a.k.a. child nodes).
+    
         kids = self.new_leaves(leaf)
 
-        # 3. Leaf Evaluation - Estimating the value of a leaf node in the tree by doing
-        # a rollout simulation using the default policy from the leaf node’s state to a final state
+    # 3. Leaf Evaluation - Estimating the value of a leaf node in the tree by doing
+    # a rollout simulation using the default policy from the leaf node’s state to a final state
 
         # Chooses one of the new kids found in new_leaves
         kid = np.random.choice(kids)
         
         leaf, rew = self.leaf_evaluation(kid, lite_model)
 
-        # 4. Backpropagation - Passing the evaluation of a final state back up the tree, 
-        # updating relevant data (see course lecture notes) at all nodes and edges 
-        # on the path from the final state to the tree root.
+    # 4. Backpropagation - Passing the evaluation of a final state back up the tree, 
+    # updating relevant data (see course lecture notes) at all nodes and edges 
+    # on the path from the final state to the tree root.
     
         self.backpropagation(kid, rew)
    
@@ -127,7 +127,7 @@ class MCTS:
         RETURNS: a leaf node
 
         """
-        """
+        
         current_node = self.root
         
         while current_node.get_kids_count() > 0:
@@ -140,43 +140,93 @@ class MCTS:
             current_node = current_node.kids[action]
 
         return current_node
-        """
-        
-        current_node = self.root
-        player = current_node.get_player()
-        flag = 0   
-        
-        if player == 1:
-            flag = 1
-        elif player == 2:
-            flag = -1
-        else:
-            raise TypeError("Sorry, the player int is not compatible[2]")
-
-        while current_node.get_kids_count() > 0:
     
-            max = -flag * float('inf')
-            current_best = None
-            kids = current_node.get_kids()
+        """ BEHOLDER DETTE I TILFELLE VI SKAL ENDRE TIL DET UNDER """
 
-            for action in kids:
-                
-                if  current_node.get_action_count(action) == 0:
-                    a = -max
-                else:
-                    if flag == 1:
-                        a = current_node.get_q_value(action) + current_node.get_u_value(action, self.exp_weight)
-                    else:
-                       a = current_node.get_q_value(action) - current_node.get_u_value(action, self.exp_weight)
-                
-                if (a < max and flag == -1) or (a > max and flag == 1):
-                    max = a
-                    current_best = action
 
-            current_node = current_node.get_kid_with_action(current_best)
-            flag *= -1
+        # sign = 1 if player == 1 else -1
+
+        # while current_node.get_kids_count() > 0:
+
+        #     best = -sign * float('inf')
+        #     best_action = None
+        #     for action in current_node.kids:
+                
+        #         a = current_node.get_q_value(action) + sign * current_node.get_u_value(action, self.exp_weight)
+        #         if a > best and sign == 1:
+        #             best = a
+        #             best_action = action
+                    
+        #         elif a < best and sign == -1:
+        #             best = a
+        #             best_action = action
+
+        #     current_node = current_node.get_kid_with_action(best_action)
+        #     sign *= -1
+
+        # testnode = current_node
+        # counter = 0
+        # while testnode.parent:
+        #     counter += 1
+        #     testnode = testnode.parent
             
-        return current_node
+        # print(counter)
+
+        # return current_node
+
+        # current_node = self.root
+        
+        # #  Er vell bare å bruke player her?
+        # player = current_node.get_player()
+        # flag = 0   
+        # if player == 1:
+        #     flag = 1
+        # elif player == 2:
+        #     flag = -1
+        # else:
+        #     raise TypeError("Sorry, the player int is not compatible[2]")
+
+        
+        # while current_node.get_kids_count() > 0:
+    
+        #     max = -flag * float('inf')
+        #     current_best = None
+        #     kids = current_node.get_kids()
+            
+
+        #     for action in kids:
+                
+                
+        #         if  current_node.get_action_count(action) == 0:
+        #             a = -max
+        #         else:
+        #             if flag == 1:
+        #                 a = current_node.get_q_value(action) + current_node.get_u_value(action, self.exp_weight)
+        #                 # print(a)
+        #             else:
+        #                 a = current_node.get_q_value(action) - current_node.get_u_value(action, self.exp_weight)
+        #                 # print(a)
+                    
+                
+        #         if (a < max and flag == -1) or (a > max and flag == 1):
+        #             max = a
+        #             current_best = action
+
+        #     current_node = current_node.get_kid_with_action(current_best)
+            
+        #     flag *= -1
+        
+        # testnode = current_node
+        # counter = 0
+        # while testnode.parent:
+        #     counter += 1
+        #     testnode = testnode.parent
+            
+            
+        # print(counter)
+            
+        # return current_node
+
     
     def new_leaves(self, leaf):
         """
@@ -218,6 +268,7 @@ class MCTS:
         RETURNS: a leaf node
 
         """
+        
         
         leaf = from_node.get_state()
         player = from_node.get_player()

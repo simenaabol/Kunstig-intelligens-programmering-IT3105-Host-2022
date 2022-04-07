@@ -3,8 +3,13 @@ import numpy as np
 
 class Nim:
     def __init__(self, num_stones, max_removal):
-        
+        """Class for the Nim game
 
+        Args:
+            num_stones (int): How many stones the game starts with
+            max_removal (int): How many stones one can remove in one turn
+        """        
+    
         # Variables from config
         self.num_stones = num_stones
         self.max_removal = max_removal

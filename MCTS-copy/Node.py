@@ -221,3 +221,24 @@ class Node:
 
         """
         return exploration_weight * np.sqrt(np.log(self.count) / (1 + self.get_action_count(action)))
+        
+        
+    """ FÅR SE OM VI SKAL BEHOLDE DENNE UNDER """
+        
+    def UCT(self, player, exploration_weight):
+        
+        if player == 2:
+                exploration_weight = exploration_weight*-1
+                
+                
+        if self.count == 0:
+            return exploration_weight * float("inf")
+        else:
+            exploitation = self.evaluate  / (self.count)
+        
+        exploration = exploration_weight * np.sqrt(2 * np.log(self.parent.count) / (self.count))
+        
+        if player == 1:
+            return exploitation + exploration
+        else:
+            return exploitation + exploration
