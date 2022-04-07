@@ -9,9 +9,9 @@ config = {
     'saving_interval': 5,
     'save_nets': True,
     
-    'mode': 'learn', # learn, learn_topp, topp
+    'mode': 'topp', # learn, learn_topp, topp
     
-    'network_folder_name': 'test_system' # Folder name for saving and loading the networks for TOPP
+    'network_folder_name': 'thom' # Folder name for saving and loading the networks for TOPP
 }
 
 hex_config = {

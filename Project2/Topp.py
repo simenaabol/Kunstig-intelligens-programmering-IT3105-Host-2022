@@ -28,8 +28,8 @@ class Topp:
 
         for i, path in enumerate(path_list):
             
-            model = tf.keras.models.load_model(path, custom_objects={"cross_entropy_loss": cross_entropy_loss})
-            anet = ANET(model, None, None, None, None, None, 1, None, self.state_manager)
+            model = tf.keras.models.load_model(path, custom_objects={"custom_cross_entropy": cross_entropy_loss})
+            anet = ANET(model, None, None, None, None, None, 0.3, None, self.state_manager)
             anets.append((int(path.name), anet))
            
         anets.sort(key=lambda x: x[0])
@@ -91,9 +91,15 @@ class Topp:
                     outcome = self.play_one_game(agent1, agent2)
 
                     if outcome == 1:
+                        print("Player", agent1, "won against player", agent2,)
+                        print("Matrix before win", champions)
                         champions[agent1][agent2] += 1
+                        print("Matrix after win", champions)
                     elif outcome == 2:
+                        print("Player", agent2, "won against player", agent1,)
+                        print("Matrix before win", champions)
                         champions[agent2][agent1] += 1
+                        print("Matrix after win", champions)
 
         self.champions = champions        
         print(self.champions)
