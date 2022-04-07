@@ -50,7 +50,7 @@ class Topp:
         self.visualize_game = topp_config['visualize_game']
         self.visualize_stats = topp_config['visualize_robin']
         
-        print(self.epsilon)
+        # print(self.epsilon)
         
         
     def get_anets(self, path_list):
@@ -227,7 +227,7 @@ class Topp:
         ax.set_xlabel('More trained nets to the right')
         
 
-        print('total serier', self.serie_total)
+        # print('total serier', self.serie_total)
         for i, height in enumerate(self.serie_total):
             
             rect3 = matplotlib.patches.Rectangle((width*i,0 ), 4, height,color ='blue')
@@ -252,7 +252,7 @@ class Topp:
         ax.set_xlabel('More trained nets to the right')
         
 
-        print('total won', self.total)
+        # print('total won', self.total)
         for i, height in enumerate(self.total):
             
             rect3 = matplotlib.patches.Rectangle((width*i,0 ), 4, height,color ='blue')
