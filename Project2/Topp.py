@@ -47,6 +47,10 @@ class Topp:
         self.number_of_vis = 1
         self.game_number = 0
         
+        self.visualize_game = topp_config['visualize_game']
+        self.visualize_stats = topp_config['visualize_robin']
+        
+        print(self.epsilon)
         
         
     def get_anets(self, path_list):
@@ -60,11 +64,12 @@ class Topp:
         """        
         
         anets = []
+        
 
         for i, path in enumerate(path_list):
             
             model = tf.keras.models.load_model(path, custom_objects={"custom_cross_entropy": custom_cross_entropy})
-            anet = ANET(model, None, None, None, None, None, self.epsilon, 1, self.state_manager)
+            anet = ANET(model, None, None, None, None, None, 0, 1, self.state_manager)
             anets.append((int(path.name), anet))
            
         anets.sort(key=lambda x: x[0])
@@ -150,7 +155,7 @@ class Topp:
         
         
         # print(total)
-        game_vis = False
+        game_vis = self.visualize_game
         
         for agent1 in range(self.number_of_anets):
             
@@ -199,11 +204,11 @@ class Topp:
         topp_total = True
         
         
-        if topp_robin:
+        if self.visualize_stats:
             self.visualize_robin()
             
-        if topp_total:
-            self.visualize_total()
+        # if topp_total:
+        #     self.visualize_total()
 
 
 
@@ -225,7 +230,7 @@ class Topp:
         print('total serier', self.serie_total)
         for i, height in enumerate(self.serie_total):
             
-            rect3 = matplotlib.patches.Rectangle((width*i,0 ), 4, height,color ='yellow')
+            rect3 = matplotlib.patches.Rectangle((width*i,0 ), 4, height,color ='blue')
             ax.add_patch(rect3)
             
         plt.xlim([0, max_width])

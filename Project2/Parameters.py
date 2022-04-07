@@ -9,7 +9,7 @@ config = {
     'saving_interval': 5,
     'save_nets': True,
     
-    'mode': 'learn', # learn, learn_topp, topp
+    'mode': 'topp', # learn, learn_topp, topp
     
     # 'network_folder_name': '4' # Folder name for saving and loading the networks for TOPP
     'network_folder_name': '4_hex_demo' # Folder name for saving and loading the networks for TOPP
@@ -24,9 +24,9 @@ hex_config = {
         'hidden_layer_size': (70, 50),
         'activation_function': 'tanh', # relu, linear, sigmoid, tanh
         'optimizer': 'adam', # adam, rmsprop, sgd, adagrad
+        'output_act': 'softmax',
         'anet_batch_size': 64,
         
-        # output_act': 'softmax',
 
         'epsilon': 1, 
         'epsilon_decay': 0.95
@@ -68,5 +68,7 @@ nim_config = {
 
 topp_config = {
     'number_of_games': 16,
-    'topp_eps': 0
+    'topp_eps': 0,
+    'visualize_game': True,
+    'visualize_robin': True
 }
