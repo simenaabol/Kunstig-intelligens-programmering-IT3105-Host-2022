@@ -221,3 +221,7 @@ class StateManager:
         """        
         
         return self.game.get_reward(state, player)
+    
+    def vis_entire_game(self, array_of_states, number_of_vis):
+        # print('array_of_states', array_of_states)
+        self.game.get_graphic(array_of_states, number_of_vis)

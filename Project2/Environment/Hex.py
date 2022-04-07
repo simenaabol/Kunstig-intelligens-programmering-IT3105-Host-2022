@@ -199,7 +199,7 @@ class Hex:
         return self.player
         
 
-    def get_graphic(self):
+    def get_graphic(self, array_of_states,number_of_vis ):
         """
         Method for visualizing the game state.
         :param action: Action to be performed.
@@ -208,36 +208,43 @@ class Hex:
         graph = nx.Graph()
         # graph.clear() # Remove all nodes and edged from the graph
         # plt.clf() # Clears the plt
-
-        position = []
-        node_color = []
-        node_width = []
         
-        self.board = np.array(self.board)
+        print('array_of_states in hex', array_of_states)
+
+        for one_board in array_of_states:
+            position = []
+            node_color = []
+            node_width = []
+            
+            # self.board = np.array(copy.deepcopy(one_board))
+            print('oneBB', one_board)
+            
+            for i in range(self.boardsize):
+                height = self.boardsize - i*0.5
+                width = np.ceil(self.boardsize / 2) -i
+                for j in range(self.boardsize):
+                    graph.add_node(j) # Add up a list with all the nodes
+                    position.append((width, height)) # Add the position of the node
+                    node_width.append(self.node_size)
+                    node_color.append(self.colors[round(one_board[i, j])])  
+
+                    height -= 0.5
+                    width += 1
+                    
+            # Add the edges to the graph
+            c = 0
+            for i in range(self.boardsize):
+                for j in range(self.boardsize):
+                    for x in range(len(self.neighbours)):
+                        if 0 <= i + self.neighbours[x][0] < self.boardsize and 0 <= j + self.neighbours[x][1] < self.boardsize \
+                                and c != self.boardsize * (i + self.neighbours[x][0]) + (j + self.neighbours[x][1]):
+                            graph.add_edge(c, self.boardsize * (i + self.neighbours[x][0]) + (j + self.neighbours[x][1]))
+                    c += 1
+
+            nx.draw(graph, position, node_color=node_color, node_size=node_width, with_labels=False,
+                    font_weight='bold', ) # node_shape='^', mulig det eksisterer en smultring-form
+            # graph.set_edgecolor('red') # Dette er ikke til kant, men som en border-color 
+            plt.pause(0.7)
         
-        for i in range(self.boardsize):
-            height = self.boardsize - i*0.5
-            width = np.ceil(self.boardsize / 2) -i
-            for j in range(self.boardsize):
-                graph.add_node(j) # Add up a list with all the nodes
-                position.append((width, height)) # Add the position of the node
-                node_width.append(self.node_size)
-                node_color.append(self.colors[round(self.board[i, j])])  
-
-                height -= 0.5
-                width += 1
-                
-        # Add the edges to the graph
-        c = 0
-        for i in range(self.boardsize):
-            for j in range(self.boardsize):
-                for x in range(len(self.neighbours)):
-                    if 0 <= i + self.neighbours[x][0] < self.boardsize and 0 <= j + self.neighbours[x][1] < self.boardsize \
-                            and c != self.boardsize * (i + self.neighbours[x][0]) + (j + self.neighbours[x][1]):
-                        graph.add_edge(c, self.boardsize * (i + self.neighbours[x][0]) + (j + self.neighbours[x][1]))
-                c += 1
-
-        nx.draw(graph, position, node_color=node_color, node_size=node_width, with_labels=False,
-                font_weight='bold', ) # node_shape='^', mulig det eksisterer en smultring-form
-        # graph.set_edgecolor('red') # Dette er ikke til kant, men som en border-color 
-        plt.pause(0)
+        
+        
