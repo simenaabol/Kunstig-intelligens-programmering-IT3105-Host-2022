@@ -3,13 +3,12 @@ from Actor import ANET
 import os
 from StateManager import StateManager
 from NeuralNetwork import cross_entropy_loss
-from Parameters import config, topp_config
 import numpy as np
 import math
 import matplotlib as plt
 
 class Topp:
-    def __init__(self):
+    def __init__(self, config, topp_config):
         self.state_manager = StateManager(config)
         
         """ MULIG DU MÅ ENDRE DENNE SIMEN """
@@ -20,8 +19,6 @@ class Topp:
         self.number_of_games = topp_config['number_of_games']
         self.winner1 = 0
         self.winner2 = 0
-        
-        # self.anets = OrderedDict(sorted(self.anets.items()))
         self.champions = None
         
         
@@ -32,33 +29,28 @@ class Topp:
         for i, path in enumerate(path_list):
             
             model = tf.keras.models.load_model(path, custom_objects={"cross_entropy_loss": cross_entropy_loss})
-            anet = ANET(model, None, None, None, None, None, None, 1, None, self.state_manager)
+            anet = ANET(model, None, None, None, None, None, 1, None, self.state_manager)
             anets.append((int(path.name), anet))
-
            
         anets.sort(key=lambda x: x[0])
-        # print(anets)
+        
         return anets
             
     
     def play_one_game(self, agent1, agent2):
+        
         agents = (self.anets[agent1][1], self.anets[agent2][1])
         
         gamestate = self.state_manager.get_state()
-        # print("STATE", gamestate)
         self.state_manager.reset_game()
-        
-        # print(f'Playing game between player {agent1} and player {agent2}.')
-        
         current_player = 0
         
         while not self.state_manager.is_finished(gamestate):
-            # print("yes", gamestate)
+            
             action = agents[current_player].get_action(False, gamestate, current_player, False)
-            
             self.state_manager.do_move(action)
-            
             gamestate = self.state_manager.get_state()
+            
             if current_player == 0:
                 current_player = 1
             else:
@@ -108,12 +100,7 @@ class Topp:
         print('spiller 1:', self.winner1)
         print('spiller 2:', self.winner2)
     
+    
+    """ LAG DENNE """
+    
     # def visualize(self):
-        
-        
-    
-    
-    
-# toppytop = Topp()
-# toppytop.play_round_robin()
-# toppytop.visualize()

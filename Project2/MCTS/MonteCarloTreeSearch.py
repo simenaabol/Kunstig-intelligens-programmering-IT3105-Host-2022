@@ -4,8 +4,6 @@ sys.path.append("..")
 from MCTS.Node import Node
 import numpy as np
 
-import random
-
 
 class MCTS:
     def __init__(self, exploration_weight, actor, state_manager):
@@ -25,10 +23,9 @@ class MCTS:
             )
 
         self.exp_weight = exploration_weight
-        self.actor = actor # obj
-        self.state_manager = state_manager # obj
+        self.actor = actor
+        self.state_manager = state_manager
 
-# Main-kok
     def get_normalized_distribution(self):
         """
 
@@ -40,71 +37,17 @@ class MCTS:
 
         """
 
-        
-        """
-        Gets the distribution of visit counts of the children of the root
-        :return: The normalized distribution
-        """
-        # Mix med niclas
-        all_act = len(self.state_manager.get_all_moves())
-        # print('shape', all_act)
-        # distribution = np.zeros(all_act)
         distribution = []
         
-        # for action in range(all_act): #Itererer alle barna til roten? Ikke alle?
-        # for i in range(all_act):
         for action in self.state_manager.get_all_moves():
             
-            
-            if action in self.root.kids: #Itererer alle barna til roten? Ikke alle?
-                # print("ACT INDEX", action)
-                kids = self.root.get_kids()
-                # print('kids', kids)
+            if action in self.root.kids:
                 kid = self.root.get_kid_with_action(action)
-                # print('----------------------------------------------------------------------------------------', float(kid.count))
-                # print('----------------------------------------------------------------------------------------', float(self.root.count))
                 distribution.append(float(kid.count) / float(self.root.count))
-                
             else:
                 distribution.append(0.0)
-            
-            
-        # distribution = distribution.flatten()
-        # print("DIST", distribution)
+                
         return distribution / np.sum(distribution)
-        #     if action in self.root.kids:
-        #         print('kids action', action)
-        #         # print("COUNT", action, float(self.root.kids[action].count))
-        #         distribution[action] = float(self.root.kids[action].count) / float(self.root.count)
-
-        #         # distribution[action - 1] = float(self.root.kids[action].count) / float(self.root.count)
-        #     else:
-        #         distribution[action] = 0.0
-          
-        # distribution = distribution.flatten()      
-        # # print(tuple(distribution))
-        # print("DIST", distribution)
-        # return distribution
-    # / np.sum(distribution) 
-
-        # Dette er fra main. Kan evt testes
-        # board_shape = self.simworld.get_grid().shape
-        # shape = len(self.state_manager.get_all_moves())
-        # distribution = np.zeros(shape)
-        # print(distribution)
-        # for action in range(len(self.root.kids)): #Itererer alle barna til roten? Ikke alle?
-        #     # kid = self.root.kids[action]
-        #     if action in self.root.kids:
-        #         print(action, self.root.kids[action])
-        #         # print(distribution[action])
-        #         distribution[action] = float(self.root.kids[action].count)
-        #         print("COUNTS", float(self.root.kids[action].count))
-        # distribution = distribution.flatten()
-        # print(distribution)
-        # print(distribution / np.sum(distribution))
-        # return distribution / np.sum(distribution)    
-
-        
 
     def mcts(self, lite_model):
         """
@@ -117,53 +60,37 @@ class MCTS:
 
         """
 
-        if self.state_manager.is_finished(self.root.get_state()): #Sjekk opp metodNavn til done
-            print("MONTE CARLO KJØRER IKKE")
-            return # Kunne returnert noe her for å skille seg fra kok. 
-        
-        # Bør legge inn en raise her hvis det ikke eksisterer en node
-
+        if self.state_manager.is_finished(self.root.get_state()):
+            return
 
     # 1. Tree Search - Traversing the tree from the root to a leaf node by using the tree policy
-        leaf = self.search() # returns current_node
-        
-        # print("LEAF FEILMELDING", leaf)
+    
+        leaf = self.search()
 
         # Check if the leaf is at the end
         if self.state_manager.is_finished(leaf.get_state()):
             rew = self.state_manager.get_reward(leaf.get_state(),leaf.get_player() )
             self.backpropagation(leaf, rew)
-            # print("MONTE CARLO KJØRER IKKE")
             return
-
         
     # 2. Node Expansion - Generating some or all child states of a parent state, 
     # and then connecting the tree node housing the parent state (a.k.a. parent node) 
     # to the nodes housing the child states (a.k.a. child nodes).
-
-        # Find ALL the leaf for the input node
+    
         kids = self.new_leaves(leaf)
-
 
     # 3. Leaf Evaluation - Estimating the value of a leaf node in the tree by doing
     # a rollout simulation using the default policy from the leaf node’s state to a final state
 
         # Chooses one of the new kids found in new_leaves
         kid = np.random.choice(kids)
-
-        # Leaf evaluation // a rollout
-        leaf, rew = self.leaf_evaluation(kid, lite_model)
         
-        # print("ETTER ROLLOUT")
-
-
+        leaf, rew = self.leaf_evaluation(kid, lite_model)
 
     # 4. Backpropagation - Passing the evaluation of a final state back up the tree, 
     # updating relevant data (see course lecture notes) at all nodes and edges 
     # on the path from the final state to the tree root.
-
-        # Kommenatren under er kok
-        # If only nodes in MCT should be updated change leaf to successor
+    
         self.backpropagation(kid, rew)
    
 
@@ -177,14 +104,18 @@ class MCTS:
         RETURNS: nothing
 
         """
+        
         _temp_root = self.root.get_kid_with_action(action)
-        if not _temp_root: # kok - usikker hva som skjer her
+        
+        if not _temp_root:
             self.root = Node(
                 state = self.state_manager.get_state(),
                 parent = None, 
                 player = self.state_manager.get_playing_player()
             )
+            
         self.root = _temp_root
+        self.root.parent = None
 
     def search(self):
         """
@@ -198,51 +129,19 @@ class MCTS:
         """
         
         current_node = self.root
-        # print('hællæ', current_node.kids)
-        # if current_node.kids.items == None:
-            
-        
         
         while current_node.get_kids_count() > 0:
-        # if current_node.kids[0][1] != None:
-            # print('inne i while')
             
             player = current_node.player
-            # print('player', player)
             policy_function = max if player == 1 else min
-            kids = current_node.get_kids()
             
-    
-            # print('funk', policy_function)
-            # if player == 2:
-                # print('kids',current_node.kids )
             action = policy_function(current_node.kids.keys(), key=lambda key: current_node.kids[key].UCT(player, self.exp_weight))
-            # print('returned action', action)
+
             current_node = current_node.kids[action]
-            # if player 
-            # current_node.player = 
-            # current_node.kids.pop(action)    
 
-            # print('current_node med barn', current_node.kids)
-            
-            
-            
-            
-            
-        testnode = current_node
-        counter = 0
-        while testnode.parent:
-            counter += 1
-            testnode = testnode.parent
-            
-        # print('dybde', counter)
-        
-        # return current_node
         return current_node
-
-            
-            
-            
+    
+        """ BEHOLDER DETTE I TILFELLE VI SKAL ENDRE TIL DET UNDER """
 
 
         # sign = 1 if player == 1 else -1
@@ -328,11 +227,9 @@ class MCTS:
             
         # return current_node
 
-
     
-    def new_leaves(self, leaf): # Node expansion
+    def new_leaves(self, leaf):
         """
-
         Method - Generating all(atm) child states of a parent state, 
               and then connecting the tree node housing the parent state (a.k.a. parent node) 
               to the nodes housing the kid states (a.k.a. kid nodes)
@@ -342,32 +239,27 @@ class MCTS:
         RETURNS: a set of new kids from the input parent 'leaf'
 
         """
-        # merk at denne finne alle nye leaves. 
 
         state = leaf.get_state()
         player = leaf.get_player()
 
         state_action_list, player = self.state_manager.get_kids(state, player)
-        # print('state_action_list: ', state_action_list)
         kids = []
 
         for state, action in state_action_list:
             kid = leaf.get_kid_with_action(action, rollout = True)
-            # print('Henter kids fra leaf: ', leaf.get_roll_kids())
             leaf.remove_kid(action, rollout = True)
-            # print('Henter kids fra leaf etter sletting: ', leaf.get_roll_kids())
 
-            if not kid: # Sjekk om man kan bruke noe annet her
+            if not kid:
                 kid = Node(state, leaf, player)
-                # print('New kid', kid)
-            # print("ADD KID NEW LEAVES", kid, action)
+                
             leaf.add_kid(kid, action)
-            # print('barn etter oppretting; ', leaf.get_kids())
             kids.append(kid)
+            
         return kids
 
 
-    def leaf_evaluation(self, from_node, lite_model):  # rollout
+    def leaf_evaluation(self, from_node, lite_model):
         """
 
         Method for traversing the tree from the root to a leaf node by using the actor.
@@ -382,47 +274,27 @@ class MCTS:
         leaf = from_node.get_state()
         player = from_node.get_player()
         rew_player = from_node.get_player()
-        done = self.state_manager.is_finished(leaf) #Sjekk opp metodNavn
+        done = self.state_manager.is_finished(leaf)
         parent = from_node 
 
 
         while done == False:
-            # Tomy
+            
             action = self.actor.get_action(lite_model, leaf, player)
-            # action = [float(action[0]), float(action[1])]
-            # print('Action i mc', action)
-            
-            # _temp_action = []
-            
-            # for cor in action:
-            #     _temp_action.append(cor)
-            
-            # action = tuple(_temp_action)
-                
             
             leaf, player = self.state_manager.get_kid_from_move(player, leaf, action)
             next_leaf = parent.get_kid_with_action(action, rollout = True)
-            # print('next_leaf', next_leaf)
 
             if not next_leaf:
-                # print('Hællæ')
-                # print('leaf', leaf)
-                # print('parent', parent)
-                # print('player', player)
+                
                 next_leaf = Node(leaf, parent, player)
-                # print('Rollout kid;', next_leaf)
                 parent.add_kid(next_leaf, action, rollout = True)
-                # print('Rolloud kids: ', parent.get_roll_kids())
+                
             parent = next_leaf
             done = self.state_manager.is_finished(leaf)
-            # if done:
-            #     print('Spill ferdig')
             
-            # print('next', next_leaf)
-            # print("HVOR MANGE", next_leaf, action)
+        rew = self.state_manager.get_reward(parent.get_state(), rew_player)
         
-        rew = self.state_manager.get_reward(parent.get_state(), rew_player) # Kan smelle disse sammen
-        # print('---------------------------------------------', rew)
         return parent, rew
 
 
