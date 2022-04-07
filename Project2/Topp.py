@@ -2,7 +2,7 @@ import tensorflow as tf
 from Actor import ANET
 import os
 from StateManager import StateManager
-from NeuralNetwork import cross_entropy_loss
+from NeuralNetwork import custom_cross_entropy
 import numpy as np
 import math
 
@@ -20,6 +20,13 @@ import matplotlib.pyplot as plt
 
 class Topp:
     def __init__(self, config, topp_config):
+        """Class for the Topp
+
+        Args:
+            config (dictionary): The main parameters
+            topp_config (dictionary): The topp parameters
+        """        
+        
         self.state_manager = StateManager(config)
         
         """ MULIG DU MÅ ENDRE DENNE SIMEN """
@@ -28,6 +35,7 @@ class Topp:
         self.anets = self.get_anets(path_list)
         self.number_of_anets = len(self.anets)
         self.number_of_games = topp_config['number_of_games']
+        self.epsilon = topp_config['topp_eps']
         self.winner1 = 0
         self.winner2 = 0
         self.serie1 = 0
@@ -42,13 +50,21 @@ class Topp:
         
         
     def get_anets(self, path_list):
+        """Method for retrieving the nets from the right folder
+
+        Args:
+            path_list (string): Path for the network folder
+
+        Returns:
+            array: All the a-nets in the folder
+        """        
         
         anets = []
 
         for i, path in enumerate(path_list):
             
-            model = tf.keras.models.load_model(path, custom_objects={"custom_cross_entropy": cross_entropy_loss})
-            anet = ANET(model, None, None, None, None, None,0, 1, self.state_manager)
+            model = tf.keras.models.load_model(path, custom_objects={"custom_cross_entropy": custom_cross_entropy})
+            anet = ANET(model, None, None, None, None, None, self.epsilon, 1, self.state_manager)
             anets.append((int(path.name), anet))
            
         anets.sort(key=lambda x: x[0])
@@ -57,6 +73,15 @@ class Topp:
             
     
     def play_one_game(self, agent1, agent2, game_vis):
+        """Method for playing one game in the tournament
+
+        Args:
+            agent1 (object): The first actor
+            agent2 (object): The second actor
+
+        Returns:
+            int: The winner of the game
+        """        
         
         agents = (self.anets[agent1][1], self.anets[agent2][1])
         
@@ -98,23 +123,25 @@ class Topp:
         
         if winner == 1:
                 self.winner1 +=1
-                # print(f'Player {agent1} won')
         elif winner == 2:
                 self.winner2 +=1
-                # print(f'Player {agent2} won')
         
         return winner
     
+    
     def bestVSbest(self):
+        """Method for choosing what players that play against each other
+        """        
         for game in range(self.number_of_games):
-            self.play_one_game(2, 2)
+            self.play_one_game(2, 2, False)
         # print('spiller 1:', self.winner1)
         # print('spiller 2:', self.winner2)
                        
-        
-         
+              
         
     def play_round_robin(self):
+        """The round robin tournament. Each player plays againt each other N times.
+        """        
         
         champions = np.zeros((self.number_of_anets, self.number_of_anets), int)
         total = np.zeros((self.number_of_anets,), int)
@@ -141,8 +168,6 @@ class Topp:
                     game_vis = False
 
                     if outcome == 1:
-                        # print("Player", agent1, "won against player", agent2,)
-                        # print("Matrix before win", champions)
                         champions[agent1][agent2] += 1
                         total[agent1] += 1
                         self.serie1 += 1

@@ -12,6 +12,11 @@ import copy
 
 class Hex:   
     def __init__(self, boardsize):
+        """Class for the Hex game
+
+        Args:
+            boardsize (int): How large one side of the board should be
+        """        
         
         self.boardsize = boardsize
         self.board = np.zeros((boardsize, boardsize), int)
