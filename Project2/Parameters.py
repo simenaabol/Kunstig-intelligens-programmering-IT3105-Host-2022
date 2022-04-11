@@ -1,10 +1,10 @@
 config = {
     'game': 'hex',
-    'num_actual_games': 1,
-    'num_search_games': 10,
+    'num_actual_games': 10,
+    'num_search_games': 1,
     'starting_player': 1,
     
-    'lite_model_interval': 5,
+    'lite_model_interval': 2,
     
     'saving_interval': 5,
     'save_nets': True,
@@ -70,6 +70,6 @@ nim_config = {
 
 topp_config = {
     'number_of_games': 2,
-    'visualize_game': False,
+    'visualize_game': True,
     'visualize_robin': True
 }
