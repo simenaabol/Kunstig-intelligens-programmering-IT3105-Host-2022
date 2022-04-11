@@ -6,7 +6,7 @@ from LiteModel import LiteModel
 import numpy as np
 import time
 
-class RL_learner:
+class RL_learner:  
 
     def __init__(self, config):
         """Reinforcement learner class for training the neural network actor
@@ -42,7 +42,7 @@ class RL_learner:
     def training(self):
         """Method for training the ANET
         """        
-
+  
         replay_buffer = []
 
         # Save the initial net

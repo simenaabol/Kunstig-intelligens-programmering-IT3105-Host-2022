@@ -1,7 +1,7 @@
 config = {
     'game': 'hex',
-    'num_actual_games': 10,
-    'num_search_games': 50,
+    'num_actual_games': 20,
+    'num_search_games': 100, 
     'starting_player': 1,
     
     'lite_model_interval': 5,
@@ -11,17 +11,19 @@ config = {
     
     'mode': 'topp', # learn, learn_topp, topp
     
-    # 'network_folder_name': '4' # Folder name for saving and loading the networks for TOPP
-    'network_folder_name': '4_hex_demo' # Folder name for saving and loading the networks for TOPP
+
+    'network_folder_name': '4_hex_trained' # Folder name for saving and loading the networks for TOPP
+    # 'network_folder_name': '4_TOPP' # Folder name for saving and loading the networks for TOPP
 }
 
 hex_config = {
     
     'board_size': 4,
 
+
     'actor_config': {
         'learning_rate': 0.01, 
-        'hidden_layer_size': (70, 50),
+        'hidden_layer_size': (48,),
         'activation_function': 'tanh', # relu, linear, sigmoid, tanh
         'optimizer': 'adam', # adam, rmsprop, sgd, adagrad
         'output_act': 'softmax',
@@ -67,8 +69,7 @@ nim_config = {
 }
 
 topp_config = {
-    'number_of_games': 16,
-    'topp_eps': 0,
-    'visualize_game': True,
+    'number_of_games': 2,
+    'visualize_game': False,
     'visualize_robin': True
 }
