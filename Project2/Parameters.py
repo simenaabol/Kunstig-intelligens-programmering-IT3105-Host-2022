@@ -18,7 +18,7 @@ config = {
 
 hex_config = {
     
-    'board_size': 4,
+    'board_size': 7,
 
 
     'actor_config': {

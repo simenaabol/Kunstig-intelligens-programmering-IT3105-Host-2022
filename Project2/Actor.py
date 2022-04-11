@@ -198,5 +198,13 @@ class ANET:
             ind = np.random.choice(indices)
         else:
             ind = np.argmax(distribution)
+            
+        # print("0", all_actions[ind][0], "1", all_actions[ind][1])
+        
+        # print(distribution)
+        
+        # # print("action", all_actions[ind])
+        # print("all actions", all_actions)
+        # print("index", ind)
         
         return all_actions[ind][0], all_actions[ind][1]

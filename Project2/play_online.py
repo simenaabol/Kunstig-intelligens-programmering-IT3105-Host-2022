@@ -17,11 +17,11 @@ class MyClient(ActorClient):
         
         row, col = actor.get_action2(False, state, False) # Your logic
         
-        print(row, col)
+        # print(row, col)
         
         return row, col
 
 # Initialize and run your overridden client when the script is executed
 if __name__ == '__main__':
     client = MyClient(auth="90b459360688431b8fc9e1e4cf6a77ec")
-    client.run()
+    client.run(mode='league')

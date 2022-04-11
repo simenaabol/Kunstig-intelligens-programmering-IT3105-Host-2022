@@ -35,8 +35,10 @@ class Hex:
     
     def get_moves_flatten(self, state):
         # Made for 7*7 board
+        arr = state.pop(0)
         arr = np.array(state)
         arr = arr.reshape(7,7)
+        # print(self.get_moves(arr))
         return self.get_moves(arr)
                 
         
@@ -46,7 +48,7 @@ class Hex:
         # if state.any() == None:
         #     state = self.board
         
-        print(state)
+        # print(state)
             
         legal_moves = []
         for i in range(self.boardsize):

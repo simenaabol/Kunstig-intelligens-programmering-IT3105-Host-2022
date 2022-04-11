@@ -111,7 +111,7 @@ class StateManager:
             array: Legal moves
         """        
 
-        return self.game.get_moves(state)
+        return self.game.get_moves_flatten(state)
     
     
     def get_all_moves(self):
