@@ -25,7 +25,7 @@ class MCTS:
         self.exp_weight = exploration_weight
         self.actor = actor
         self.state_manager = state_manager
-
+  
     def get_normalized_distribution(self):
         """
 

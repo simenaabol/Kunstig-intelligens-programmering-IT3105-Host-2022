@@ -19,7 +19,7 @@ class NeuralNet:
         self.optimizer = optimizer
         self.output_act = output_act
 
-    def init_model(self, state_manager):
+    def init_model(self, state_manager): 
         """Method for initalizing the network
 
         Args:
