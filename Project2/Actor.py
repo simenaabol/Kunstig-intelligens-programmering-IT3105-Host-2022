@@ -57,7 +57,7 @@ class ANET:
             name (string): Folder name for the net
         """        
         
-        self.model.save("./TrainedNets/{folder}/{name}".format(name=name, folder=config['network_folder_name']))
+        self.model.save("Project2/TrainedNets/{folder}/{name}".format(name=name, folder=config['network_folder_name']))
         
     def get_model(self):
         """Method for returning the model

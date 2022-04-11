@@ -1,7 +1,7 @@
 config = {
     'game': 'hex',
-    'num_actual_games': 10,
-    'num_search_games': 50,
+    'num_actual_games': 1,
+    'num_search_games': 10,
     'starting_player': 1,
     
     'lite_model_interval': 5,
