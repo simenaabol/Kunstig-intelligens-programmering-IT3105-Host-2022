@@ -142,3 +142,61 @@ class ANET:
             ind = np.argmax(distribution)
         
         return all_actions[ind]
+    
+    
+    def get_action2(self, lite_model, state, do_random_move=True):
+        #  Mulig med false  for lite_model
+        """Method for retrieving an action from the network
+
+        Args:
+            lite_model (lite_model object): The lite model from BB
+            state (numpy array): The state to retrieve an action from
+            player (int): Which players' turn it is
+            do_random_move (bool, optional): If we will allow random moves. Defaults to True.
+
+        Returns:
+            tuple: An action from the action distribution depending on the default policy 
+        """        
+        
+        if np.count_nonzero(state == 1) > np.count_nonzero(state == 2):
+            player = 2
+        else:
+            player = 1
+        
+        legal_actions = self.state_manager.get_legal_moves(state)
+        all_actions = self.state_manager.get_all_moves()
+        
+        # Concat the player with the state to represent the input to the network
+        state_for_model = np.concatenate(([player], state), axis=None)
+        
+        # If we want to use the lite_model or not
+        if lite_model:
+            distribution = lite_model.predict_single(state_for_model)
+        else:
+            state_for_model = tf.cast(tf.convert_to_tensor([state_for_model]), dtype=tf.float32)
+            distribution = self.model(state_for_model).numpy()
+        
+        distribution = distribution.reshape(distribution.shape[-1])
+          
+        # Remove the illegal actions, and renormalize the action distribution
+        for i, move in enumerate(all_actions):
+            if move not in legal_actions:
+                distribution[i] = 0
+                
+                distribution /= np.sum(distribution) # Renormalize
+                
+        distribution = np.array(distribution)
+        
+        if sum(distribution.flatten()) <= 0:
+            return random.choice(legal_actions)
+           
+        # The default policy:
+        # - Do random if epsilon is below a random float between 0 and 1
+        # - Else do the best move from the distribution
+        if random.uniform(0,1) < self.epsilon and do_random_move:
+            indices, = np.nonzero(distribution.flatten())
+            ind = np.random.choice(indices)
+        else:
+            ind = np.argmax(distribution)
+        
+        return all_actions[ind][0], all_actions[ind][1]

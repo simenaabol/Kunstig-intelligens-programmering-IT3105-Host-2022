@@ -6,7 +6,7 @@
 # -> Dette til si at vi må rotere matrisen 45 grader med klokken
 
 import numpy as np
-import networkx as nx
+# import networkx as nx
 import matplotlib.pyplot as plt
 import copy
 
@@ -35,8 +35,10 @@ class Hex:
 
     def get_moves(self, state=None):
         
-        if state.any() == None:
-            state = self.board
+        # if state.any() == None:
+        #     state = self.board
+        
+        print(state)
             
         legal_moves = []
         for i in range(self.boardsize):
