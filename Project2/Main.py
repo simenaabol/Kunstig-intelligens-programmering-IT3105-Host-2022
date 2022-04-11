@@ -17,6 +17,7 @@ def main():
     elif config['mode'] == 'topp':
         topp = Topp(config, topp_config)
         topp.play_round_robin()
+        # topp.bestVSbest()
  
         
     else:

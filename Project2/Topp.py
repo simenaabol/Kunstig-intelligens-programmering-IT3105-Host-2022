@@ -5,7 +5,7 @@ from StateManager import StateManager
 from NeuralNetwork import custom_cross_entropy
 import numpy as np
 import math
-
+  
 import copy
 # import matplotlib.pyplot as plt
 # from matplotlib.patches import Rectangle
@@ -35,7 +35,6 @@ class Topp:
         self.anets = self.get_anets(path_list)
         self.number_of_anets = len(self.anets)
         self.number_of_games = topp_config['number_of_games']
-        self.epsilon = topp_config['topp_eps']
         self.winner1 = 0
         self.winner2 = 0
         self.serie1 = 0
@@ -140,8 +139,8 @@ class Topp:
     def bestVSbest(self):
         """Method for choosing what players that play against each other
         """        
-        for game in range(self.number_of_games):
-            self.play_one_game(2, 2, False)
+        # for game in range(self.number_of_games):
+        self.play_one_game(11, 11, self.visualize_game)
         # print('spiller 1:', self.winner1)
         # print('spiller 2:', self.winner2)
                        
@@ -202,10 +201,7 @@ class Topp:
         # print('spiller 1:', self.winner1)
         # print('spiller 2:', self.winner2)
         # print('serie_total', self.serie_total)
-        
-        topp_robin = True
-        topp_total = True
-        
+             
         
         if self.visualize_stats:
             self.visualize_robin()
@@ -240,6 +236,7 @@ class Topp:
         plt.ylim([0, max_height+2])
         
         plt.show()
+
         
     def visualize_total(self):
         

@@ -92,6 +92,7 @@ class ANET:
         self.model.fit(x=x, y=y, epochs=epochs, batch_size=self.gameconfig['actor_config']['anet_batch_size'])
         
     def get_action(self, lite_model, state, player, do_random_move=True):
+        #  Mulig med false  for lite_model
         """Method for retrieving an action from the network
 
         Args:
@@ -118,7 +119,7 @@ class ANET:
             distribution = self.model(state_for_model).numpy()
         
         distribution = distribution.reshape(distribution.shape[-1])
-        
+          
         # Remove the illegal actions, and renormalize the action distribution
         for i, move in enumerate(all_actions):
             if move not in legal_actions:

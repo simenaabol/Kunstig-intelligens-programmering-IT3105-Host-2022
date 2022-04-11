@@ -209,7 +209,7 @@ class Hex:
         # graph.clear() # Remove all nodes and edged from the graph
         # plt.clf() # Clears the plt
         
-        print('array_of_states in hex', array_of_states)
+        # print('array_of_states in hex', array_of_states)
 
         for one_board in array_of_states:
             position = []
@@ -217,7 +217,7 @@ class Hex:
             node_width = []
             
             # self.board = np.array(copy.deepcopy(one_board))
-            print('oneBB', one_board)
+            # print('oneBB', one_board)
             
             for i in range(self.boardsize):
                 height = self.boardsize - i*0.5
@@ -245,6 +245,9 @@ class Hex:
                     font_weight='bold', ) # node_shape='^', mulig det eksisterer en smultring-form
             # graph.set_edgecolor('red') # Dette er ikke til kant, men som en border-color 
             plt.pause(0.7)
+        
+  
+        plt.close()
         
         
         
