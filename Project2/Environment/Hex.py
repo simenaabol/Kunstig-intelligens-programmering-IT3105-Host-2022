@@ -32,6 +32,14 @@ class Hex:
     def reset(self):
         self.board = np.zeros((self.boardsize, self.boardsize))
         self.player = 1
+    
+    def get_moves_flatten(self, state):
+        # Made for 7*7 board
+        arr = np.array(state)
+        arr = arr.reshape(7,7)
+        return self.get_moves(arr)
+                
+        
 
     def get_moves(self, state=None):
         
