@@ -38,7 +38,6 @@ class Hex:
         arr = state.pop(0)
         arr = np.array(state)
         arr = arr.reshape(7,7)
-        # print(self.get_moves(arr))
         return self.get_moves(arr)
                 
         
