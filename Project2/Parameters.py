@@ -12,18 +12,31 @@ config = {
     'mode': 'topp', # learn, learn_topp, topp
     
 
-    'network_folder_name': '4_hex_trained' # Folder name for saving and loading the networks for TOPP
-    # 'network_folder_name': '4_TOPP' # Folder name for saving and loading the networks for TOPP
+    'network_folder_name': 'Alle' # Folder name for saving and loading the networks for TOPP
+    # 'network_folder_name': '4_hex_trained' # Folder name for saving and loading the networks for TOPP
 }
+
+#  anets -> nr.5             1. litt bedre
+
+#  7_anets1 -> nr.7             1. litt bedre
+#  7_amd2 -> nr.             1. litt bedre
+#  7_anets3-> nr. 16. og litt 28.           1. litt bedre
+
+#  7_bu1-> nr.  11. og litt 16.          2. litt bedre'
+#  7_bu2-> nr.   for liten
+
+
+#  Samlet -> tror 25 fra topp er best
+
 
 hex_config = {
     
-    'board_size': 7,
+    'board_size': 7, 
 
 
     'actor_config': {
         'learning_rate': 0.01, 
-        'hidden_layer_size': (48,),
+        'hidden_layer_size': (367, 94, 94,),
         'activation_function': 'tanh', # relu, linear, sigmoid, tanh
         'optimizer': 'adam', # adam, rmsprop, sgd, adagrad
         'output_act': 'softmax',
@@ -70,6 +83,6 @@ nim_config = {
 
 topp_config = {
     'number_of_games': 2,
-    'visualize_game': True,
+    'visualize_game': False,
     'visualize_robin': True
 }

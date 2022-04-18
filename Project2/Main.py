@@ -24,5 +24,5 @@ def main():
         raise ValueError("Enter correct mode!")
     
 
-if __name__ == '__main__':
+if __name__ == '__main__':  
     main()
