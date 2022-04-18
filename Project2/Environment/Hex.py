@@ -6,7 +6,7 @@
 # -> Dette til si at vi må rotere matrisen 45 grader med klokken
 
 import numpy as np
-# import networkx as nx
+import networkx as nx
 import matplotlib.pyplot as plt
 import copy
 
@@ -260,6 +260,26 @@ class Hex:
         
   
         plt.close()
+
+    def board_flip(self, state):
+        #  State is the board with player first
+
+        #  remove the first int, the player
+        # print('State1', state)
+
+        temp_state = []
+
+        for int in state:
+            if int == 1:
+                temp_state.append(2)
+            elif int == 0:
+                temp_state.append(0)
+            else:
+                temp_state.append(1)
+        # print('State2', temp_state)
+        return temp_state
         
+
         
-        
+# obj = Hex(7)
+# obj.board_flip([2, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 1, 2, 2, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 2, 2, 2, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0])

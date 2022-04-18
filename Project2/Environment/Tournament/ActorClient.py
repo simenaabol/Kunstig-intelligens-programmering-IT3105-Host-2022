@@ -72,6 +72,9 @@ class ActorClient:
         self.logger = self.create_logger()
         self._sock = None
 
+        self.intPlayer = None
+        self.startin = None
+
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     #   "Game loop"
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -167,6 +170,8 @@ class ActorClient:
             series_player_id = [
                 p[1] for p in player_id_map if p[0] == unique_player_id
             ]
+            self.intPlayer = player_id_map[0]
+
             self.handle_series_start(
                 unique_id=unique_player_id,
                 series_id=series_player_id[0],
@@ -179,6 +184,7 @@ class ActorClient:
             self.handle_game_start(
                 start_player=msg['start_player'],
             )
+            self.startin = msg['start_player']
 
         elif topic == 'request_action':
             action = self.handle_get_action(state=msg['state'])
@@ -203,6 +209,9 @@ class ActorClient:
             )
 
         return True
+
+    # def return_player():
+    #     return  msg['unique_player_id']
 
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -407,7 +416,7 @@ class ActorClient:
         Args:
             start_player (int): the series_id of the starting player (1 or 2)
         """
-        self.logger.info('Game start: start_player=%s', start_player)
+        # self.logger.info('Game start: start_player=%s', start_player)
 
     def handle_get_action(self, state):
         """Called whenever it's your turn to pick an action
@@ -462,7 +471,7 @@ class ActorClient:
               path of ones from the top to the bottom following the
               neighborhood description given in `handle_get_action`
         """
-        self.logger.info('Game over: winner=%s end_state=%s', winner, end_state)
+        # self.logger.info('Game over: winner=%s end_state=%s', winner, end_state)
 
     def handle_series_over(self, stats):
         """Called after each set of games against an opponent is finished

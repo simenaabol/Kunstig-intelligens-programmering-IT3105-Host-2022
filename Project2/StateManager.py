@@ -111,7 +111,11 @@ class StateManager:
             array: Legal moves
         """        
 
+        # Endre her for online og topp
+
+        # return self.game.get_moves(state)
         return self.game.get_moves_flatten(state)
+        #  Endre her -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
     
     def get_all_moves(self):
@@ -224,3 +228,7 @@ class StateManager:
     
     def vis_entire_game(self, array_of_states, number_of_vis):
         self.game.get_graphic(array_of_states, number_of_vis)
+
+
+    def flip_board(self, state):
+        return self.game.board_flip(state)

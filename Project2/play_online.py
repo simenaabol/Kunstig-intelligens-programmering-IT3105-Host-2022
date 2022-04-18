@@ -5,7 +5,10 @@ from NeuralNetwork import custom_cross_entropy
 from StateManager import StateManager
 from Parameters import config
 
-path = "./TrainedNets/OHT/5"
+#  Husk å endre her
+# path = "TrainedNets/Alle/9999400"
+path = "Project2\TrainedNets\Alle\9999400"
+
 model = tf.keras.models.load_model(path, custom_objects={"custom_cross_entropy": custom_cross_entropy})
 state_manager = StateManager(config)
 actor = ANET(model, None, None, None, None, None, 0, 1, state_manager)
@@ -14,7 +17,20 @@ actor = ANET(model, None, None, None, None, None, 0, 1, state_manager)
 from Environment.Tournament.ActorClient import ActorClient
 class MyClient(ActorClient):
     def handle_get_action(self, state):
+
+        # print('player', self.intPlayer)
+        # oss = self.intPlayer
+        starter = self.startin
+        # print('state1', state)
+
+        if starter == 2:
+            # print('state3', state)
+            flipped = state_manager.flip_board(state)
+            state = flipped
+
         
+
+        # print('state2', state)
         row, col = actor.get_action2(False, state, False) # Your logic
         
         # print(row, col)
@@ -23,5 +39,10 @@ class MyClient(ActorClient):
 
 # Initialize and run your overridden client when the script is executed
 if __name__ == '__main__':
-    client = MyClient(auth="90b459360688431b8fc9e1e4cf6a77ec")
+    # Marcus
+    # client = MyClient(auth="90b459360688431b8fc9e1e4cf6a77ec")
+
+    # Simen
+    client = MyClient(auth="eba119845dbe40bea7a335dd52cb1009")
+
     client.run(mode='league')

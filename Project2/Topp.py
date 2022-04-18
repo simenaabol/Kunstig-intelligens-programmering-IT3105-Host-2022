@@ -141,8 +141,8 @@ class Topp:
         """        
         # for game in range(self.number_of_games):
         self.play_one_game(11, 11, self.visualize_game)
-        # print('spiller 1:', self.winner1)
-        # print('spiller 2:', self.winner2)
+        print('spiller 1:', self.winner1)
+        print('spiller 2:', self.winner2)
                        
               
         
@@ -177,6 +177,7 @@ class Topp:
                     if outcome == 1:
                         champions[agent1][agent2] += 1
                         total[agent1] += 1
+                        winner1[agent1] += 1
                         self.serie1 += 1
                         
                         # print("Matrix after win", champions)
@@ -185,6 +186,7 @@ class Topp:
                         # print("Matrix before win", champions)
                         total[agent2] += 1
                         champions[agent2][agent1] += 1
+                        winner2[agent2] += 1
                         self.serie2 += 1
                         # print("Matrix after win", champions)
                 if self.serie1 > self.serie2:
@@ -198,8 +200,8 @@ class Topp:
         self.total = total        
         # print(self.champions)
         # print(self.total)
-        # print('spiller 1:', self.winner1)
-        # print('spiller 2:', self.winner2)
+        print('spiller 1:', self.winner1)
+        print('spiller 2:', self.winner2)
         # print('serie_total', self.serie_total)
              
         
