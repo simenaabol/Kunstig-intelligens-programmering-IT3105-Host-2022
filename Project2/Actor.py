@@ -116,7 +116,7 @@ class ANET:
             distribution = lite_model.predict_single(state_for_model)
         else:
             state_for_model = tf.cast(tf.convert_to_tensor([state_for_model]), dtype=tf.float32)
-            distribution = self.model(state_for_model).numpy()
+            distribution = self.model(state_for_model).numpy() # Får feil her
         
         distribution = distribution.reshape(distribution.shape[-1])
           

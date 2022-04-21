@@ -72,7 +72,6 @@ class ActorClient:
         self.logger = self.create_logger()
         self._sock = None
 
-        self.intPlayer = None
         self.startin = None
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -170,8 +169,6 @@ class ActorClient:
             series_player_id = [
                 p[1] for p in player_id_map if p[0] == unique_player_id
             ]
-            self.intPlayer = player_id_map[0]
-
             self.handle_series_start(
                 unique_id=unique_player_id,
                 series_id=series_player_id[0],
@@ -209,9 +206,6 @@ class ActorClient:
             )
 
         return True
-
-    # def return_player():
-    #     return  msg['unique_player_id']
 
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
