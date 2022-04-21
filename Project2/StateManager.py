@@ -113,8 +113,8 @@ class StateManager:
 
         # Endre her for online og topp
 
-        # return self.game.get_moves(state)
-        return self.game.get_moves_flatten(state)
+        return self.game.get_moves(state)
+        # return self.game.get_moves_flatten(state)
         #  Endre her -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
     

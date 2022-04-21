@@ -198,7 +198,7 @@ class Topp:
         
         self.champions = champions        
         self.total = total        
-        # print(self.champions)
+        print(self.champions)
         # print(self.total)
         print('spiller 1:', self.winner1)
         print('spiller 2:', self.winner2)

@@ -12,8 +12,16 @@ config = {
     'mode': 'topp', # learn, learn_topp, topp
     
 
-    'network_folder_name': 'Alle' # Folder name for saving and loading the networks for TOPP
-    # 'network_folder_name': '4_hex_trained' # Folder name for saving and loading the networks for TOPP
+    # 'network_folder_name': 'anets' # 
+
+    # 'network_folder_name': '7_anets1' # 
+    # 'network_folder_name': '7_amd2' # 800 best
+    # 'network_folder_name': '7_anets3' # 1480 best
+    # 'network_folder_name': '7_bu1' # 40 er best
+    # 'network_folder_name': '7_bu2' # søppel
+    # 'network_folder_name': '7_bu1' # Folder name for saving and loading the networks for TOPP
+
+    'network_folder_name': 'best' # Folder name for saving and loading the networks for TOPP
 }
 
 #  anets -> nr.5             1. litt bedre
