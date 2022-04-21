@@ -4,10 +4,11 @@ import tensorflow as tf
 from NeuralNetwork import custom_cross_entropy
 from StateManager import StateManager
 from Parameters import config
+import copy
 
 #  Husk å endre her
 # path = "TrainedNets/Alle/9999400"
-path = "Project2\TrainedNets\Alle\9999400"
+path = "./TrainedNets/OHT/1000_conf1"
 
 model = tf.keras.models.load_model(path, custom_objects={"custom_cross_entropy": custom_cross_entropy})
 state_manager = StateManager(config)
@@ -22,16 +23,26 @@ class MyClient(ActorClient):
         # oss = self.intPlayer
         starter = self.startin
         # print('state1', state)
+        
+        # print("før", len(state))
 
         if starter == 2:
             # print('state3', state)
-            flipped = state_manager.flip_board(state)
-            state = flipped
-
+            state = state_manager.flip_board(state)
+            # state = copy.deepcopy(flipped)
+            # print("len inni", len(state))
+            
+            
+        # print("etter", len(state))
         
+        utstate = copy.deepcopy(state)
+        
+        # print(len(utstate))
+
+        # self.logger.info('Get action: state=%s', state)
 
         # print('state2', state)
-        row, col = actor.get_action2(False, state, False) # Your logic
+        row, col = actor.get_action2(False, utstate, False) # Your logic
         
         # print(row, col)
         
@@ -40,9 +51,9 @@ class MyClient(ActorClient):
 # Initialize and run your overridden client when the script is executed
 if __name__ == '__main__':
     # Marcus
-    # client = MyClient(auth="90b459360688431b8fc9e1e4cf6a77ec")
+    client = MyClient(auth="90b459360688431b8fc9e1e4cf6a77ec")
 
     # Simen
-    client = MyClient(auth="eba119845dbe40bea7a335dd52cb1009")
+    # client = MyClient(auth="eba119845dbe40bea7a335dd52cb1009")
 
     client.run(mode='league')

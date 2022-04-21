@@ -5,6 +5,7 @@ import random
 import tensorflow as tf
 from Parameters import config
 
+import copy
 class ANET:
     def __init__(self,
                  model, 
@@ -144,7 +145,7 @@ class ANET:
         return all_actions[ind]
     
     
-    def get_action2(self, lite_model, state, do_random_move=True):
+    def get_action2(self, lite_model, state2, do_random_move=True):
         #  Mulig med false  for lite_model
         """Method for retrieving an action from the network
 
@@ -156,27 +157,42 @@ class ANET:
 
         Returns:
             tuple: An action from the action distribution depending on the default policy 
-        """        
+        """       
         
-        if np.count_nonzero(state == 1) > np.count_nonzero(state == 2):
-            player = 2
-        else:
-            player = 1
         
-        legal_actions = self.state_manager.get_legal_moves(state)
-        all_actions = self.state_manager.get_all_moves()
+        print("1", state2, "len", len(state2)) 
+        
+        # if np.count_nonzero(state == 1) > np.count_nonzero(state == 2):
+        #     player = 2
+        # else:
+        #     player = 1
         
         # Concat the player with the state to represent the input to the network
-        state_for_model = np.concatenate(([player], state), axis=None)
+        # state_for_model = np.concatenate(([player], state), axis=None)
+        
+        # print("2", state_for_model, "len", len(state_for_model))
+        # state_for_model = np.array(state)
+        
+        # state2 = np.array(copy.deepcopy(state2))
+        # print("2", state2, "len", len(state2)) 
+        
+        teststate = copy.deepcopy(state2)
+        
+        # print("1.5", teststate, "len", len(teststate))
+        
         
         # If we want to use the lite_model or not
         if lite_model:
             distribution = lite_model.predict_single(state_for_model)
         else:
-            state_for_model = tf.cast(tf.convert_to_tensor([state_for_model]), dtype=tf.float32)
+            state_for_model = tf.cast(tf.convert_to_tensor([teststate]), dtype=tf.float32)
+            # print("2", state_for_model, "len", len(state_for_model)) 
             distribution = self.model(state_for_model).numpy()
         
         distribution = distribution.reshape(distribution.shape[-1])
+        
+        legal_actions = self.state_manager.get_legal_moves(teststate)
+        all_actions = self.state_manager.get_all_moves()
           
         # Remove the illegal actions, and renormalize the action distribution
         for i, move in enumerate(all_actions):
@@ -203,8 +219,19 @@ class ANET:
         
         # print(distribution)
         
-        # # print("action", all_actions[ind])
+        # print("action", all_actions[ind])
         # print("all actions", all_actions)
         # print("index", ind)
+        
+        # state.pop(0)
+        # state = np.array(state)
+        # state = state.reshape(7, 7)
+        
+        # print(state)
+        # print(distribution)
+        # print("ACT", all_actions[ind][0], all_actions[ind][1])
+        
+        # print(len(distribution))
+        
         
         return all_actions[ind][0], all_actions[ind][1]
