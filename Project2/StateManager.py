@@ -113,9 +113,14 @@ class StateManager:
 
         # Endre her for online og topp
 
+        # Line A
         return self.game.get_moves(state)
+    
+        # When playing an online tournament use the line B, and not line A, and vice versa
+        
+        # Line B
         # return self.game.get_moves_flatten(state)
-        #  Endre her -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        
     
     
     def get_all_moves(self):

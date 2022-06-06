@@ -6,7 +6,7 @@
 # -> Dette til si at vi må rotere matrisen 45 grader med klokken
 
 import numpy as np
-# import networkx as nx
+import networkx as nx
 import matplotlib.pyplot as plt
 import copy
 
@@ -217,10 +217,10 @@ class Hex:
         :return: None
         """
         graph = nx.Graph()
-        # graph.clear() # Remove all nodes and edged from the graph
-        # plt.clf() # Clears the plt
+        graph.clear() # Remove all nodes and edged from the graph
+        plt.clf() # Clears the plt
         
-        # print('array_of_states in hex', array_of_states)
+        print('array_of_states in hex', array_of_states)
 
         for one_board in array_of_states:
             position = []
@@ -275,10 +275,6 @@ class Hex:
                 temp_state.append(0)
             else:
                 temp_state.append(1)
-        # print('State2', temp_state)
         return temp_state
         
 
-        
-# obj = Hex(7)
-# obj.board_flip([2, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 1, 2, 2, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 2, 2, 2, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0])

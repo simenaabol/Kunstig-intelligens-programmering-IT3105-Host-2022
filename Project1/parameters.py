@@ -9,12 +9,12 @@ config = {
 hanoiConfig = {
 
     'game_config': {
-        'pegs': 5, 
-        'discs': 6,
+        'pegs': 3, 
+        'discs': 3,
     },
 
-    'num_episodes': 30,
-    'max_steps': 10,
+    'num_episodes': 100,
+    'max_steps': 50,
 
     'actor_config': {
         'learning_rate': 0.01,

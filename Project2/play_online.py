@@ -50,8 +50,6 @@ class MyClient(ActorClient):
 
 # Initialize and run your overridden client when the script is executed
 if __name__ == '__main__':
-    # Marcus
-    client = MyClient(auth="90b459360688431b8fc9e1e4cf6a77ec")
 
     # Simen    
     client = MyClient(auth="eba119845dbe40bea7a335dd52cb1009")

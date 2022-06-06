@@ -180,7 +180,7 @@ class Hanoi():
             
  
         
-    def Reverse(self, tuple):
+    def reverse(self, tuple):
         """
 
         Method that reverse a tuple 
@@ -212,9 +212,9 @@ class Hanoi():
         is_tuple = type(self.current_action) is tuple
 
         if is_tuple:
-            current_action_reversed = self.Reverse(self.current_action)
+            current_action_reversed = self.reverse(self.current_action)
         else:
-            current_action_reversed = self.Reverse(self.current_action[0])
+            current_action_reversed = self.reverse(self.current_action[0])
 
         # Default reward for a move
         rew = -1
